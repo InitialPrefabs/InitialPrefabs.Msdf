@@ -1,0 +1,3 @@
+[submodule "Dependencies/freetype-native"]
+	path = Dependencies/freetype-native
+	url = git@github.com:freetype/freetype.git
