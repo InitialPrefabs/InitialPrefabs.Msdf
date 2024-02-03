@@ -1,0 +1,32 @@
+{
+    "FormattingOptions": {
+        "EnableEditorConfigSupport": true,
+        "OrganizeImports": false
+    },
+    "cake": {
+        "enabled": false,
+        "bakeryPath ": null
+    },
+    "RoslynExtensionsOptions": {
+        "documentAnalysisTimeoutMs": 30000,
+        "enableDecompilationSupport": true,
+        "enableImportCompletion": true,
+        "enableAnalyzersSupport": true,
+        "diagnosticWorkersThreadCount": 8,
+        "locationPaths": [],
+        "inlayHintsOptions": {
+            "enableForParameters": true,
+            "forLiteralParameters": true,
+            "forIndexerParameters": true,
+            "forObjectCreationParameters": true,
+            "forOtherParameters": true,
+            "suppressForParametersThatDifferOnlyBySuffix": false,
+            "suppressForParametersThatMatchMethodIntent": false,
+            "suppressForParametersThatMatchArgumentName": false,
+            "enableForTypes": true,
+            "forImplicitVariableTypes": true,
+            "forLambdaParameterTypes": true,
+            "forImplicitObjectCreation": true
+        }
+    }
+}

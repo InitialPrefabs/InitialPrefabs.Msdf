@@ -1,12 +1,14 @@
 {
     "name": "InitialPrefabs.Msdf",
     "rootNamespace": "InitialPrefabs.Msdf",
-    "references": [],
+    "references": [
+        "GUID:d8b63aba1907145bea998dd612889d6b"
+    ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
