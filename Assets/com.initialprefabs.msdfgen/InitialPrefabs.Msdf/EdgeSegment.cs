@@ -1,10 +1,9 @@
-﻿using System;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
 
     public interface ICopy<T> where T : struct, ISegment {
-        ICopy<T> Clone();
+        T Clone();
     }
 
     public interface ISegment {
@@ -22,51 +21,7 @@ namespace InitialPrefabs.Msdf {
         void GetBounds(ref float4 points);
         void MoveStartPoint(float2 dst);
         void MoveEndPoint(float2 dst);
-        void SplitInThirds(ref SignedDistance sd, float2 origin, float t);
-    }
-
-    public struct LineSegment : ISegment, ICopy<LineSegment> {
-        public float2 P0;
-        public float2 P1;
-
-        public EdgeColor Color { get; set; }
-
-        public LineSegment(float2 p0, float2 p1, EdgeColor color) {
-            Color = color;
-            P0 = p0;
-            P1 = p1;
-        }
-
-        public readonly LineSegment Clone() => new LineSegment(P0, P1, Color);
-
-        public readonly void GetBounds(ref float4 points) {
-            MathExtensions.PointBounds(P0, ref points.x, ref points.y, ref points.z, ref points.w);
-            MathExtensions.PointBounds(P1, ref points.x, ref points.y, ref points.z, ref points.w);
-        }
-
-        public readonly float2 GetDirection(float t) => P1 - P0;
-
-        public readonly float2 GetPoint(float t) => math.lerp(P0, P1, t);
-
-        public readonly SignedDistance GetSignedDistance(float2 origin, out float t) {
-            throw new NotImplementedException();
-        }
-
-        public void MoveEndPoint(float2 dst) {
-            throw new NotImplementedException();
-        }
-
-        public void MoveStartPoint(float2 dst) {
-            throw new NotImplementedException();
-        }
-
-        public void SplitInThirds(ref SignedDistance sd, float2 origin, System.Single t) {
-            throw new System.NotImplementedException();
-        }
-
-        ICopy<LineSegment> ICopy<LineSegment>.Clone() {
-            throw new System.NotImplementedException();
-        }
+        void SplitInThirds(out ISegment p1, out ISegment p2, out ISegment p3);
     }
 
     public static partial class EdgeSegmentExtensions {
