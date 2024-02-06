@@ -2,10 +2,6 @@
 
 namespace InitialPrefabs.Msdf {
 
-    public interface ICopy<T> where T : struct, ISegment {
-        T Clone();
-    }
-
     public interface ISegment {
 
         EdgeColor Color { get; set; }
