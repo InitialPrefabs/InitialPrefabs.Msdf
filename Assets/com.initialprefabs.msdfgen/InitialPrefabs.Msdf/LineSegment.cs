@@ -16,8 +16,8 @@ namespace InitialPrefabs.Msdf {
         public readonly LineSegment Clone() => new LineSegment(P0, P1, Color);
 
         public readonly void GetBounds(ref float4 points) {
-            MathExtensions.PointBounds(P0, ref points.x, ref points.y, ref points.z, ref points.w);
-            MathExtensions.PointBounds(P1, ref points.x, ref points.y, ref points.z, ref points.w);
+            P0.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
+            P1.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
         }
 
         public readonly float2 GetDirection(float t) => P1 - P0;
@@ -52,8 +52,8 @@ namespace InitialPrefabs.Msdf {
 
         public void SplitInThirds(out ISegment p1, out ISegment p2, out ISegment p3) {
             p1 = new LineSegment(P0, P1, Color);
-            p2 = new LineSegment();
-            p3 = new LineSegment();
+            p2 = new LineSegment(GetPoint(1 / 3f), GetPoint(2 / 3f), Color);
+            p3 = new LineSegment(GetPoint(2 / 3f), P1, Color);
         }
     }
 }
