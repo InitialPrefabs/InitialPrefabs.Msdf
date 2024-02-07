@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "InitialPrefabs.Msdf.sln"
+    "dotnet.defaultSolution": "InitialPrefabs.Msdf.sln",
+    "cmake.configureOnOpen": false
 }

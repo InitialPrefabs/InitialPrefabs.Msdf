@@ -1,4 +1,4 @@
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
     public struct LineSegment : ISegment, ICopy<LineSegment> {
