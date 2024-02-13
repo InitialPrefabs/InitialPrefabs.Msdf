@@ -14,7 +14,7 @@ namespace InitialPrefabs.Msdf {
             P1 = p1;
         }
 
-        public readonly LineSegment Clone() => new LineSegment(P0, P1, Color);
+        public readonly LineSegment Clone() => this;
 
         public readonly void GetBounds(ref float4 points) {
             P0.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);

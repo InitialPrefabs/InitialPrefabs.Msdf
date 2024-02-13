@@ -5,9 +5,9 @@ namespace InitialPrefabs.Msdf {
 
     public struct QuadraticSegment : ISegment, IDivider<QuadraticSegment>, ICopy<QuadraticSegment> {
 
-        public ref float2 P0 => ref pts[0];
-        public ref float2 P1 => ref pts[1];
-        public ref float2 P2 => ref pts[2];
+        public readonly ref float2 P0 => ref pts[0];
+        public readonly ref float2 P1 => ref pts[1];
+        public readonly ref float2 P2 => ref pts[2];
 
         private float2x3 pts;
 
@@ -25,7 +25,7 @@ namespace InitialPrefabs.Msdf {
 
         public readonly QuadraticSegment Clone() => new QuadraticSegment(pts, Color);
 
-        public void GetBounds(ref float4 points) {
+        public readonly void GetBounds(ref float4 points) {
             P0.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
             P2.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
             var bot = (P1 - P0) - (P2 - P1);
@@ -46,7 +46,7 @@ namespace InitialPrefabs.Msdf {
                 t
             );
 
-        public SignedDistance GetSignedDistance(float2 origin, out float t) {
+        public readonly SignedDistance GetSignedDistance(float2 origin, out float t) {
             var qa = P0 - origin;
             var ab = P1 - P0;
             var br = P0 + P2 - P1 - P1;
@@ -61,15 +61,18 @@ namespace InitialPrefabs.Msdf {
             var minDistance = MathExtensions.Cross(ab, qa).NonZeroSign() * math.length(qa);
             t = -math.dot(qa, ab) / math.dot(ab, ab);
 
-            var distance = MathExtensions.Cross(P2 - P1, P2 - origin).NonZeroSign() * math.length(P2 - origin);
-            if (math.abs(distance) < math.abs(minDistance)) {
-                minDistance = distance;
-                t = math.dot(origin - P1, P2 - P1) / math.dot(P2 - P1, P2 - P1);
+            {
+                var distance = MathExtensions.Cross(P2 - P1, P2 - origin).NonZeroSign() * math.length(P2 - origin);
+                if (math.abs(distance) < math.abs(minDistance)) {
+                    minDistance = distance;
+                    t = math.dot(origin - P1, P2 - P1) / math.dot(P2 - P1, P2 - P1);
+                }
             }
 
             for (int i = 0; i < solutions; i++) {
                 if (roots[i] > 0 && roots[i] < 1) {
                     var endPoint = P0 + (2 * roots[i] * ab) + (roots[i] * roots[i] * br);
+                    var distance = MathExtensions.Cross(P2 - P0, endPoint - origin) * math.length(endPoint - origin);
 
                     if (math.abs(distance) <= math.abs(minDistance)) {
                         minDistance = distance;
