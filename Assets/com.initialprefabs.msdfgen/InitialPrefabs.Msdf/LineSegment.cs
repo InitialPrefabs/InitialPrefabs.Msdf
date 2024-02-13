@@ -1,7 +1,8 @@
 ﻿using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
-    public struct LineSegment : ISegment, ICopy<LineSegment> {
+
+    public struct LineSegment : ISegment, ICopy<LineSegment>, IDivider<LineSegment> {
         public float2 P0;
         public float2 P1;
 
@@ -50,7 +51,7 @@ namespace InitialPrefabs.Msdf {
 
         public void MoveEndPoint(float2 dst) => P1 = dst;
 
-        public void SplitInThirds(out ISegment p1, out ISegment p2, out ISegment p3) {
+        public void SplitInThirds(out LineSegment p1, out LineSegment p2, out LineSegment p3) {
             p1 = new LineSegment(P0, P1, Color);
             p2 = new LineSegment(GetPoint(1 / 3f), GetPoint(2 / 3f), Color);
             p3 = new LineSegment(GetPoint(2 / 3f), P1, Color);

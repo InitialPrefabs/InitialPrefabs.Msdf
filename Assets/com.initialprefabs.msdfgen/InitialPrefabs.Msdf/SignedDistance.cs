@@ -6,6 +6,11 @@ namespace InitialPrefabs.Msdf {
         public float Distance;
         public float Dot;
 
+        public SignedDistance(float distance, float dot) {
+            Distance = distance;
+            Dot = dot;
+        }
+
         public static SignedDistance Infinite { get; } = new SignedDistance {
             Distance = float.MinValue,
             Dot = 1.0f
