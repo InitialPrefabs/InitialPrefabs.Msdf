@@ -31,16 +31,22 @@ namespace InitialPrefabs.Msdf {
             var bot = (P1 - P0) - (P2 - P1);
 
             if (bot.x != 0) {
-                throw new NotImplementedException();
+                var param = (P1.x - P0.x) / bot.x;
+                if (param > 0 && param < 1) {
+                    GetPoint(param).PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
+                }
             }
             if (bot.y != 0) {
-                throw new NotImplementedException();
+                var param = (P1.y - P0.y) / bot.y;
+                if (param > 0 && param < 1) {
+                    GetPoint(param).PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
+                }
             }
         }
 
-        public float2 GetDirection(float t) => math.lerp(pts[1] - pts[0], pts[2] - pts[1], t);
+        public readonly float2 GetDirection(float t) => math.lerp(pts[1] - pts[0], pts[2] - pts[1], t);
 
-        public float2 GetPoint(float t) => math.lerp(
+        public readonly float2 GetPoint(float t) => math.lerp(
                 math.lerp(pts[0], pts[1], t),
                 math.lerp(pts[1], pts[2], t),
                 t
