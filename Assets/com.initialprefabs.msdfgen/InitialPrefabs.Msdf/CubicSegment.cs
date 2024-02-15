@@ -2,6 +2,7 @@
 using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
+
     public struct CubicSegment : ISegment, IDivider<CubicSegment>, ICopy<CubicSegment> {
 
         public ref float2 P0 => ref pts[0];
