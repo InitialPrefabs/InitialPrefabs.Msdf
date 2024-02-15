@@ -21,7 +21,28 @@ namespace InitialPrefabs.Msdf {
         public CubicSegment Clone() => this;
 
         public void GetBounds(ref float4 points) {
-            throw new NotImplementedException();
+            P0.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
+            P3.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
+
+            var a0 = P1 - P0;
+            var a1 = 2 * (P2 - P1 - a0);
+            var a2 = P3 - 3 * P2 + 3 * P1 - P0;
+
+            var roots = new float2();
+            var solutions = roots.SolveQuadratic(a2.x, a1.x, a0.x);
+
+            for (int i = 0; i < solutions; i++) {
+                if (roots[i] > 0 && roots[i] < 1) {
+                    GetPoint(roots[i]).PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
+                }
+            }
+
+            solutions = roots.SolveQuadratic(a2.y, a1.y, a0.y);
+            for (int i = 0; i < solutions; i++) {
+                if (roots[i] > 0 && roots[i] < 1) {
+                    GetPoint(roots[i]).PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
+                }
+            }
         }
 
         public float2 GetDirection(float t) {
@@ -75,7 +96,7 @@ namespace InitialPrefabs.Msdf {
                     var qpt = GetPoint(_t) - origin;
                     var distance = MathExtensions.Cross(GetDirection(_t), qpt).NonZeroSign() * math.length(qpt);
 
-                    if (Math.Abs(distance) < Math.Abs(minDistance)) {
+                    if (math.abs(distance) < math.abs(minDistance)) {
                         minDistance = distance;
                         t = _t;
                     }
@@ -107,15 +128,69 @@ namespace InitialPrefabs.Msdf {
         }
 
         public void MoveEndPoint(float2 dst) {
-            throw new NotImplementedException();
+            P2 += dst - P3;
+            P3 = dst;
         }
 
         public void MoveStartPoint(float2 dst) {
-            throw new NotImplementedException();
+            P1 += dst - P0;
+            P0 = dst;
         }
 
         public void SplitInThirds(out CubicSegment p1, out CubicSegment p2, out CubicSegment p3) {
-            throw new NotImplementedException();
+            p1 = new CubicSegment(
+                P0,
+                P0.Equals(P1) ? P0 : math.lerp(P0, P1, 1 / 3f),
+                math.lerp(
+                    math.lerp(P0, P1, 1 / 3f),
+                    math.lerp(P1, P2, 1 / 3f),
+                    1 / 3f
+                ),
+                GetPoint(1 / 3f),
+                Color
+            );
+            p2 = new CubicSegment(
+                GetPoint(1 / 3f),
+                math.lerp(
+                    math.lerp(
+                        math.lerp(P0, P1, 1 / 3f),
+                        math.lerp(P1, P2, 1 / 3f),
+                        1 / 3f
+                    ),
+                    math.lerp(
+                        math.lerp(P1, P2, 1 / 3f),
+                        math.lerp(P2, P3, 1 / 3f),
+                        1 / 3f
+                    ),
+                    2 / 3f
+                ),
+                math.lerp(
+                    math.lerp(
+                        math.lerp(P0, P1, 2 / 3f),
+                        math.lerp(P1, P2, 2 / 3f),
+                        2 / 3f
+                    ),
+                    math.lerp(
+                        math.lerp(P1, P2, 2 / 3f),
+                        math.lerp(P2, P3, 2 / 3f),
+                        2 / 3f
+                    ),
+                    1 / 3f
+                ),
+                GetPoint(2 / 3f),
+                Color
+            );
+            p3 = new CubicSegment(
+                GetPoint(2 / 3f),
+                math.lerp(
+                    math.lerp(P1, P2, 2 / 3f),
+                    math.lerp(P2, P3, 2 / 3f),
+                    2 / 3f
+                ),
+                P2.Equals(P3) ? P3 : math.lerp(P2, P3, 2 / 3f),
+                P3,
+                Color
+            );
         }
     }
 }
