@@ -1,11 +1,12 @@
 ﻿using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
-    public struct QuadraticSegment : ISegment, ICopy<QuadraticSegment> {
 
-        public ref float2 P0 => ref pts[0];
-        public ref float2 P1 => ref pts[1];
-        public ref float2 P2 => ref pts[2];
+    public struct QuadraticSegment : ISegment, IDivider<QuadraticSegment>, ICopy<QuadraticSegment> {
+
+        public readonly ref float2 P0 => ref pts[0];
+        public readonly ref float2 P1 => ref pts[1];
+        public readonly ref float2 P2 => ref pts[2];
 
         private float2x3 pts;
 
@@ -23,7 +24,7 @@ namespace InitialPrefabs.Msdf {
 
         public readonly QuadraticSegment Clone() => this;
 
-        public void GetBounds(ref float4 points) {
+        public readonly void GetBounds(ref float4 points) {
             P0.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
             P2.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
             float2 bot = P1 - P0 - (P2 - P1);
