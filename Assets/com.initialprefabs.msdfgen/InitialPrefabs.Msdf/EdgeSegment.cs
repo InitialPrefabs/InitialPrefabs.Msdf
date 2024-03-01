@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
 
@@ -30,8 +29,8 @@ namespace InitialPrefabs.Msdf {
             float t) where T : struct, ISegment {
 
             if (t < 0) {
-                var dir = math.normalize(segment.GetDirection(0));
-                var aq = origin - segment.GetPoint(0);
+                float2 dir = math.normalize(segment.GetDirection(0));
+                float2 aq = origin - segment.GetPoint(0);
                 float ts = math.dot(aq, dir);
 
                 if (ts < 0) {
@@ -44,8 +43,8 @@ namespace InitialPrefabs.Msdf {
                     }
                 }
             } else if (t > 1) {
-                var dir = math.normalize(segment.GetDirection(1));
-                var bq = origin - segment.GetPoint(1);
+                float2 dir = math.normalize(segment.GetDirection(1));
+                float2 bq = origin - segment.GetPoint(1);
                 float ts = math.dot(bq, dir);
 
                 if (ts > 0) {

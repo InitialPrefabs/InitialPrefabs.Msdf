@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
 
@@ -49,7 +48,7 @@ namespace InitialPrefabs.Msdf {
             } else {
                 float u = (r < 0 ? 1 : -1) * math.pow(math.abs(r) + math.sqrt(r2 - q3), 1 / 3f);
                 float v = u == 0 ? 0 : q / u;
-                x.x = (u + v) - a;
+                x.x = u + v - a;
                 if (u == v || math.abs(u - v) < 1e-12 * math.abs(u + v)) {
                     x.y = -0.5f * (u + v) - a;
                     return 2;
@@ -65,8 +64,8 @@ namespace InitialPrefabs.Msdf {
                     return SolveCubicNormal(ref x, bn, c / a, d / a);
                 }
             }
-            var xy = x.xy;
-            Int32 quadratic = SolveQuadratic(ref xy, b, c, d);
+            float2 xy = x.xy;
+            int quadratic = SolveQuadratic(ref xy, b, c, d);
             x.xy = xy;
             return quadratic;
         }

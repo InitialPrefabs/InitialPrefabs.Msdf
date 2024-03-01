@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
     public struct LineSegment : ISegment, ICopy<LineSegment> {
@@ -29,22 +28,18 @@ namespace InitialPrefabs.Msdf {
             float2 aq = origin - P0;
             float2 ab = P1 - P0;
             t = math.dot(aq, ab);
-            var eq = (t > 0.5f ? P1 : P0) - origin;
+            float2 eq = (t > 0.5f ? P1 : P0) - origin;
             float endPtDistance = math.length(eq);
 
             if (t > 0 && t < 1) {
                 float orthoDistance = math.dot(ab.GetOrthogonal(false, false), aq);
                 if (math.abs(orthoDistance) < endPtDistance) {
-                    return new SignedDistance {
-                        Distance = orthoDistance,
-                        Dot = 0
-                    };
+                    return new SignedDistance(orthoDistance, 0);
                 }
             }
-            return new SignedDistance {
-                Distance = MathExtensions.Cross(aq, ab).NonZeroSign() * endPtDistance,
-                Dot = math.abs(math.dot(math.normalize(ab), math.normalize(eq)))
-            };
+            return new SignedDistance(
+                aq.Cross(ab).NonZeroSign() * endPtDistance,
+                math.abs(math.dot(math.normalize(ab), math.normalize(eq))));
         }
 
         public void MoveStartPoint(float2 dst) => P0 = dst;
