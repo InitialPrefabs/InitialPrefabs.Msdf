@@ -2,7 +2,7 @@
 
 namespace InitialPrefabs.Msdf {
 
-    public struct QuadraticSegment : ISegment, IDivider<QuadraticSegment>, ICopy<QuadraticSegment> {
+    public struct QuadraticSegment : ISegment, ICopy<QuadraticSegment>, IDivider<QuadraticSegment> {
 
         public readonly ref float2 P0 => ref pts[0];
         public readonly ref float2 P1 => ref pts[1];
@@ -118,7 +118,7 @@ namespace InitialPrefabs.Msdf {
             }
         }
 
-        public void SplitInThirds(out ISegment p1, out ISegment p2, out ISegment p3) {
+        public void SplitInThirds(out QuadraticSegment p1, out QuadraticSegment p2, out QuadraticSegment p3) {
             p1 = new QuadraticSegment(P0, math.lerp(P0, P1, 1 / 3f), GetPoint(1 / 3f), Color);
             p2 = new QuadraticSegment(GetPoint(1 / 3f), math.lerp(
                     math.lerp(P0, P1, 5 / 9f),
