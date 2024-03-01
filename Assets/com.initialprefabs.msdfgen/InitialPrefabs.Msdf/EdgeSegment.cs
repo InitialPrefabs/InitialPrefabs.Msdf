@@ -1,4 +1,5 @@
-﻿using Unity.Mathematics;
+﻿using System;
+using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
 
@@ -31,10 +32,10 @@ namespace InitialPrefabs.Msdf {
             if (t < 0) {
                 var dir = math.normalize(segment.GetDirection(0));
                 var aq = origin - segment.GetPoint(0);
-                var ts = math.dot(aq, dir);
+                float ts = math.dot(aq, dir);
 
                 if (ts < 0) {
-                    var pseudoDistance = aq.Cross(dir);
+                    float pseudoDistance = aq.Cross(dir);
                     if (math.abs(pseudoDistance) <= math.abs(sd.Distance)) {
                         sd = new SignedDistance {
                             Distance = pseudoDistance,
@@ -45,10 +46,10 @@ namespace InitialPrefabs.Msdf {
             } else if (t > 1) {
                 var dir = math.normalize(segment.GetDirection(1));
                 var bq = origin - segment.GetPoint(1);
-                var ts = math.dot(bq, dir);
+                float ts = math.dot(bq, dir);
 
                 if (ts > 0) {
-                    var pseudoDistance = bq.Cross(dir);
+                    float pseudoDistance = bq.Cross(dir);
                     if (math.abs(pseudoDistance) <= math.abs(sd.Distance)) {
                         sd = new SignedDistance {
                             Distance = pseudoDistance,

@@ -4,7 +4,7 @@ using Unity.Mathematics;
 namespace InitialPrefabs.Msdf {
     public static class MathExtensions {
         public static float2 GetOrthogonal(this float2 v, bool polarity, bool allowZero) {
-            var len = math.length(v);
+            float len = math.length(v);
             if (len <= 0) {
                 return polarity ? new float2(0, allowZero ? 0 : 1) : new float2(0, -(allowZero ? 0 : 1));
             }

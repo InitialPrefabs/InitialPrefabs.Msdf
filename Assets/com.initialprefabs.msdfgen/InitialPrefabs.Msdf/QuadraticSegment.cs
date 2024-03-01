@@ -27,7 +27,7 @@ namespace InitialPrefabs.Msdf {
         public void GetBounds(ref float4 points) {
             P0.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
             P2.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
-            var bot = (P1 - P0) - (P2 - P1);
+            float2 bot = (P1 - P0) - (P2 - P1);
 
             if (bot.x != 0) {
                 throw new NotImplementedException();
