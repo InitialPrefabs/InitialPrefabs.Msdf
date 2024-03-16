@@ -2,11 +2,11 @@
 
 namespace InitialPrefabs.Msdf {
 
-    public struct QuadraticSegment : ISegment, ICopy<QuadraticSegment>, IDivider<QuadraticSegment> {
+    public class QuadraticSegment : ISegment, ICopy<QuadraticSegment>, IDivider<QuadraticSegment> {
 
-        public readonly ref float2 P0 => ref pts[0];
-        public readonly ref float2 P1 => ref pts[1];
-        public readonly ref float2 P2 => ref pts[2];
+        public ref float2 P0 => ref pts[0];
+        public ref float2 P1 => ref pts[1];
+        public ref float2 P2 => ref pts[2];
 
         private float2x3 pts;
 
@@ -22,9 +22,11 @@ namespace InitialPrefabs.Msdf {
             this.pts = pts;
         }
 
-        public readonly QuadraticSegment Clone() => this;
+        public QuadraticSegment Clone() {
+            return new QuadraticSegment(pts, Color);
+        }
 
-        public readonly void GetBounds(ref float4 points) {
+        public void GetBounds(ref float4 points) {
             P0.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
             P2.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
             float2 bot = P1 - P0 - (P2 - P1);
@@ -43,9 +45,9 @@ namespace InitialPrefabs.Msdf {
             }
         }
 
-        public readonly float2 GetDirection(float t) => math.lerp(pts[1] - pts[0], pts[2] - pts[1], t);
+        public float2 GetDirection(float t) => math.lerp(pts[1] - pts[0], pts[2] - pts[1], t);
 
-        public readonly float2 GetPoint(float t) => math.lerp(
+        public float2 GetPoint(float t) => math.lerp(
                 math.lerp(pts[0], pts[1], t),
                 math.lerp(pts[1], pts[2], t),
                 t

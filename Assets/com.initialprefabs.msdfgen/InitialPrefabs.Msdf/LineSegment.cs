@@ -2,7 +2,7 @@
 
 namespace InitialPrefabs.Msdf {
 
-    public struct LineSegment : ISegment, ICopy<LineSegment>, IDivider<LineSegment> {
+    public class LineSegment : ISegment, ICopy<LineSegment>, IDivider<LineSegment> {
         public float2 P0;
         public float2 P1;
 
@@ -14,18 +14,18 @@ namespace InitialPrefabs.Msdf {
             P1 = p1;
         }
 
-        public readonly LineSegment Clone() => this;
+        public LineSegment Clone() => this;
 
-        public readonly void GetBounds(ref float4 points) {
+        public void GetBounds(ref float4 points) {
             P0.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
             P1.PointBounds(ref points.x, ref points.y, ref points.z, ref points.w);
         }
 
-        public readonly float2 GetDirection(float t) => P1 - P0;
+        public float2 GetDirection(float t) => P1 - P0;
 
-        public readonly float2 GetPoint(float t) => math.lerp(P0, P1, t);
+        public float2 GetPoint(float t) => math.lerp(P0, P1, t);
 
-        public readonly SignedDistance GetSignedDistance(float2 origin, out float t) {
+        public SignedDistance GetSignedDistance(float2 origin, out float t) {
             float2 aq = origin - P0;
             float2 ab = P1 - P0;
             t = math.dot(aq, ab);
