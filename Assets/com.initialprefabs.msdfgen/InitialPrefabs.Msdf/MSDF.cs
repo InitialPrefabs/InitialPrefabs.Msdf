@@ -1,3 +1,4 @@
+﻿using InitialPrefabs.Msdf.Collections;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -6,39 +7,38 @@ using UnityEngine;
 
 namespace InitialPrefabs.Msdf {
 
-    struct MultiDistance {
-
-        public float R {
-            get => Values.x;
-            set => Values.x = value;
-        }
-
-        public float G {
-            get => Values.y;
-            set => Values.y = value;
-        }
-
-        public float B {
-            get => Values.z;
-            set => Values.z = value;
-        }
-
-        public float Med {
-            get => Values.w;
-            set => Values.w = value;
-        }
-
-        public float4 Values;
-    }
-
-    public static partial class MSDF {
+    public unsafe static partial class MSDF {
 
         internal struct Clash {
             public int X;
             public int Y;
         }
 
-        public static bool PixelClash(Color a, Color b, double threshold) {
+        internal struct EdgePoint {
+            public SignedDistance minDistance;
+            public ISegment nearEdge;
+            public float nearParam;
+        }
+
+        public ref struct SDFParams {
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public float2 DetermineInitialPoint() => (new float2(xy) + 0.5f) / (Scale - Translate);
+
+            private readonly int2 xy;
+            public readonly float Range;
+            public readonly float2 Scale;
+            public float2 Translate;
+
+            public SDFParams(int x, int y, float range, float2 scale, float2 translate) {
+                xy = new int2(x, y);
+                Range = range;
+                Scale = scale;
+                Translate = translate;
+            }
+        }
+
+        public static bool PixelClash(Color a, Color b, float threshold) {
             bool aIn = ((a.r > .5f) ? 1 : 0) + ((a.g > .5f) ? 1 : 0) + ((a.b > .5f) ? 1 : 0) >= 2;
             bool bIn = ((b.r > .5f) ? 1 : 0) + ((b.g > .5f) ? 1 : 0) + ((b.b > .5f) ? 1 : 0) >= 2;
             if (aIn != bIn) return false;
@@ -46,8 +46,9 @@ namespace InitialPrefabs.Msdf {
             if ((a.r > .5f && a.g > .5f && a.b > .5f) ||
                 (a.r < .5f && a.g < .5f && a.b < .5f) ||
                 (b.r > .5f && b.g > .5f && b.b > .5f) ||
-                (b.r < .5f && b.g < .5f && b.b < .5f))
+                (b.r < .5f && b.g < .5f && b.b < .5f)) {
                 return false;
+            }
 
             float aa, ab, ba, bb, ac, bc;
 
@@ -79,14 +80,13 @@ namespace InitialPrefabs.Msdf {
                 bb = b.b;
                 ac = a.r;
                 bc = b.r;
-            } else
+            } else {
                 return false;
-            return (math.abs(aa - ba) >= threshold) &&
-                (math.abs(ab - bb) >= threshold) &&
-                math.abs(ac - .5f) >= math.abs(bc - .5f);
+            }
+            return (math.abs(aa - ba) >= threshold) && (math.abs(ab - bb) >= threshold) && math.abs(ac - .5f) >= math.abs(bc - .5f);
         }
 
-        public static bool PixelClash(Color32 a, Color32 b, double threshold) {
+        public static bool PixelClash(Color32 a, Color32 b, float threshold) {
             Color af = a;
             Color bf = b;
             return PixelClash(af, bf, threshold);
@@ -156,339 +156,5 @@ namespace InitialPrefabs.Msdf {
                 output[clash.X, clash.Y] = pixel;
             }
         }
-        /*
-        public static void GenerateSDF(Bitmap<float> output, Shape shape, double range, float2 scale, float2 translate) {
-            GenerateSDF(output, shape, new Rect(0, 0, output.Width, output.Height), range, scale, translate);
-        }
-
-        public static void GenerateSDF(Bitmap<byte> output, Shape shape, double range, float2 scale, float2 translate) {
-            GenerateSDF(output, shape, new Rect(0, 0, output.Width, output.Height), range, scale, translate);
-        }
-
-        public static void GenerateSDF(Bitmap<float> output, Shape shape, Rect region, double range, float2 scale, float2 translate) {
-            int contourCount = shape.Contours.Count;
-            int[] windings = new int[contourCount];
-
-            for (int i = 0; i < shape.Contours.Count; i++) {
-                windings[i] = shape.Contours[i].Winding;
-            }
-
-            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
-            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
-            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
-            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
-
-            double[] contourSD = new double[contourCount];
-
-            for (int y = yStart; y < yEnd; y++) {
-                int row = shape.InverseYAxis ? yEnd - (y - yStart) - 1 : y;
-                for (int x = xStart; x < xEnd; x++) {
-                    output[x, row] = EvaluateSDF(shape, windings, contourSD, x, y, range, scale, region.Position + translate);
-                }
-            }
-        }
-
-        public static void GenerateSDF(Bitmap<byte> output, Shape shape, Rect region, double range, float2 scale, float2 translate) {
-            int contourCount = shape.Contours.Count;
-            int[] windings = new int[contourCount];
-
-            for (int i = 0; i < shape.Contours.Count; i++) {
-                windings[i] = shape.Contours[i].Winding;
-            }
-
-            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
-            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
-            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
-            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
-
-            double[] contourSD = new double[contourCount];
-
-            for (int y = yStart; y < yEnd; y++) {
-                int row = shape.InverseYAxis ? yEnd - (y - yStart) - 1 : y;
-                for (int x = xStart; x < xEnd; x++) {
-                    output[x, row] = (byte)math.Min(math.Min((int)(EvaluateSDF(shape, windings, contourSD, x, y, range, scale, region.Position + translate) * 255), 0), 255);
-                }
-            }
-        }
-
-        static float EvaluateSDF(Shape shape, int[] windings, double[] contourSD, int x, int y, double range, float2 scale, float2 translate) {
-            int contourCount = contourSD.Length;
-
-            float dummy;
-            float2 p = new float2(x + 0.5f, y + 0.5f) / scale - translate;
-            double negDist = -SignedDistance.Infinite.Distance;
-            double posDist = SignedDistance.Infinite.Distance;
-            int winding = 0;
-
-            for (int i = 0; i < contourCount; i++) {
-                Contour contour = shape.Contours[i];
-                SignedDistance minDistance = new SignedDistance(-1e240f, 1);
-
-                for (int j = 0; j < contour.Edges.Count; j++) {
-                    ISegment edge = contour.Edges[j];
-                    SignedDistance distance = edge.GetSignedDistance(p, out dummy);
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                    }
-                }
-
-                contourSD[i] = minDistance.Distance;
-                if (windings[i] > 0 && minDistance.Distance >= 0 && math.Abs(minDistance.Distance) < math.Abs(posDist)) {
-                    posDist = minDistance.Distance;
-                }
-
-                if (windings[i] < 0 && minDistance.Distance <= 0 && math.Abs(minDistance.Distance) < math.Abs(negDist)) {
-                    negDist = minDistance.Distance;
-                }
-            }
-
-            double sd = SignedDistance.Infinite.Distance;
-
-            if (posDist >= 0 && math.Abs(posDist) <= math.Abs(negDist)) {
-                sd = posDist;
-                winding = 1;
-                for (int i = 0; i < contourCount; i++) {
-                    if (windings[i] > 0 && contourSD[i] > sd && math.Abs(contourSD[i]) < math.Abs(negDist)) {
-                        sd = contourSD[i];
-                    }
-                }
-            } else if (negDist <= 0 && math.Abs(negDist) <= math.Abs(posDist)) {
-                sd = negDist;
-                winding = -1;
-                for (int i = 0; i < contourCount; i++) {
-                    if (windings[i] < 0 && contourSD[i] < sd && math.Abs(contourSD[i]) < math.Abs(posDist)) {
-                        sd = contourSD[i];
-                    }
-                }
-            }
-
-            for (int i = 0; i < contourCount; i++) {
-                if (windings[i] != winding && math.Abs(contourSD[i]) < math.Abs(sd)) {
-                    sd = contourSD[i];
-                }
-            }
-
-            return (float)(sd / range) + 0.5f;
-        }
-
-        struct EdgePoint {
-            public SignedDistance minDistance;
-            public ISegment nearEdge;
-            public double nearParam;
-        }
-
-        public static void GenerateMSDF(Bitmap<Color> output, Shape shape, double range, float2 scale, float2 translate, double edgeThreshold) {
-            GenerateMSDF(output, shape, new Recta(0, 0, output.Width, output.Height), range, scale, translate, edgeThreshold);
-        }
-
-        public static void GenerateMSDF(Bitmap<Color32> output, Shape shape, double range, float2 scale, float2 translate, double edgeThreshold) {
-            GenerateMSDF(output, shape, new Rect(0, 0, output.Width, output.Height), range, scale, translate, edgeThreshold);
-        }
-
-        public static void GenerateMSDF(Bitmap<Color32> output, Shape shape, Rect region, double range, float2 scale, float2 translate, double edgeThreshold) {
-            int contourCount = shape.Contours.Count;
-            int[] windings = new int[contourCount];
-
-            for (int i = 0; i < shape.Contours.Count; i++) {
-                windings[i] = shape.Contours[i].Winding;
-            }
-
-            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
-            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
-            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
-            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
-
-            MultiDistance[] contourSD = new MultiDistance[contourCount];
-
-            for (int y = yStart; y < yEnd; y++) {
-                int row = shape.InverseYAxis ? yEnd - (y - yStart) - 1 : y;
-                for (int x = xStart; x < xEnd; x++) {
-                    float2 p = (new float2(x, y) - region.Position - translate) / scale;
-                    output[x, row] = EvaluateMSDF(shape, windings, contourSD, p, range);
-                }
-            }
-        }
-
-        public static void GenerateMSDF(Bitmap<Color3b> output, Shape shape, Rectangle region, double range, float2 scale, float2 translate, double edgeThreshold) {
-            int contourCount = shape.Contours.Count;
-            int[] windings = new int[contourCount];
-
-            for (int i = 0; i < shape.Contours.Count; i++) {
-                windings[i] = shape.Contours[i].Winding;
-            }
-
-            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
-            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
-            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
-            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
-
-            MultiDistance[] contourSD = new MultiDistance[contourCount];
-
-            for (int y = yStart; y < yEnd; y++) {
-                int row = shape.InverseYAxis ? yEnd - (y - yStart) - 1 : y;
-                for (int x = xStart; x < xEnd; x++) {
-                    float2 p = (new float2(x, y) - region.Position - translate) / scale;
-                    output[x, row] = new Color3b(EvaluateMSDF(shape, windings, contourSD, p, range));
-                }
-            }
-        }
-
-        public static void GenerateMSDF(Bitmap<Color32> output, Shape shape, Rect region, double range, float2 scale, float2 translate, double edgeThreshold) {
-            int contourCount = shape.Contours.Count;
-            int[] windings = new int[contourCount];
-
-            for (int i = 0; i < shape.Contours.Count; i++) {
-                windings[i] = shape.Contours[i].Winding;
-            }
-
-            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
-            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
-            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
-            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
-
-            MultiDistance[] contourSD = new MultiDistance[contourCount];
-
-            for (int y = yStart; y < yEnd; y++) {
-                int row = shape.InverseYAxis ? yEnd - (y - yStart) - 1 : y;
-                for (int x = xStart; x < xEnd; x++) {
-                    float2 p = (new float2(x, y) - region.Position - translate) / scale;
-                    output[x, row] = new Color32(EvaluateMSDF(shape, windings, contourSD, p, range), 255);
-                }
-            }
-        }
-
-        static Color3 EvaluateMSDF(Shape shape, int[] windings, MultiDistance[] contourSD, float2 p, double range) {
-            int contourCount = contourSD.Length;
-            p += new float2(0.5f, 0.5f);
-
-            EdgePoint sr = new EdgePoint {
-                minDistance = new SignedDistance(-1e240, 1)
-            };
-            EdgePoint sg = new EdgePoint {
-                minDistance = new SignedDistance(-1e240, 1)
-            };
-            EdgePoint sb = new EdgePoint {
-                minDistance = new SignedDistance(-1e240, 1)
-            };
-
-            double d = math.Abs(SignedDistance.Infinite.distance);
-            double negDist = -SignedDistance.Infinite.distance;
-            double posDist = SignedDistance.Infinite.distance;
-            int winding = 0;
-
-            for (int i = 0; i < contourCount; i++) {
-                Contour contour = shape.Contours[i];
-                EdgePoint r = new EdgePoint {
-                    minDistance = new SignedDistance(-1e240, 1)
-                };
-                EdgePoint g = new EdgePoint {
-                    minDistance = new SignedDistance(-1e240, 1)
-                };
-                EdgePoint b = new EdgePoint {
-                    minDistance = new SignedDistance(-1e240, 1)
-                };
-
-                for (int j = 0; j < contour.Edges.Count; j++) {
-                    EdgeSegment edge = contour.Edges[j];
-                    double param;
-
-                    SignedDistance distance = edge.GetSignedDistance(p, out param);
-                    if ((edge.Color & EdgeColor.Red) == EdgeColor.Red && distance < r.minDistance) {
-                        r.minDistance = distance;
-                        r.nearEdge = edge;
-                        r.nearParam = param;
-                    }
-                    if ((edge.Color & EdgeColor.Green) == EdgeColor.Green && distance < g.minDistance) {
-                        g.minDistance = distance;
-                        g.nearEdge = edge;
-                        g.nearParam = param;
-                    }
-                    if ((edge.Color & EdgeColor.Blue) == EdgeColor.Blue && distance < b.minDistance) {
-                        b.minDistance = distance;
-                        b.nearEdge = edge;
-                        b.nearParam = param;
-                    }
-                }
-
-                if (r.minDistance < sr.minDistance) sr = r;
-                if (g.minDistance < sg.minDistance) sg = g;
-                if (b.minDistance < sb.minDistance) sb = b;
-
-                double medMinDistance = math.Abs(Median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance));
-
-                if (medMinDistance < d) {
-                    d = medMinDistance;
-                    winding = -windings[i];
-                }
-
-                if (r.nearEdge != null) {
-                    r.nearEdge.DistanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
-                }
-                if (g.nearEdge != null) {
-                    g.nearEdge.DistanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
-                }
-                if (b.nearEdge != null) {
-                    b.nearEdge.DistanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
-                }
-
-                medMinDistance = Median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance);
-
-                contourSD[i].r = r.minDistance.distance;
-                contourSD[i].g = g.minDistance.distance;
-                contourSD[i].b = b.minDistance.distance;
-                contourSD[i].med = medMinDistance;
-
-                if (windings[i] > 0 && medMinDistance >= 0 && math.Abs(medMinDistance) < math.Abs(posDist)) {
-                    posDist = medMinDistance;
-                }
-                if (windings[i] < 0 && medMinDistance <= 0 && math.Abs(medMinDistance) < math.Abs(negDist)) {
-                    negDist = medMinDistance;
-                }
-            }
-
-            if (sr.nearEdge != null) sr.nearEdge.DistanceToPseudoDistance(ref sr.minDistance, p, sr.nearParam);
-            if (sg.nearEdge != null) sg.nearEdge.DistanceToPseudoDistance(ref sg.minDistance, p, sg.nearParam);
-            if (sb.nearEdge != null) sb.nearEdge.DistanceToPseudoDistance(ref sb.minDistance, p, sb.nearParam);
-
-            MultiDistance msd = new MultiDistance {
-                r = SignedDistance.Infinite.distance,
-                g = SignedDistance.Infinite.distance,
-                b = SignedDistance.Infinite.distance,
-                med = SignedDistance.Infinite.distance,
-            };
-
-            if (posDist >= 0 && math.Abs(posDist) <= math.Abs(negDist)) {
-                msd.med = SignedDistance.Infinite.distance;
-                winding = 1;
-                for (int i = 0; i < contourCount; i++) {
-                    if (windings[i] > 0 && contourSD[i].med > msd.med && math.Abs(contourSD[i].med) < math.Abs(negDist)) {
-                        msd = contourSD[i];
-                    }
-                }
-            } else if (negDist <= 0 && math.Abs(negDist) <= math.Abs(posDist)) {
-                msd.med = -SignedDistance.Infinite.distance;
-                winding = -1;
-                for (int i = 0; i < contourCount; i++) {
-                    if (windings[i] < 0 && contourSD[i].med < msd.med && math.Abs(contourSD[i].med) < math.Abs(posDist)) {
-                        msd = contourSD[i];
-                    }
-                }
-            }
-
-            for (int i = 0; i < contourCount; i++) {
-                if (windings[i] != winding && math.Abs(contourSD[i].med) < math.Abs(msd.med)) {
-                    msd = contourSD[i];
-                }
-            }
-
-            if (Median(sr.minDistance.distance, sg.minDistance.distance, sb.minDistance.distance) == msd.med) {
-                msd.r = sr.minDistance.distance;
-                msd.g = sg.minDistance.distance;
-                msd.b = sb.minDistance.distance;
-            }
-
-            return new Color3((float)(msd.r / range) + 0.5f, (float)(msd.g / range) + 0.5f, (float)(msd.b / range) + 0.5f);
-        }
-        */
     }
 }

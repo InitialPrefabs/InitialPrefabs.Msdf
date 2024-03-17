@@ -3,6 +3,8 @@ using UnityEngine;
 namespace InitialPrefabs.Msdf {
     public static class ColorExtensions {
 
+        public static Color32 Initialize(this Color32 _, Color color1) => color1;
+
         public static Color32 Initialize(this Color32 color, byte r, byte gba) {
             color.r = r;
             color.g = color.b = color.a = gba;

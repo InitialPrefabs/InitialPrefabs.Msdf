@@ -11,8 +11,13 @@ namespace InitialPrefabs.Msdf {
             Dot = dot;
         }
 
-        public static SignedDistance Infinite { get; } = new SignedDistance {
-            Distance = float.MinValue,
+        public static SignedDistance NegativeInfinite { get; } = new SignedDistance {
+            Distance = float.NegativeInfinity,
+            Dot = 1.0f
+        };
+
+        public static SignedDistance PositiveInfinite { get; } = new SignedDistance {
+            Distance = float.PositiveInfinity,
             Dot = 1.0f
         };
 
