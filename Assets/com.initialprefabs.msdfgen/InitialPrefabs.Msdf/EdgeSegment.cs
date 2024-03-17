@@ -5,10 +5,10 @@ namespace InitialPrefabs.Msdf {
     public static class EdgeSegmentExtensions {
 
         public static void DistanceToPseudoDistance<T>(
-            ref T segment,
+            this T segment,
             ref SignedDistance sd,
             float2 origin,
-            float t) where T : struct, ISegment {
+            float t) where T : class, ISegment {
 
             if (t < 0) {
                 float2 dir = math.normalize(segment.GetDirection(0));

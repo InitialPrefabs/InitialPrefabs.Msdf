@@ -1,7 +1,7 @@
 ﻿using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
-    internal struct MultiDistance {
+    public struct MultiDistance {
 
         public float R {
             get => Values.x;

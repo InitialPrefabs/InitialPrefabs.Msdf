@@ -15,9 +15,9 @@ namespace InitialPrefabs.Msdf {
         }
 
         internal struct EdgePoint {
-            public SignedDistance minDistance;
-            public ISegment nearEdge;
-            public float nearParam;
+            public SignedDistance MinDistance;
+            public ISegment NearEdge;
+            public float NearParam;
         }
 
         public ref struct SDFParams {
