@@ -26,5 +26,15 @@ namespace InitialPrefabs.Msdf {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Cross(this float2 a, float2 b) => a.x * b.y - a.y * b.x;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Median(float a, float b, float c) {
+            return math.max(math.min(a, b), Math.Min(Math.Max(a, b), c));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Median(int a, int b, int c) {
+            return math.max(math.min(a, b), Math.Min(Math.Max(a, b), c));
+        }
     }
 }

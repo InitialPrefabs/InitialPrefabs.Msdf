@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -31,6 +32,11 @@ namespace InitialPrefabs.Msdf {
     }
 
     public static partial class MSDF {
+
+        internal struct Clash {
+            public int X;
+            public int Y;
+        }
 
         public static bool PixelClash(Color a, Color b, double threshold) {
             bool aIn = ((a.r > .5f) ? 1 : 0) + ((a.g > .5f) ? 1 : 0) + ((a.b > .5f) ? 1 : 0) >= 2;
@@ -75,9 +81,9 @@ namespace InitialPrefabs.Msdf {
                 bc = b.r;
             } else
                 return false;
-            return (Math.Abs(aa - ba) >= threshold) &&
-                (Math.Abs(ab - bb) >= threshold) &&
-                Math.Abs(ac - .5f) >= Math.Abs(bc - .5f);
+            return (math.abs(aa - ba) >= threshold) &&
+                (math.abs(ab - bb) >= threshold) &&
+                math.abs(ac - .5f) >= math.abs(bc - .5f);
         }
 
         public static bool PixelClash(Color32 a, Color32 b, double threshold) {
@@ -86,41 +92,35 @@ namespace InitialPrefabs.Msdf {
             return PixelClash(af, bf, threshold);
         }
 
-        struct Clash {
-            public int x;
-            public int y;
-        }
-
-        /*
-        public static void CorrectErrors(Bitmap<Color4> output, RectInt region, float2 threshold) {
+        public static void CorrectErrors(Bitmap<Color> output, RectInt region, float2 threshold) {
             List<Clash> clashes = new List<Clash>();
             int w = output.Width;
             int h = output.Height;
 
-            int xStart = Math.Min(Math.Max(0, region.Left), output.Width);
-            int yStart = Math.Min(Math.Max(0, region.Top), output.Height);
-            int xEnd = Math.Min(Math.Max(0, region.Right), output.Width);
-            int yEnd = Math.Min(Math.Max(0, region.Bottom), output.Height);
+            int xStart = math.min(math.max(0, region.Left), output.Width);
+            int yStart = math.min(math.max(0, region.Top), output.Height);
+            int xEnd = math.min(math.max(0, region.Right), output.Width);
+            int yEnd = math.min(math.max(0, region.Bottom), output.Height);
 
             for (int y = yStart; y < yEnd; y++) {
                 for (int x = xStart; x < xEnd; x++) {
-                    if ((x > 0 && PixelClash(output[x, y], output[x - 1, y], threshold.X)) ||
-                        (x < w - 1 && PixelClash(output[x, y], output[x + 1, y], threshold.X)) ||
-                        (y > 0 && PixelClash(output[x, y], output[x, y - 1], threshold.Y)) ||
-                        (y < h - 1 && PixelClash(output[x, y], output[x, y + 1], threshold.Y))) {
+                    if ((x > 0 && PixelClash(output[x, y], output[x - 1, y], threshold.x)) ||
+                        (x < w - 1 && PixelClash(output[x, y], output[x + 1, y], threshold.x)) ||
+                        (y > 0 && PixelClash(output[x, y], output[x, y - 1], threshold.y)) ||
+                        (y < h - 1 && PixelClash(output[x, y], output[x, y + 1], threshold.y))) {
 
-                        clashes.Add(new Clash { x = x, y = y });
+                        clashes.Add(new Clash { X = x, Y = y });
                     }
                 }
             }
 
             for (int i = 0; i < clashes.Count; i++) {
-                Color pixel = output[clashes[i].x, clashes[i].y];
-                float med = Median(pixel.r, pixel.g, pixel.b);
+                Color pixel = output[clashes[i].X, clashes[i].Y];
+                float med = MathExtensions.Median(pixel.r, pixel.g, pixel.b);
                 pixel.r = med;
                 pixel.g = med;
                 pixel.b = med;
-                output[clashes[i].x, clashes[i].y] = pixel;
+                output[clashes[i].X, clashes[i].Y] = pixel;
             }
         }
 
@@ -129,45 +129,34 @@ namespace InitialPrefabs.Msdf {
             int w = output.Width;
             int h = output.Height;
 
-            int xStart = Math.Min(Math.Max(0, region.Left), output.Width);
-            int yStart = Math.Min(Math.Max(0, region.Top), output.Height);
-            int xEnd = Math.Min(Math.Max(0, region.Right), output.Width);
-            int yEnd = Math.Min(Math.Max(0, region.Bottom), output.Height);
+            int xStart = math.min(math.max(0, region.Left), output.Width);
+            int yStart = math.min(math.max(0, region.Top), output.Height);
+            int xEnd = math.min(math.max(0, region.Right), output.Width);
+            int yEnd = math.min(math.max(0, region.Bottom), output.Height);
 
             for (int y = yStart; y < yEnd; y++) {
                 for (int x = xStart; x < xEnd; x++) {
-                    if ((x > 0 && PixelClash(output[x, y], output[x - 1, y], threshold.X)) ||
-                        (x < w - 1 && PixelClash(output[x, y], output[x + 1, y], threshold.X)) ||
-                        (y > 0 && PixelClash(output[x, y], output[x, y - 1], threshold.Y)) ||
-                        (y < h - 1 && PixelClash(output[x, y], output[x, y + 1], threshold.Y))) {
+                    if ((x > 0 && PixelClash(output[x, y], output[x - 1, y], threshold.x)) ||
+                        (x < w - 1 && PixelClash(output[x, y], output[x + 1, y], threshold.x)) ||
+                        (y > 0 && PixelClash(output[x, y], output[x, y - 1], threshold.y)) ||
+                        (y < h - 1 && PixelClash(output[x, y], output[x, y + 1], threshold.y))) {
 
-                        clashes.Add(new Clash { x = x, y = y });
+                        clashes.Add(new Clash { X = x, Y = y });
                     }
                 }
             }
 
             for (int i = 0; i < clashes.Count; i++) {
-                Color32 pixel = output[clashes[i].x, clashes[i].y];
-                int med = Median(pixel.r, pixel.g, pixel.b);
+                Clash clash = clashes[i];
+                Color32 pixel = output[clash.X, clash.Y];
+                int med = MathExtensions.Median(pixel.r, pixel.g, pixel.b);
                 pixel.r = (byte)med;
                 pixel.g = (byte)med;
                 pixel.b = (byte)med;
-                output[clashes[i].x, clashes[i].y] = pixel;
+                output[clash.X, clash.Y] = pixel;
             }
         }
-
-        static float Median(float a, float b, float c) {
-            return Math.Max(Math.Min(a, b), Math.Min(Math.Max(a, b), c));
-        }
-
-        static double Median(double a, double b, double c) {
-            return Math.Max(Math.Min(a, b), Math.Min(Math.Max(a, b), c));
-        }
-
-        static int Median(int a, int b, int c) {
-            return Math.Max(Math.Min(a, b), Math.Min(Math.Max(a, b), c));
-        }
-
+        /*
         public static void GenerateSDF(Bitmap<float> output, Shape shape, double range, float2 scale, float2 translate) {
             GenerateSDF(output, shape, new Rect(0, 0, output.Width, output.Height), range, scale, translate);
         }
@@ -184,10 +173,10 @@ namespace InitialPrefabs.Msdf {
                 windings[i] = shape.Contours[i].Winding;
             }
 
-            int xStart = Math.Min(Math.Max(0, (int)region.Left), output.Width);
-            int yStart = Math.Min(Math.Max(0, (int)region.Top), output.Height);
-            int xEnd = Math.Min(Math.Max(0, (int)region.Right), output.Width);
-            int yEnd = Math.Min(Math.Max(0, (int)region.Bottom), output.Height);
+            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
+            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
+            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
+            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
 
             double[] contourSD = new double[contourCount];
 
@@ -207,17 +196,17 @@ namespace InitialPrefabs.Msdf {
                 windings[i] = shape.Contours[i].Winding;
             }
 
-            int xStart = Math.Min(Math.Max(0, (int)region.Left), output.Width);
-            int yStart = Math.Min(Math.Max(0, (int)region.Top), output.Height);
-            int xEnd = Math.Min(Math.Max(0, (int)region.Right), output.Width);
-            int yEnd = Math.Min(Math.Max(0, (int)region.Bottom), output.Height);
+            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
+            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
+            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
+            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
 
             double[] contourSD = new double[contourCount];
 
             for (int y = yStart; y < yEnd; y++) {
                 int row = shape.InverseYAxis ? yEnd - (y - yStart) - 1 : y;
                 for (int x = xStart; x < xEnd; x++) {
-                    output[x, row] = (byte)Math.Min(Math.Min((int)(EvaluateSDF(shape, windings, contourSD, x, y, range, scale, region.Position + translate) * 255), 0), 255);
+                    output[x, row] = (byte)math.Min(math.Min((int)(EvaluateSDF(shape, windings, contourSD, x, y, range, scale, region.Position + translate) * 255), 0), 255);
                 }
             }
         }
@@ -244,37 +233,37 @@ namespace InitialPrefabs.Msdf {
                 }
 
                 contourSD[i] = minDistance.Distance;
-                if (windings[i] > 0 && minDistance.Distance >= 0 && Math.Abs(minDistance.Distance) < Math.Abs(posDist)) {
+                if (windings[i] > 0 && minDistance.Distance >= 0 && math.Abs(minDistance.Distance) < math.Abs(posDist)) {
                     posDist = minDistance.Distance;
                 }
 
-                if (windings[i] < 0 && minDistance.Distance <= 0 && Math.Abs(minDistance.Distance) < Math.Abs(negDist)) {
+                if (windings[i] < 0 && minDistance.Distance <= 0 && math.Abs(minDistance.Distance) < math.Abs(negDist)) {
                     negDist = minDistance.Distance;
                 }
             }
 
             double sd = SignedDistance.Infinite.Distance;
 
-            if (posDist >= 0 && Math.Abs(posDist) <= Math.Abs(negDist)) {
+            if (posDist >= 0 && math.Abs(posDist) <= math.Abs(negDist)) {
                 sd = posDist;
                 winding = 1;
                 for (int i = 0; i < contourCount; i++) {
-                    if (windings[i] > 0 && contourSD[i] > sd && Math.Abs(contourSD[i]) < Math.Abs(negDist)) {
+                    if (windings[i] > 0 && contourSD[i] > sd && math.Abs(contourSD[i]) < math.Abs(negDist)) {
                         sd = contourSD[i];
                     }
                 }
-            } else if (negDist <= 0 && Math.Abs(negDist) <= Math.Abs(posDist)) {
+            } else if (negDist <= 0 && math.Abs(negDist) <= math.Abs(posDist)) {
                 sd = negDist;
                 winding = -1;
                 for (int i = 0; i < contourCount; i++) {
-                    if (windings[i] < 0 && contourSD[i] < sd && Math.Abs(contourSD[i]) < Math.Abs(posDist)) {
+                    if (windings[i] < 0 && contourSD[i] < sd && math.Abs(contourSD[i]) < math.Abs(posDist)) {
                         sd = contourSD[i];
                     }
                 }
             }
 
             for (int i = 0; i < contourCount; i++) {
-                if (windings[i] != winding && Math.Abs(contourSD[i]) < Math.Abs(sd)) {
+                if (windings[i] != winding && math.Abs(contourSD[i]) < math.Abs(sd)) {
                     sd = contourSD[i];
                 }
             }
@@ -304,10 +293,10 @@ namespace InitialPrefabs.Msdf {
                 windings[i] = shape.Contours[i].Winding;
             }
 
-            int xStart = Math.Min(Math.Max(0, (int)region.Left), output.Width);
-            int yStart = Math.Min(Math.Max(0, (int)region.Top), output.Height);
-            int xEnd = Math.Min(Math.Max(0, (int)region.Right), output.Width);
-            int yEnd = Math.Min(Math.Max(0, (int)region.Bottom), output.Height);
+            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
+            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
+            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
+            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
 
             MultiDistance[] contourSD = new MultiDistance[contourCount];
 
@@ -328,10 +317,10 @@ namespace InitialPrefabs.Msdf {
                 windings[i] = shape.Contours[i].Winding;
             }
 
-            int xStart = Math.Min(Math.Max(0, (int)region.Left), output.Width);
-            int yStart = Math.Min(Math.Max(0, (int)region.Top), output.Height);
-            int xEnd = Math.Min(Math.Max(0, (int)region.Right), output.Width);
-            int yEnd = Math.Min(Math.Max(0, (int)region.Bottom), output.Height);
+            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
+            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
+            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
+            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
 
             MultiDistance[] contourSD = new MultiDistance[contourCount];
 
@@ -352,10 +341,10 @@ namespace InitialPrefabs.Msdf {
                 windings[i] = shape.Contours[i].Winding;
             }
 
-            int xStart = Math.Min(Math.Max(0, (int)region.Left), output.Width);
-            int yStart = Math.Min(Math.Max(0, (int)region.Top), output.Height);
-            int xEnd = Math.Min(Math.Max(0, (int)region.Right), output.Width);
-            int yEnd = Math.Min(Math.Max(0, (int)region.Bottom), output.Height);
+            int xStart = math.Min(math.Max(0, (int)region.Left), output.Width);
+            int yStart = math.Min(math.Max(0, (int)region.Top), output.Height);
+            int xEnd = math.Min(math.Max(0, (int)region.Right), output.Width);
+            int yEnd = math.Min(math.Max(0, (int)region.Bottom), output.Height);
 
             MultiDistance[] contourSD = new MultiDistance[contourCount];
 
@@ -382,7 +371,7 @@ namespace InitialPrefabs.Msdf {
                 minDistance = new SignedDistance(-1e240, 1)
             };
 
-            double d = Math.Abs(SignedDistance.Infinite.distance);
+            double d = math.Abs(SignedDistance.Infinite.distance);
             double negDist = -SignedDistance.Infinite.distance;
             double posDist = SignedDistance.Infinite.distance;
             int winding = 0;
@@ -425,7 +414,7 @@ namespace InitialPrefabs.Msdf {
                 if (g.minDistance < sg.minDistance) sg = g;
                 if (b.minDistance < sb.minDistance) sb = b;
 
-                double medMinDistance = Math.Abs(Median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance));
+                double medMinDistance = math.Abs(Median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance));
 
                 if (medMinDistance < d) {
                     d = medMinDistance;
@@ -449,10 +438,10 @@ namespace InitialPrefabs.Msdf {
                 contourSD[i].b = b.minDistance.distance;
                 contourSD[i].med = medMinDistance;
 
-                if (windings[i] > 0 && medMinDistance >= 0 && Math.Abs(medMinDistance) < Math.Abs(posDist)) {
+                if (windings[i] > 0 && medMinDistance >= 0 && math.Abs(medMinDistance) < math.Abs(posDist)) {
                     posDist = medMinDistance;
                 }
-                if (windings[i] < 0 && medMinDistance <= 0 && Math.Abs(medMinDistance) < Math.Abs(negDist)) {
+                if (windings[i] < 0 && medMinDistance <= 0 && math.Abs(medMinDistance) < math.Abs(negDist)) {
                     negDist = medMinDistance;
                 }
             }
@@ -468,26 +457,26 @@ namespace InitialPrefabs.Msdf {
                 med = SignedDistance.Infinite.distance,
             };
 
-            if (posDist >= 0 && Math.Abs(posDist) <= Math.Abs(negDist)) {
+            if (posDist >= 0 && math.Abs(posDist) <= math.Abs(negDist)) {
                 msd.med = SignedDistance.Infinite.distance;
                 winding = 1;
                 for (int i = 0; i < contourCount; i++) {
-                    if (windings[i] > 0 && contourSD[i].med > msd.med && Math.Abs(contourSD[i].med) < Math.Abs(negDist)) {
+                    if (windings[i] > 0 && contourSD[i].med > msd.med && math.Abs(contourSD[i].med) < math.Abs(negDist)) {
                         msd = contourSD[i];
                     }
                 }
-            } else if (negDist <= 0 && Math.Abs(negDist) <= Math.Abs(posDist)) {
+            } else if (negDist <= 0 && math.Abs(negDist) <= math.Abs(posDist)) {
                 msd.med = -SignedDistance.Infinite.distance;
                 winding = -1;
                 for (int i = 0; i < contourCount; i++) {
-                    if (windings[i] < 0 && contourSD[i].med < msd.med && Math.Abs(contourSD[i].med) < Math.Abs(posDist)) {
+                    if (windings[i] < 0 && contourSD[i].med < msd.med && math.Abs(contourSD[i].med) < math.Abs(posDist)) {
                         msd = contourSD[i];
                     }
                 }
             }
 
             for (int i = 0; i < contourCount; i++) {
-                if (windings[i] != winding && Math.Abs(contourSD[i].med) < Math.Abs(msd.med)) {
+                if (windings[i] != winding && math.Abs(contourSD[i].med) < math.Abs(msd.med)) {
                     msd = contourSD[i];
                 }
             }
