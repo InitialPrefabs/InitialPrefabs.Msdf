@@ -4,7 +4,7 @@ using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf {
 
-    public unsafe static partial class MSDF {
+    public static unsafe partial class MSDF {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal unsafe static float EvaluateSDF(
             Shape shape,
