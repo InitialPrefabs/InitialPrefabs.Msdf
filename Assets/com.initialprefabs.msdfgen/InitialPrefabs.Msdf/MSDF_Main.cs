@@ -22,7 +22,7 @@ namespace InitialPrefabs.Msdf {
 
             float d = math.abs(SignedDistance.PositiveInfinite.Distance);
             float negDist = SignedDistance.NegativeInfinite.Distance;
-            float postDist = SignedDistance.PositiveInfinite.Distance;
+            float posDist = SignedDistance.PositiveInfinite.Distance;
             int winding = 0;
 
             for (int i = 0; i < contourCount; i++) {
@@ -85,17 +85,65 @@ namespace InitialPrefabs.Msdf {
 
                     medMinDistance = MathExtensions.Median(r.MinDistance.Distance, g.MinDistance.Distance, b.MinDistance.Distance);
 
-                    ref MultiDistance current = ref PointerExtensions.ElementAt<MultiDistance>(contourSD, i);
+                    ref MultiDistance current = ref PointerExtensions.ElementAt(contourSD, i);
                     current.R = r.MinDistance.Distance;
                     current.G = g.MinDistance.Distance;
                     current.B = b.MinDistance.Distance;
                     current.Med = medMinDistance;
 
-                    // if (windings[i] > 0 && medMinDistance >= 0 && math.abs(medMinDistance)
+                    if (windings[i] > 0 && medMinDistance >= 0 && math.abs(medMinDistance) < math.abs(posDist)) {
+                        posDist = medMinDistance;
+                    }
+
+                    if (windings[i] < 0 && medMinDistance <= 0 && math.abs(medMinDistance) < math.abs(negDist)) {
+                        negDist = medMinDistance;
+                    }
                 }
             }
 
-            throw new System.NotImplementedException();
+            if (sr.NearEdge != null) sr.NearEdge.DistanceToPseudoDistance(ref sr.MinDistance, p, sr.NearParam);
+            if (sg.NearEdge != null) sg.NearEdge.DistanceToPseudoDistance(ref sg.MinDistance, p, sg.NearParam);
+            if (sb.NearEdge != null) sb.NearEdge.DistanceToPseudoDistance(ref sb.MinDistance, p, sb.NearParam);
+
+            MultiDistance msd = new MultiDistance {
+                Values = new float4(SignedDistance.PositiveInfinite.Distance)
+            };
+
+            if (posDist >= 0 && math.abs(posDist) <= math.abs(negDist)) {
+                msd.Med = SignedDistance.PositiveInfinite.Distance;
+                winding = 1;
+                for (int i = 0; i < contourCount; i++) {
+                    ref MultiDistance current = ref PointerExtensions.ElementAt(contourSD, i);
+                    if (windings[i] > 0 && current.Med > msd.Med && math.abs(current.Med) < math.abs(negDist)) {
+                        msd = current;
+                    }
+                }
+            } else if (negDist <= 0 && math.abs(negDist) <= math.abs(posDist)) {
+                msd.Med = SignedDistance.NegativeInfinite.Distance;
+                winding = -1;
+
+                for (int i = 0; i < contourCount; i++) {
+                    ref MultiDistance current = ref PointerExtensions.ElementAt(contourSD, i);
+                    if (windings[i] < 0 && current.Med < msd.Med && math.abs(current.Med) < math.abs(posDist)) {
+                        msd = contourSD[i];
+                    }
+                }
+            }
+
+            for (int i = 0; i < contourCount; i++) {
+                ref MultiDistance current = ref PointerExtensions.ElementAt(contourSD, i);
+                if (windings[i] != winding && math.abs(current.Med) < math.abs(msd.Med)) {
+                    msd = contourSD[i];
+                }
+            }
+
+            if (MathExtensions.Median(sr.MinDistance.Distance, sg.MinDistance.Distance, sb.MinDistance.Distance) == msd.Med) {
+                msd.R = sr.MinDistance.Distance;
+                msd.G = sg.MinDistance.Distance;
+                msd.B = sb.MinDistance.Distance;
+            }
+
+            return new Color((msd.R / range) + 0.5f, (msd.G / range) + 0.5f, (msd.B / range) + 0.5f);
         }
     }
 }
