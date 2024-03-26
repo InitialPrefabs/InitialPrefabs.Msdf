@@ -145,5 +145,36 @@ namespace InitialPrefabs.Msdf {
 
             return new Color((msd.R / range) + 0.5f, (msd.G / range) + 0.5f, (msd.B / range) + 0.5f);
         }
+
+        public ref struct MsdfParams {
+            public float Range;
+            public float EdgeThreshold;
+            public float2 Scale;
+            public float2 Translate;
+        }
+
+        public static void GenerateMSDF(ref Bitmap<Color> output, Shape shape, Rect region, ref MsdfParams msdfParams) {
+            int contourCount = shape.Contours.Count;
+            int* windings = stackalloc int[contourCount];
+
+            for (int i = 0; i < contourCount; i++) {
+                windings[i] = shape.Contours[i].Winding;
+            }
+
+            int xStart = math.min(math.max(0, (int)region.Left), output.Width);
+            int yStart = math.min(math.max(0, (int)region.Top), output.Height);
+            int xEnd   = math.min(math.max(0, (int)region.Right), output.Width);
+            int yEnd   = math.min(math.max(0, (int)region.Bottom), output.Height);
+
+            MultiDistance* contourSD = stackalloc MultiDistance[contourCount];
+
+            for (int y = yStart; y < yEnd; y++) {
+                int row = shape.InverseYAxis ? yEnd - (y - yStart) - 1 : y;
+                for (int x = xStart; x < xEnd; x++) {
+                    float2 p = (new float2(x, y) - region.Position - msdfParams.Translate) / msdfParams.Scale;
+                    output[x, row] = EvaluateMSDF(shape, windings, contourSD, contourCount, p, msdfParams.Range);
+                }
+            }
+        }
     }
 }
