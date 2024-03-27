@@ -1,11 +1,12 @@
 ﻿using InitialPrefabs.Msdf.Collections;
+using System;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace InitialPrefabs.Msdf {
     public static unsafe partial class MSDF {
 
-        public static Color EvaluateMSDF(Shape shape, int* windings, MultiDistance* contourSD, int contourCount, float2 p, float range) {
+        public static Color EvaluateMSDF(Shape shape, ref Span<int> windings, ref Span<MultiDistance> contourSD, int contourCount, float2 p, float range) {
             p += 0.5f;
 
             EdgePoint sr = new EdgePoint {
@@ -85,7 +86,7 @@ namespace InitialPrefabs.Msdf {
 
                     medMinDistance = MathExtensions.Median(r.MinDistance.Distance, g.MinDistance.Distance, b.MinDistance.Distance);
 
-                    ref MultiDistance current = ref PointerExtensions.ElementAt(contourSD, i);
+                    ref MultiDistance current = ref contourSD[i];
                     current.R = r.MinDistance.Distance;
                     current.G = g.MinDistance.Distance;
                     current.B = b.MinDistance.Distance;
@@ -113,7 +114,7 @@ namespace InitialPrefabs.Msdf {
                 msd.Med = SignedDistance.PositiveInfinite.Distance;
                 winding = 1;
                 for (int i = 0; i < contourCount; i++) {
-                    ref MultiDistance current = ref PointerExtensions.ElementAt(contourSD, i);
+                    ref MultiDistance current = ref contourSD[i];
                     if (windings[i] > 0 && current.Med > msd.Med && math.abs(current.Med) < math.abs(negDist)) {
                         msd = current;
                     }
@@ -123,7 +124,7 @@ namespace InitialPrefabs.Msdf {
                 winding = -1;
 
                 for (int i = 0; i < contourCount; i++) {
-                    ref MultiDistance current = ref PointerExtensions.ElementAt(contourSD, i);
+                    ref MultiDistance current = ref contourSD[i];
                     if (windings[i] < 0 && current.Med < msd.Med && math.abs(current.Med) < math.abs(posDist)) {
                         msd = contourSD[i];
                     }
@@ -131,7 +132,7 @@ namespace InitialPrefabs.Msdf {
             }
 
             for (int i = 0; i < contourCount; i++) {
-                ref MultiDistance current = ref PointerExtensions.ElementAt(contourSD, i);
+                ref MultiDistance current = ref contourSD[i];
                 if (windings[i] != winding && math.abs(current.Med) < math.abs(msd.Med)) {
                     msd = contourSD[i];
                 }
@@ -153,9 +154,9 @@ namespace InitialPrefabs.Msdf {
             public float2 Translate;
         }
 
-        public static void GenerateMSDF(ref Bitmap<Color> output, Shape shape, Rect region, ref MsdfParams msdfParams) {
+        public static void GenerateMSDF(ref Bitmap<Color> output, in MsdfParams msdfParams, in Rect region, Shape shape) {
             int contourCount = shape.Contours.Count;
-            int* windings = stackalloc int[contourCount];
+            Span<int> windings = stackalloc int[contourCount];
 
             for (int i = 0; i < contourCount; i++) {
                 windings[i] = shape.Contours[i].Winding;
@@ -163,18 +164,23 @@ namespace InitialPrefabs.Msdf {
 
             int xStart = math.min(math.max(0, (int)region.Left), output.Width);
             int yStart = math.min(math.max(0, (int)region.Top), output.Height);
-            int xEnd   = math.min(math.max(0, (int)region.Right), output.Width);
-            int yEnd   = math.min(math.max(0, (int)region.Bottom), output.Height);
+            int xEnd = math.min(math.max(0, (int)region.Right), output.Width);
+            int yEnd = math.min(math.max(0, (int)region.Bottom), output.Height);
 
-            MultiDistance* contourSD = stackalloc MultiDistance[contourCount];
+            Span<MultiDistance> contourSD = stackalloc MultiDistance[contourCount];
 
             for (int y = yStart; y < yEnd; y++) {
                 int row = shape.InverseYAxis ? yEnd - (y - yStart) - 1 : y;
                 for (int x = xStart; x < xEnd; x++) {
                     float2 p = (new float2(x, y) - region.Position - msdfParams.Translate) / msdfParams.Scale;
-                    output[x, row] = EvaluateMSDF(shape, windings, contourSD, contourCount, p, msdfParams.Range);
+                    output[x, row] = EvaluateMSDF(shape, ref windings, ref contourSD, contourCount, p, msdfParams.Range);
                 }
             }
+        }
+
+        public static void GenerateMSDF(ref Bitmap<Color> output, ref MsdfParams msdfParams, Shape shape) {
+            Rect rect = new Rect(0, 0, output.Width, output.Height);
+            GenerateMSDF(ref output, in msdfParams, in rect, shape);
         }
     }
 }
