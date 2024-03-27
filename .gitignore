@@ -72,3 +72,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 Dependencies/freetype-demos/bin
 .idea
+Assets/com.initialprefabs.msdfgen/Example
+Assets/com.initialprefabs.msdfgen/Example.meta
