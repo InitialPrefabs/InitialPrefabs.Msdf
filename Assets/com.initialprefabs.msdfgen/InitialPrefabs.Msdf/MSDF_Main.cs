@@ -1,9 +1,18 @@
 ﻿using InitialPrefabs.Msdf.Collections;
 using System;
+using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace InitialPrefabs.Msdf {
+
+    public ref struct MsdfParams {
+        public float Range;
+        public float EdgeThreshold;
+        public float2 Scale;
+        public float2 Translate;
+    }
+
     public static unsafe partial class MSDF {
 
         public static Color EvaluateMSDF(Shape shape, ref Span<int> windings, ref Span<MultiDistance> contourSD, int contourCount, float2 p, float range) {
@@ -147,14 +156,8 @@ namespace InitialPrefabs.Msdf {
             return new Color((msd.R / range) + 0.5f, (msd.G / range) + 0.5f, (msd.B / range) + 0.5f);
         }
 
-        public ref struct MsdfParams {
-            public float Range;
-            public float EdgeThreshold;
-            public float2 Scale;
-            public float2 Translate;
-        }
-
-        public static void GenerateMSDF(ref Bitmap<Color> output, in MsdfParams msdfParams, in Rect region, Shape shape) {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GenerateMSDF(Shape shape, ref Bitmap<Color> output, in MsdfParams msdfParams, in Rect region) {
             int contourCount = shape.Contours.Count;
             Span<int> windings = stackalloc int[contourCount];
 
@@ -178,9 +181,9 @@ namespace InitialPrefabs.Msdf {
             }
         }
 
-        public static void GenerateMSDF(ref Bitmap<Color> output, ref MsdfParams msdfParams, Shape shape) {
+        public static void GenerateMSDF(Shape shape, ref Bitmap<Color> output, in MsdfParams msdfParams) {
             Rect rect = new Rect(0, 0, output.Width, output.Height);
-            GenerateMSDF(ref output, in msdfParams, in rect, shape);
+            GenerateMSDF(shape, ref output, in msdfParams, in rect);
         }
     }
 }

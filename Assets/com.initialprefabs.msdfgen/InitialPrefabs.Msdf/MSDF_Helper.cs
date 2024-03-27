@@ -1,5 +1,4 @@
 ﻿using InitialPrefabs.Msdf.Collections;
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Mathematics;
@@ -7,36 +6,36 @@ using UnityEngine;
 
 namespace InitialPrefabs.Msdf {
 
+    internal struct Clash {
+        public int X;
+        public int Y;
+    }
+
+    internal struct EdgePoint {
+        public SignedDistance MinDistance;
+        public ISegment NearEdge;
+        public float NearParam;
+    }
+
+    public ref struct SDFParams {
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float2 DetermineInitialPoint() => (new float2(xy) + 0.5f) / (Scale - Translate);
+
+        private readonly int2 xy;
+        public readonly float Range;
+        public readonly float2 Scale;
+        public float2 Translate;
+
+        public SDFParams(int x, int y, float range, float2 scale, float2 translate) {
+            xy = new int2(x, y);
+            Range = range;
+            Scale = scale;
+            Translate = translate;
+        }
+    }
+
     public unsafe static partial class MSDF {
-
-        internal struct Clash {
-            public int X;
-            public int Y;
-        }
-
-        internal struct EdgePoint {
-            public SignedDistance MinDistance;
-            public ISegment NearEdge;
-            public float NearParam;
-        }
-
-        public ref struct SDFParams {
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public float2 DetermineInitialPoint() => (new float2(xy) + 0.5f) / (Scale - Translate);
-
-            private readonly int2 xy;
-            public readonly float Range;
-            public readonly float2 Scale;
-            public float2 Translate;
-
-            public SDFParams(int x, int y, float range, float2 scale, float2 translate) {
-                xy = new int2(x, y);
-                Range = range;
-                Scale = scale;
-                Translate = translate;
-            }
-        }
 
         public static bool PixelClash(Color a, Color b, float threshold) {
             bool aIn = ((a.r > .5f) ? 1 : 0) + ((a.g > .5f) ? 1 : 0) + ((a.b > .5f) ? 1 : 0) >= 2;
