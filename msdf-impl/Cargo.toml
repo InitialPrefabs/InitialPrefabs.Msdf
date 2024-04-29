@@ -1,0 +1,13 @@
+[package]
+name = "msdf-impl"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+msdf = "0.2.1"
+ttf-parser = "0.15.2"
+mint = "0.5.9"
+image = "0.24.2"
+regex = "1.10.4"

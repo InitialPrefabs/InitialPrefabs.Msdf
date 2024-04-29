@@ -74,3 +74,4 @@ Dependencies/freetype-demos/bin
 .idea
 Assets/com.initialprefabs.msdfgen/Example
 Assets/com.initialprefabs.msdfgen/Example.meta
+msdf-impl/target
