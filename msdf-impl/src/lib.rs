@@ -4,24 +4,24 @@ mod msdf_impl;
 mod tests {
     use core::panic;
 
-    use crate::msdf_impl::load_font_file;
+    use crate::msdf_impl::get_raw_font;
 
     #[test]
-    fn load_file_works() {
-        let result = load_font_file("UbuntuMonoNerdFontPropo-Regular.ttf");
+    fn get_raw_file_works() {
+        let result = get_raw_font("UbuntuMonoNerdFontPropo-Regular.ttf");
 
         match result {
-            Ok(content) => assert_ne!(content.len(), 0, "Failed to load"),
+            Ok(content) => assert_ne!(content.len(), 0, "Failed to load to UbuntuMonoNerdFontPropo-Regular.ttf"),
             Err(_) => panic!("Failed to find UbuntuMonoNerdFontPropo-Regular.ttf")
         }
     }
 
     #[test]
-
-    fn load_file_does_not_work() {
-        let result = load_font_file("");
+    #[should_panic]
+    fn get_raw_file_fails() {
+        let result = get_raw_font("");
         match result {
-            Ok(content) => panic!("Failed to load"),
+            Ok(_) => panic!("Failed to load"),
             Err(_) => println!("Successfully handled invalid file")
         }
 

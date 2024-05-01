@@ -6,8 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-msdf = "0.2.1"
-ttf-parser = "0.15.2"
+msdf = { path = "../msdf-rs/msdf" } 
+ttf-parser = "0.20.0"
 mint = "0.5.9"
-image = "0.24.2"
+image = "0.25.1"
 regex = "1.10.4"
