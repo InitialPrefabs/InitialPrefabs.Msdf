@@ -599,7 +599,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "msdf-impl"
+name = "msdf-atlas"
 version = "0.1.0"
 dependencies = [
  "image",

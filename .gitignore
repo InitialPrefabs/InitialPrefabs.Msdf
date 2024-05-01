@@ -75,3 +75,4 @@ Dependencies/freetype-demos/bin
 Assets/com.initialprefabs.msdfgen/Example
 Assets/com.initialprefabs.msdfgen/Example.meta
 msdf-impl/target
+msdf-atlas/target

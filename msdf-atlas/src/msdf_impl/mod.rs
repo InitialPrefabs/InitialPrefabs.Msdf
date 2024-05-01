@@ -1,10 +1,17 @@
 use msdf::GlyphLoader;
 use regex::bytes::Regex;
+use std::f64;
 use std::ffi::{c_char, CString};
 use std::io::Error;
 use std::result::Result;
 use std::{fs::File, io::Read};
 use ttf_parser::Face;
+
+pub mod glyph_data;
+
+pub struct Args {
+    angle: f64
+}
 
 /// Loads an otf or ttf file.
 ///
@@ -34,7 +41,7 @@ pub fn get_raw_font(file_path: &str) -> Result<Vec<u8>, Error> {
     Ok(buffer)
 }
 
-pub unsafe fn load_font(raw_font_data: &[u8], str: *mut c_char) {
+pub unsafe fn load_font(raw_font_data: &[u8], str: *mut c_char, args: Args) {
     let face = Face::parse(raw_font_data, 0).unwrap();
 
     for c in CString::from_raw(str).to_str().unwrap().chars() {

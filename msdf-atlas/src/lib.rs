@@ -3,8 +3,7 @@ mod msdf_impl;
 #[cfg(test)]
 mod tests {
     use core::panic;
-
-    use crate::msdf_impl::get_raw_font;
+    use crate::msdf_impl::{get_raw_font, glyph_data::GlyphData};
 
     #[test]
     fn get_raw_file_works() {
@@ -25,5 +24,12 @@ mod tests {
             Err(_) => println!("Successfully handled invalid file")
         }
 
+    }
+
+    #[test]
+    fn glyph_data_constructed() {
+        let unicode_version = GlyphData::from_unicode(99);
+        let char_version = GlyphData::from_char('c');
+        assert!(unicode_version.unicode == char_version.unicode, "Failed to convert from char to i32");
     }
 }
