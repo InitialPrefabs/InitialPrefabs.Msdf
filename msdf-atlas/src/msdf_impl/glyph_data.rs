@@ -1,5 +1,7 @@
 use std::cmp;
 
+use ttf_parser::Face;
+
 pub struct GlyphData {
     pub unicode: i32,
     pub advance: f32,
@@ -17,6 +19,18 @@ pub struct GlyphData {
 
 #[allow(dead_code)]
 impl GlyphData {
+    pub fn from_glyph(c: char, face: &Face) -> Self {
+        let glyph_data = GlyphData::from_char(c);
+        let glyph_id = face.glyph_index(c).unwrap();
+
+        let bounding_box = face.glyph_bounding_box(glyph_id).unwrap();
+
+        glyph_data
+            .with_advance(face.glyph_hor_advance(glyph_id).unwrap())
+            .with_metrics(face.width(), face.height())
+            .with_bearings(face.glyph_hor_side_bearing(glyph_id).unwrap(), 0)
+    }
+
     pub fn from_char(c: char) -> Self {
         Self {
             unicode: c as i32,
@@ -93,8 +107,9 @@ impl GlyphData {
 
 impl ToString for GlyphData {
     fn to_string(&self) -> String {
-        format!("Unicode: {} | Metrics: ({}, {}) | Bearings: ({}, {}) | Advance: {} | BoundingBox: ({}, {}), ({}, {})", 
+        format!("Unicode: {}, Char: {} | Metrics: ({}, {}) | Bearings: ({}, {}) | Advance: {} | BoundingBox: ({}, {}), ({}, {})", 
             self.unicode, 
+            char::from_u32(self.unicode as u32).unwrap(),
             self.metrics_x, 
             self.metrics_y, 
             self.bearings_x, 

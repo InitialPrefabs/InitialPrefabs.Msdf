@@ -1,7 +1,10 @@
-[00:00:00.000] (46b8) INFO   Units per EM: 1000
-[00:00:00.000] (46b8) INFO   Face Height: 1000
-[00:01:11.060] (46b8) INFO   Not found
-[00:01:11.060] (46b8) INFO   Unicode: 65 | Metrics: (0, 0) | Bearings: (9, 0) | Advance: 500 | BoundingBox: (9, 0), (491, 619)
-[00:03:49.285] (46b8) INFO   Not found
-[00:03:52.515] (46b8) INFO   Unicode: 66 | Metrics: (0, 0) | Bearings: (54, 0) | Advance: 500 | BoundingBox: (54, -5), (451, 625)
-[00:04:37.745] (46b8) INFO   Not found
+[00:00:00.000] (42e0) INFO   Units per EM: 1000
+[00:00:00.000] (42e0) INFO   Face Height: 1000
+[00:00:00.000] (42e0) INFO   Unicode: 65, Char: A | Metrics: (482, 619) | Bearings: (9, 830) | Advance: 500 | BoundingBox: (9, 0), (491, 619)
+[00:00:00.000] (42e0) INFO   Ascender/Bearing Y: 830, Bearing Y Calc: 619, Descender y: -170
+[00:00:00.002] (42e0) INFO   Unicode: 97, Char: a | Metrics: (374, 486) | Bearings: (58, 830) | Advance: 500 | BoundingBox: (58, -11), (432, 475)
+[00:00:00.003] (42e0) INFO   Ascender/Bearing Y: 830, Bearing Y Calc: 486, Descender y: -170
+[00:00:00.003] (42e0) INFO   Unicode: 71, Char: G | Metrics: (409, 646) | Bearings: (46, 830) | Advance: 500 | BoundingBox: (46, -13), (455, 633)
+[00:00:00.003] (42e0) INFO   Ascender/Bearing Y: 830, Bearing Y Calc: 646, Descender y: -170
+[00:00:00.003] (42e0) INFO   Unicode: 103, Char: g | Metrics: (389, 643) | Bearings: (40, 830) | Advance: 500 | BoundingBox: (40, -168), (429, 475)
+[00:00:00.003] (42e0) INFO   Ascender/Bearing Y: 830, Bearing Y Calc: 643, Descender y: -170

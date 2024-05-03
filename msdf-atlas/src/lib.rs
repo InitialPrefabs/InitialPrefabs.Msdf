@@ -4,7 +4,7 @@ mod msdf_impl;
 mod tests {
     use crate::msdf_impl::{get_raw_font, glyph_data::GlyphData, get_font_metrics, Args};
     use core::panic;
-    use std::{ffi::CString};
+    use std::ffi::CString;
 
     #[test]
     fn get_raw_file_works() {
@@ -44,7 +44,7 @@ mod tests {
     fn log_file() {
         unsafe {
             let raw_font_data = get_raw_font("UbuntuMonoNerdFontPropo-Regular.ttf").unwrap();
-            let c_string = CString::new("ABC").unwrap().into_raw();
+            let c_string = CString::new("AaGg").unwrap().into_raw();
             get_font_metrics(&raw_font_data, c_string, Args::new());
         }
     }

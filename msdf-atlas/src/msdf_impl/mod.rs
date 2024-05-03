@@ -62,21 +62,20 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     for c in chars {
         let glyph_id = face.glyph_index(c).unwrap();
         let bounding_box = face.glyph_bounding_box(glyph_id).unwrap();
-        // let shape = face.load_shape(glyph_id).unwrap();
 
-        let horizontal_bearing = face.glyph_hor_side_bearing(glyph_id).unwrap();
-        let vertical_bearing = face.glyph_ver_side_bearing(glyph_id);
-        match vertical_bearing {
-            Some(value) => { info!("Vertical Bearing: {}", value); },
-            None => info!("Not found")
-        };
+        let bearing_x = face.glyph_hor_side_bearing(glyph_id).unwrap();
+        let bearing_y_calc = bounding_box.y_max - bounding_box.y_min;
+
+        let width = bounding_box.width() as f32;
+        let height = bounding_box.height() as f32;
 
         // TODO: Figure out what the metrics and uvs are from the texture
         let glyph = GlyphData::from_char(c)
             .with_advance(face.glyph_hor_advance(glyph_id).unwrap() as f32)
             .with_min_uv(bounding_box.x_min, bounding_box.y_min)
             .with_max_uv(bounding_box.x_max, bounding_box.y_max)
-            .with_bearings(horizontal_bearing, 0);
+            .with_metrics(width, height)
+            .with_bearings(bearing_x, bearing_y_calc);
         info!("{}", glyph.to_string());
     }
 }
