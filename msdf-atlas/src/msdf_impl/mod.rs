@@ -1,16 +1,27 @@
+use log::{info, log, LevelFilter};
 use msdf::GlyphLoader;
 use regex::bytes::Regex;
+use simple_logging::log_to_file;
 use std::f64;
-use std::ffi::{c_char, CString};
+use std::ffi::{c_char, CStr, CString};
 use std::io::Error;
 use std::result::Result;
+use std::str::FromStr;
 use std::{fs::File, io::Read};
 use ttf_parser::Face;
+
+use crate::msdf_impl::glyph_data::GlyphData;
 
 pub mod glyph_data;
 
 pub struct Args {
-    angle: f64
+    angle: f64,
+}
+
+impl Args {
+    pub fn new() -> Self {
+        Self { angle: 3.0 }
+    }
 }
 
 /// Loads an otf or ttf file.
@@ -32,21 +43,40 @@ pub fn get_raw_font(file_path: &str) -> Result<Vec<u8>, Error> {
     if !r.is_match(file_path.as_bytes()) {
         panic!("The file is not an otf or ttf file!");
     }
-
     let mut file = File::options().read(true).write(false).open(file_path)?;
-
     let mut buffer = Vec::new();
     file.read_to_end(&mut buffer)?;
-
     Ok(buffer)
 }
 
-pub unsafe fn load_font(raw_font_data: &[u8], str: *mut c_char, args: Args) {
+pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) {
+    log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
 
-    for c in CString::from_raw(str).to_str().unwrap().chars() {
+    let face_height = face.height();
+    info!("Units per EM: {}", face.units_per_em());
+    info!("Face Height: {}", face_height);
+
+    let chars = CStr::from_ptr(str).to_str().unwrap().chars();
+
+    for c in chars {
         let glyph_id = face.glyph_index(c).unwrap();
         let bounding_box = face.glyph_bounding_box(glyph_id).unwrap();
-        let shape = face.load_shape(glyph_id).unwrap();
+        // let shape = face.load_shape(glyph_id).unwrap();
+
+        let horizontal_bearing = face.glyph_hor_side_bearing(glyph_id).unwrap();
+        let vertical_bearing = face.glyph_ver_side_bearing(glyph_id);
+        match vertical_bearing {
+            Some(value) => { info!("Vertical Bearing: {}", value); },
+            None => info!("Not found")
+        };
+
+        // TODO: Figure out what the metrics and uvs are from the texture
+        let glyph = GlyphData::from_char(c)
+            .with_advance(face.glyph_hor_advance(glyph_id).unwrap() as f32)
+            .with_min_uv(bounding_box.x_min, bounding_box.y_min)
+            .with_max_uv(bounding_box.x_max, bounding_box.y_max)
+            .with_bearings(horizontal_bearing, 0);
+        info!("{}", glyph.to_string());
     }
 }
