@@ -1,6 +1,10 @@
-[00:00:00.000] (9a8c) INFO   Units per EM: 1000
-[00:00:00.000] (9a8c) INFO   Face Height: 1000
-[00:00:00.000] (9a8c) INFO   Unicode: 65, Char: A | Metrics: (482, 619) | Bearings: (9, 619) | Advance: 500 | BoundingBox: (9, 0), (491, 619)
-[00:00:00.000] (9a8c) INFO   Unicode: 97, Char: a | Metrics: (374, 486) | Bearings: (58, 486) | Advance: 500 | BoundingBox: (58, -11), (432, 475)
-[00:00:00.000] (9a8c) INFO   Unicode: 71, Char: G | Metrics: (409, 646) | Bearings: (46, 646) | Advance: 500 | BoundingBox: (46, -13), (455, 633)
-[00:00:00.000] (9a8c) INFO   Unicode: 103, Char: g | Metrics: (389, 643) | Bearings: (40, 643) | Advance: 500 | BoundingBox: (40, -168), (429, 475)
+[00:00:00.000] (4d98) INFO   Units per EM: 2048
+[00:00:00.000] (4d98) INFO   Face Height: 2400
+[00:00:00.335] (4d98) INFO   Unicode: 65, Char: A | Metrics: (1156, 1456) | Bearings: (33, 1456) | Advance: 1223 | BoundingBox: (33, 0), (1189, 1456)
+[00:00:00.336] (4d98) INFO   Writing A0.png
+[00:00:01.594] (4d98) INFO   Unicode: 97, Char: a | Metrics: (841, 1122) | Bearings: (92, 1122) | Advance: 1081 | BoundingBox: (92, -20), (933, 1102)
+[00:00:01.594] (4d98) INFO   Writing a1.png
+[00:00:02.573] (4d98) INFO   Unicode: 71, Char: G | Metrics: (1058, 1496) | Bearings: (168, 1496) | Advance: 1406 | BoundingBox: (168, -20), (1226, 1476)
+[00:00:02.574] (4d98) INFO   Writing G2.png
+[00:00:03.599] (4d98) INFO   Unicode: 103, Char: g | Metrics: (829, 1538) | Bearings: (121, 1538) | Advance: 1123 | BoundingBox: (121, -436), (950, 1102)
+[00:00:03.599] (4d98) INFO   Writing g3.png

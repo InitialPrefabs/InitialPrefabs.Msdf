@@ -9,6 +9,9 @@ pub struct GlyphData {
     metrics_y: f32,
     bearings_x: f32,
     bearings_y: f32,
+    // The following represent the min, max uvs within an atlas.
+    // This is typically filled afterwards, because we are generating
+    // the atlases ourselves
     uv_x: f32,
     uv_y: f32,
     uv_z: f32,

@@ -1,12 +1,13 @@
-use log::{info, log, LevelFilter};
-use msdf::GlyphLoader;
+use image::{DynamicImage, ImageBuffer, Rgb};
+use log::{info, LevelFilter};
+use mint::Vector2;
+use msdf::{GlyphLoader, Projection, SDFTrait};
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::f64;
-use std::ffi::{c_char, CStr, CString};
+use std::ffi::{c_char, CStr};
 use std::io::Error;
 use std::result::Result;
-use std::str::FromStr;
 use std::{fs::File, io::Read};
 use ttf_parser::Face;
 
@@ -57,25 +58,72 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     info!("Units per EM: {}", face.units_per_em());
     info!("Face Height: {}", face_height);
 
-    let chars = CStr::from_ptr(str).to_str().unwrap().chars();
+    let c_string = CStr::from_ptr(str).to_str().unwrap();
+    let count = c_string.len() as u32;
+    let chars = c_string.chars();
 
+    let msdf_config = Default::default();
+    let clear = 0 as f32;
+
+    let mut atlas = ImageBuffer::from_pixel(
+        512 * count,
+        512,
+        Rgb([clear, clear, clear]),
+    );
+
+    // Create an image that represents the size
+    let mut index = 0;
     for c in chars {
-        let glyph_id = face.glyph_index(c).unwrap();
-        let bounding_box = face.glyph_bounding_box(glyph_id).unwrap();
+        let glyph_index = face.glyph_index(c).unwrap();
+        let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
 
-        let bearing_x = face.glyph_hor_side_bearing(glyph_id).unwrap();
+        let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
         let bearing_y_calc = bounding_box.y_max - bounding_box.y_min;
 
         let width = bounding_box.width();
         let height = bounding_box.height();
 
         // TODO: Figure out what the metrics and uvs are from the texture
-        let glyph = GlyphData::from_char(c)
-            .with_advance(face.glyph_hor_advance(glyph_id).unwrap())
+        let mut glyph = GlyphData::from_char(c)
+            .with_advance(face.glyph_hor_advance(glyph_index).unwrap())
             .with_min_uv(bounding_box.x_min, bounding_box.y_min)
             .with_max_uv(bounding_box.x_max, bounding_box.y_max)
             .with_metrics(width, height)
             .with_bearings(bearing_x, bearing_y_calc);
+
+        let shape = face.load_shape(glyph_index).unwrap();
+        let colored_shape = shape.color_edges_simple(3.0);
+
+        let projection = Projection {
+            scale: Vector2 {
+                x: 1.0 / 64.0, 
+                y: 1.0 / 64.0
+            },
+            translation: Vector2 { x: 0.0, y: 0.0 },
+        };
+
+        let glyph_image_buffer = colored_shape
+            .generate_msdf(
+                512,
+                512,
+                10.0 * 64.0,
+                &projection,
+                &msdf_config,
+            )
+            .to_image();
+
         info!("{}", glyph.to_string());
+
+        // Write the image to a much larger buffer
+        for x in 0..32 {
+            for y in 0..32 {
+                let pixel = glyph_image_buffer.get_pixel(x, y);
+                atlas.put_pixel(x, y, *pixel);
+            }
+        }
+        info!("Writing {}{}.png", c, index);
+        _ = DynamicImage::from(glyph_image_buffer).into_rgb8().save(format!("{}{}.png", c, index));
+        index += 1;
     }
+    DynamicImage::from(atlas).into_rgb8().save("atlas.png").unwrap();
 }

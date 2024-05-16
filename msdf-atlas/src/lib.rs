@@ -43,7 +43,7 @@ mod tests {
     #[test]
     fn log_file() {
         unsafe {
-            let raw_font_data = get_raw_font("UbuntuMonoNerdFontPropo-Regular.ttf").unwrap();
+            let raw_font_data = get_raw_font("Roboto-Thin.ttf").unwrap();
             let c_string = CString::new("AaGg").unwrap().into_raw();
             get_font_metrics(&raw_font_data, c_string, Args::new());
         }
