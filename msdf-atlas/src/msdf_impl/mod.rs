@@ -66,12 +66,12 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         let bearing_x = face.glyph_hor_side_bearing(glyph_id).unwrap();
         let bearing_y_calc = bounding_box.y_max - bounding_box.y_min;
 
-        let width = bounding_box.width() as f32;
-        let height = bounding_box.height() as f32;
+        let width = bounding_box.width();
+        let height = bounding_box.height();
 
         // TODO: Figure out what the metrics and uvs are from the texture
         let glyph = GlyphData::from_char(c)
-            .with_advance(face.glyph_hor_advance(glyph_id).unwrap() as f32)
+            .with_advance(face.glyph_hor_advance(glyph_id).unwrap())
             .with_min_uv(bounding_box.x_min, bounding_box.y_min)
             .with_max_uv(bounding_box.x_max, bounding_box.y_max)
             .with_metrics(width, height)

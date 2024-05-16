@@ -1,5 +1,3 @@
-use std::cmp;
-
 use ttf_parser::Face;
 
 pub struct GlyphData {
@@ -27,7 +25,7 @@ impl GlyphData {
 
         glyph_data
             .with_advance(face.glyph_hor_advance(glyph_id).unwrap())
-            .with_metrics(face.width(), face.height())
+            .with_metrics(bounding_box.width(), bounding_box.height())
             .with_bearings(face.glyph_hor_side_bearing(glyph_id).unwrap(), 0)
     }
 
@@ -61,14 +59,14 @@ impl GlyphData {
         }
     }
 
-    pub fn with_advance(mut self, advance: f32) -> GlyphData {
-        self.advance = advance;
+    pub fn with_advance(mut self, advance: u16) -> GlyphData {
+        self.advance = advance as f32;
         self
     }
 
-    pub fn with_metrics(mut self, x: f32, y: f32) -> GlyphData {
-        self.metrics_x = x;
-        self.metrics_y = y;
+    pub fn with_metrics(mut self, x: i16, y: i16) -> GlyphData {
+        self.metrics_x = x as f32;
+        self.metrics_y = y as f32;
         self
     }
 
