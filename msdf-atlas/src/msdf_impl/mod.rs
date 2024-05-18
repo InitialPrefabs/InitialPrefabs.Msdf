@@ -63,13 +63,10 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     let chars = c_string.chars();
 
     let msdf_config = Default::default();
+
     let clear = 0 as f32;
 
-    let mut atlas = ImageBuffer::from_pixel(
-        512 * count,
-        512,
-        Rgb([clear, clear, clear]),
-    );
+    // let mut atlas = ImageBuffer::from_pixel(512 * count, 512, Rgb([clear, clear, clear]));
 
     // Create an image that represents the size
     let mut index = 0;
@@ -94,36 +91,33 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         let shape = face.load_shape(glyph_index).unwrap();
         let colored_shape = shape.color_edges_simple(3.0);
 
-        let projection = Projection {
-            scale: Vector2 {
-                x: 1.0 / 64.0, 
-                y: 1.0 / 64.0
-            },
-            translation: Vector2 { x: 0.0, y: 0.0 },
+        let scale = Vector2 {
+            x: 1.0 / 64.0,
+            y: 1.0 / 64.0,
         };
 
+        let translation = Vector2 {
+            x: (32.0 * 64.0 - (bounding_box.width() as f64)) / 2.0
+                - (bounding_box.x_min as f64),
+            y: (32.0 * 64.0 - (bounding_box.height() as f64)) / 2.0
+                - (bounding_box.y_min as f64),
+        };
+
+        // Generate a texture that we can 
+
+        // Determine how to add padding
+        let projection = Projection { scale, translation };
+
         let glyph_image_buffer = colored_shape
-            .generate_msdf(
-                512,
-                512,
-                10.0 * 64.0,
-                &projection,
-                &msdf_config,
-            )
+            .generate_msdf(32, 32, 10.0 * 64.0, &projection, &msdf_config)
             .to_image();
 
         info!("{}", glyph.to_string());
-
-        // Write the image to a much larger buffer
-        for x in 0..32 {
-            for y in 0..32 {
-                let pixel = glyph_image_buffer.get_pixel(x, y);
-                atlas.put_pixel(x, y, *pixel);
-            }
-        }
-        info!("Writing {}{}.png", c, index);
-        _ = DynamicImage::from(glyph_image_buffer).into_rgb8().save(format!("{}{}.png", c, index));
+        // TODO: Generate the atlas.
+        _ = DynamicImage::from(glyph_image_buffer)
+            .into_rgb8()
+            .save(format!("{}{}.png", c, index));
         index += 1;
     }
-    DynamicImage::from(atlas).into_rgb8().save("atlas.png").unwrap();
+    // DynamicImage::from(atlas).into_rgb8().save("atlas.png").unwrap();
 }

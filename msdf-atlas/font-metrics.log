@@ -1,10 +1,28 @@
-[00:00:00.000] (4d98) INFO   Units per EM: 2048
-[00:00:00.000] (4d98) INFO   Face Height: 2400
-[00:00:00.335] (4d98) INFO   Unicode: 65, Char: A | Metrics: (1156, 1456) | Bearings: (33, 1456) | Advance: 1223 | BoundingBox: (33, 0), (1189, 1456)
-[00:00:00.336] (4d98) INFO   Writing A0.png
-[00:00:01.594] (4d98) INFO   Unicode: 97, Char: a | Metrics: (841, 1122) | Bearings: (92, 1122) | Advance: 1081 | BoundingBox: (92, -20), (933, 1102)
-[00:00:01.594] (4d98) INFO   Writing a1.png
-[00:00:02.573] (4d98) INFO   Unicode: 71, Char: G | Metrics: (1058, 1496) | Bearings: (168, 1496) | Advance: 1406 | BoundingBox: (168, -20), (1226, 1476)
-[00:00:02.574] (4d98) INFO   Writing G2.png
-[00:00:03.599] (4d98) INFO   Unicode: 103, Char: g | Metrics: (829, 1538) | Bearings: (121, 1538) | Advance: 1123 | BoundingBox: (121, -436), (950, 1102)
-[00:00:03.599] (4d98) INFO   Writing g3.png
+[00:00:00.000] (3334) INFO   Units per EM: 2048
+[00:00:00.000] (3334) INFO   Face Height: 2400
+[00:00:00.002] (3334) INFO   Unicode: 65, Char: A | Metrics: (1328, 1456) | Bearings: (18, 1456) | Advance: 1363 | BoundingBox: (18, 0), (1346, 1456)
+[00:00:00.010] (3334) INFO   Unicode: 66, Char: B | Metrics: (1039, 1456) | Bearings: (148, 1456) | Advance: 1292 | BoundingBox: (148, 0), (1187, 1456)
+[00:00:00.017] (3334) INFO   Unicode: 67, Char: C | Metrics: (1157, 1496) | Bearings: (102, 1496) | Advance: 1337 | BoundingBox: (102, -20), (1259, 1476)
+[00:00:00.022] (3334) INFO   Unicode: 68, Char: D | Metrics: (1086, 1456) | Bearings: (148, 1456) | Advance: 1338 | BoundingBox: (148, 0), (1234, 1456)
+[00:00:00.026] (3334) INFO   Unicode: 69, Char: E | Metrics: (952, 1456) | Bearings: (148, 1456) | Advance: 1158 | BoundingBox: (148, 0), (1100, 1456)
+[00:00:00.029] (3334) INFO   Unicode: 70, Char: F | Metrics: (925, 1456) | Bearings: (148, 1456) | Advance: 1125 | BoundingBox: (148, 0), (1073, 1456)
+[00:00:00.037] (3334) INFO   Unicode: 71, Char: G | Metrics: (1158, 1496) | Bearings: (106, 1496) | Advance: 1394 | BoundingBox: (106, -20), (1264, 1476)
+[00:00:00.041] (3334) INFO   Unicode: 72, Char: H | Metrics: (1156, 1456) | Bearings: (148, 1456) | Advance: 1455 | BoundingBox: (148, 0), (1304, 1456)
+[00:00:00.044] (3334) INFO   Unicode: 73, Char: I | Metrics: (252, 1456) | Bearings: (163, 1456) | Advance: 578 | BoundingBox: (163, 0), (415, 1456)
+[00:00:00.048] (3334) INFO   Unicode: 74, Char: J | Metrics: (951, 1476) | Bearings: (45, 1476) | Advance: 1137 | BoundingBox: (45, -20), (996, 1456)
+[00:00:00.053] (3334) INFO   Unicode: 75, Char: K | Metrics: (1156, 1456) | Bearings: (148, 1456) | Advance: 1291 | BoundingBox: (148, 0), (1304, 1456)
+[00:00:00.056] (3334) INFO   Unicode: 76, Char: L | Metrics: (914, 1456) | Bearings: (148, 1456) | Advance: 1108 | BoundingBox: (148, 0), (1062, 1456)
+[00:00:00.063] (3334) INFO   Unicode: 77, Char: M | Metrics: (1494, 1456) | Bearings: (148, 1456) | Advance: 1793 | BoundingBox: (148, 0), (1642, 1456)
+[00:00:00.067] (3334) INFO   Unicode: 78, Char: N | Metrics: (1155, 1456) | Bearings: (148, 1456) | Advance: 1454 | BoundingBox: (148, 0), (1303, 1456)
+[00:00:00.078] (3334) INFO   Unicode: 79, Char: O | Metrics: (1208, 1496) | Bearings: (102, 1496) | Advance: 1414 | BoundingBox: (102, -20), (1310, 1476)
+[00:00:00.084] (3334) INFO   Unicode: 80, Char: P | Metrics: (1088, 1456) | Bearings: (148, 1456) | Advance: 1309 | BoundingBox: (148, 0), (1236, 1456)
+[00:00:00.093] (3334) INFO   Unicode: 81, Char: Q | Metrics: (1210, 1728) | Bearings: (96, 1728) | Advance: 1414 | BoundingBox: (96, -252), (1306, 1476)
+[00:00:00.099] (3334) INFO   Unicode: 82, Char: R | Metrics: (1098, 1456) | Bearings: (148, 1456) | Advance: 1278 | BoundingBox: (148, 0), (1246, 1456)
+[00:00:00.108] (3334) INFO   Unicode: 83, Char: S | Metrics: (1088, 1496) | Bearings: (74, 1496) | Advance: 1236 | BoundingBox: (74, -20), (1162, 1476)
+[00:00:00.111] (3334) INFO   Unicode: 84, Char: T | Metrics: (1155, 1456) | Bearings: (45, 1456) | Advance: 1243 | BoundingBox: (45, 0), (1200, 1456)
+[00:00:00.116] (3334) INFO   Unicode: 85, Char: U | Metrics: (1088, 1476) | Bearings: (125, 1476) | Advance: 1335 | BoundingBox: (125, -20), (1213, 1456)
+[00:00:00.123] (3334) INFO   Unicode: 86, Char: V | Metrics: (1291, 1456) | Bearings: (18, 1456) | Advance: 1325 | BoundingBox: (18, 0), (1309, 1456)
+[00:00:00.126] (3334) INFO   Unicode: 87, Char: W | Metrics: (1717, 1456) | Bearings: (48, 1456) | Advance: 1802 | BoundingBox: (48, 0), (1765, 1456)
+[00:00:00.132] (3334) INFO   Unicode: 88, Char: X | Metrics: (1216, 1456) | Bearings: (41, 1456) | Advance: 1296 | BoundingBox: (41, 0), (1257, 1456)
+[00:00:00.138] (3334) INFO   Unicode: 89, Char: Y | Metrics: (1231, 1456) | Bearings: (7, 1456) | Advance: 1248 | BoundingBox: (7, 0), (1238, 1456)
+[00:00:00.143] (3334) INFO   Unicode: 90, Char: Z | Metrics: (1084, 1456) | Bearings: (80, 1456) | Advance: 1233 | BoundingBox: (80, 0), (1164, 1456)
