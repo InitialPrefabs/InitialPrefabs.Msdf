@@ -44,7 +44,7 @@ mod tests {
     fn log_file() {
         unsafe {
             let raw_font_data = get_raw_font("Roboto-Medium.ttf").unwrap();
-            let c_string = CString::new("ABCDEFGHIJKLMNOPQRSTUVWXYZ").unwrap().into_raw();
+            let c_string = CString::new("j").unwrap().into_raw();
             get_font_metrics(&raw_font_data, c_string, Args::new());
         }
     }

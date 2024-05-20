@@ -9,7 +9,7 @@ use std::ffi::{c_char, CStr};
 use std::io::Error;
 use std::result::Result;
 use std::{fs::File, io::Read};
-use ttf_parser::Face;
+use ttf_parser::{Face, Rect};
 
 use crate::msdf_impl::glyph_data::GlyphData;
 
@@ -50,6 +50,13 @@ pub fn get_raw_font(file_path: &str) -> Result<Vec<u8>, Error> {
     Ok(buffer)
 }
 
+fn scale_bounding_box(r: &mut Rect, scale_factor : i16) {
+    r.x_min /= scale_factor;
+    r.x_max /= scale_factor;
+    r.y_min /= scale_factor;
+    r.y_max /= scale_factor;
+}
+
 pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) {
     log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
@@ -72,10 +79,11 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     let mut index = 0;
     for c in chars {
         let glyph_index = face.glyph_index(c).unwrap();
-        let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
+        let mut bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
+        // scale_bounding_box(&mut bounding_box, 64);
 
-        let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
-        let bearing_y_calc = bounding_box.y_max - bounding_box.y_min;
+        let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap() / 64;
+        let bearing_y_calc = (bounding_box.y_max - bounding_box.y_min) / 64;
 
         let width = bounding_box.width();
         let height = bounding_box.height();
@@ -92,30 +100,27 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         let colored_shape = shape.color_edges_simple(3.0);
 
         let scale = Vector2 {
-            x: 1.0 / 64.0,
-            y: 1.0 / 64.0,
+            x: 1.0,
+            y: 1.0,
         };
 
         let translation = Vector2 {
-            x: (32.0 * 64.0 - (bounding_box.width() as f64)) / 2.0
-                - (bounding_box.x_min as f64),
-            y: (32.0 * 64.0 - (bounding_box.height() as f64)) / 2.0
-                - (bounding_box.y_min as f64),
+            x: 0.0,
+            y: 0.0
         };
-
-        // Generate a texture that we can 
 
         // Determine how to add padding
         let projection = Projection { scale, translation };
 
-        let glyph_image_buffer = colored_shape
-            .generate_msdf(32, 32, 10.0 * 64.0, &projection, &msdf_config)
-            .to_image();
+        let msdf_data = colored_shape
+            .generate_msdf(bounding_box.width() as u32, bounding_box.height() as u32, 255.0, &projection, &msdf_config);
+
+        let glyph_image_buffer = msdf_data.to_image();
 
         info!("{}", glyph.to_string());
         // TODO: Generate the atlas.
         _ = DynamicImage::from(glyph_image_buffer)
-            .into_rgb8()
+            .into_rgba8()
             .save(format!("{}{}.png", c, index));
         index += 1;
     }
