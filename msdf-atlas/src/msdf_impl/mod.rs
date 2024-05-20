@@ -50,7 +50,7 @@ pub fn get_raw_font(file_path: &str) -> Result<Vec<u8>, Error> {
     Ok(buffer)
 }
 
-fn scale_bounding_box(r: &mut Rect, scale_factor : i16) {
+fn scale_bounding_box(r: &mut Rect, scale_factor: i16) {
     r.x_min /= scale_factor;
     r.x_max /= scale_factor;
     r.y_min /= scale_factor;
@@ -58,7 +58,7 @@ fn scale_bounding_box(r: &mut Rect, scale_factor : i16) {
 }
 
 pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) {
-    log_to_file("font-metrics.log", LevelFilter::Info);
+    let _ = log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
 
     let face_height = face.height();
@@ -99,21 +99,19 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         let shape = face.load_shape(glyph_index).unwrap();
         let colored_shape = shape.color_edges_simple(3.0);
 
-        let scale = Vector2 {
-            x: 1.0,
-            y: 1.0,
-        };
+        let scale = Vector2 { x: 1.0, y: 1.0 };
+        let translation = Vector2 { x: (-1 * bounding_box.x_min) as f64, y: (-1 * bounding_box.y_min) as f64 };
 
-        let translation = Vector2 {
-            x: 0.0,
-            y: 0.0
-        };
-
-        // Determine how to add padding
+        // TODO: Determine how to add padding
         let projection = Projection { scale, translation };
 
-        let msdf_data = colored_shape
-            .generate_msdf(bounding_box.width() as u32, bounding_box.height() as u32, 255.0, &projection, &msdf_config);
+        let msdf_data = colored_shape.generate_msdf(
+            bounding_box.width() as u32,
+            bounding_box.height() as u32,
+            255.0,
+            &projection,
+            &msdf_config,
+        );
 
         let glyph_image_buffer = msdf_data.to_image();
 
