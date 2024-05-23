@@ -77,3 +77,5 @@ Assets/com.initialprefabs.msdfgen/Example.meta
 msdf-impl/target
 msdf-atlas/target
 *.png
+Assets/ShaderlabVSCode
+Assets/ShaderlabVSCode.meta

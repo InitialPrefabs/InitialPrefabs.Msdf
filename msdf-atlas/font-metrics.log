@@ -1,6 +1,6 @@
-[00:00:00.000] (81f8) INFO   Units per EM: 2048
-[00:00:00.000] (81f8) INFO   Face Height: 2400
-[00:00:02.997] (81f8) INFO   Unicode: 103, Char: g | Metrics: (954, 1528) | Bearings: (1, 23) | Advance: 1161 | BoundingBox: (82, -426), (1036, 1102)
-[00:00:05.448] (81f8) INFO   Unicode: 104, Char: h | Metrics: (895, 1536) | Bearings: (1, 24) | Advance: 1137 | BoundingBox: (121, 0), (1016, 1536)
-[00:00:07.038] (81f8) INFO   Unicode: 105, Char: i | Metrics: (275, 1493) | Bearings: (1, 23) | Advance: 523 | BoundingBox: (125, 0), (400, 1493)
-[00:00:08.746] (81f8) INFO   Unicode: 106, Char: j | Metrics: (464, 1930) | Bearings: (-1, 30) | Advance: 513 | BoundingBox: (-75, -437), (389, 1493)
+[00:00:00.000] (4f58) INFO   Units per EM: 2048
+[00:00:00.000] (4f58) INFO   Face Height: 2400
+[00:00:00.027] (4f58) INFO   Unicode: 103, Char: g | Metrics: (954, 1528) | Bearings: (1, 23) | Advance: 1161 | BoundingBox: (82, -426), (1036, 1102)
+[00:00:00.044] (4f58) INFO   Unicode: 104, Char: h | Metrics: (895, 1536) | Bearings: (1, 24) | Advance: 1137 | BoundingBox: (121, 0), (1016, 1536)
+[00:00:00.055] (4f58) INFO   Unicode: 105, Char: i | Metrics: (275, 1493) | Bearings: (1, 23) | Advance: 523 | BoundingBox: (125, 0), (400, 1493)
+[00:00:00.070] (4f58) INFO   Unicode: 106, Char: j | Metrics: (464, 1930) | Bearings: (-1, 30) | Advance: 513 | BoundingBox: (-75, -437), (389, 1493)

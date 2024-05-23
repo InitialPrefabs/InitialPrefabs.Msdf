@@ -70,7 +70,7 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     let chars = c_string.chars();
 
     let msdf_config = Default::default();
-
+    let uniform_scale = 1.0 / 16.0;
     let clear = 0 as f32;
 
     // let mut atlas = ImageBuffer::from_pixel(512 * count, 512, Rgb([clear, clear, clear]));
@@ -79,8 +79,8 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     let mut index = 0;
     for c in chars {
         let glyph_index = face.glyph_index(c).unwrap();
+
         let mut bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
-        // scale_bounding_box(&mut bounding_box, 64);
 
         let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap() / 64;
         let bearing_y_calc = (bounding_box.y_max - bounding_box.y_min) / 64;
@@ -99,16 +99,22 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         let shape = face.load_shape(glyph_index).unwrap();
         let colored_shape = shape.color_edges_simple(3.0);
 
-        let scale = Vector2 { x: 1.0, y: 1.0 };
-        let translation = Vector2 { x: (-1 * bounding_box.x_min) as f64, y: (-1 * bounding_box.y_min) as f64 };
+        let scale = Vector2 { x: uniform_scale, y: uniform_scale };
+
+        let translation = Vector2 {
+            x: (-1.0 * bounding_box.x_min as f64) as f64,
+            y: (-1.0 * bounding_box.y_min as f64) as f64
+        };
 
         // TODO: Determine how to add padding
         let projection = Projection { scale, translation };
+        let glyph_width = bounding_box.width() as f64 * uniform_scale;
+        let glyph_height = bounding_box.height() as f64 * uniform_scale;
 
         let msdf_data = colored_shape.generate_msdf(
-            bounding_box.width() as u32,
-            bounding_box.height() as u32,
-            255.0,
+            glyph_width as u32,
+            glyph_height as u32,
+            4.0,
             &projection,
             &msdf_config,
         );
