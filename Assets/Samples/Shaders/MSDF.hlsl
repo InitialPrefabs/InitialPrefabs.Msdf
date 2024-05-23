@@ -112,6 +112,7 @@ void UnlitPassFragment(
     UNITY_SETUP_INSTANCE_ID(input);
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
+    // The example shader needs work: https://github.com/Chlumsky/msdfgen/issues/22
     half2 uv = input.uv;
     half3 msd = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv).rgb;
     float sd = median(msd.r, msd.g, msd.b);
