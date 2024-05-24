@@ -1,9 +1,10 @@
 use image::{DynamicImage, ImageBuffer, Rgb};
 use log::{info, LevelFilter};
 use mint::Vector2;
-use msdf::{GlyphLoader, Projection, SDFTrait};
+use msdf::{ColoredShape, GlyphLoader, Projection, SDFTrait};
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
+use std::any::Any;
 use std::f64;
 use std::ffi::{c_char, CStr};
 use std::io::Error;
@@ -16,12 +17,53 @@ use crate::msdf_impl::glyph_data::GlyphData;
 pub mod glyph_data;
 
 pub struct Args {
+    /// Stores the angle in degrees for coloring the shape
     angle: f64,
+    /// Scale of the generated glyphs. Recommended to use powers of 1 / 2^n.
+    uniform_scale: f64,
 }
 
 impl Args {
-    pub fn new() -> Self {
-        Self { angle: 3.0 }
+    /// Generates arguments with default settings with angle of
+    /// 3 degrees and no adjustments to the scale.
+    pub fn default() -> Self {
+        Self {
+            angle: 3.0,
+            uniform_scale: 1.0,
+        }
+    }
+
+    /// Generates new arguments with angle and scale.
+    ///
+    /// # Arguments
+    ///
+    /// * `angle` - The angle used to color the MSDF
+    /// * `uniform_scale` - The scale to adjust the generated glyphs by
+    pub fn new(angle: f64, uniform_scale: f64) -> Args {
+        Self {
+            angle,
+            uniform_scale,
+        }
+    }
+
+    /// Builder to adjust the angle separately.
+    ///
+    /// # Arguments
+    ///
+    /// * `angle` - The angle in degrees.
+    pub fn with_angle(mut self, angle: f64) -> Args {
+        self.angle = angle;
+        self
+    }
+
+    /// Builder to adjust the scale of the generated glyphs
+    ///
+    /// # Arguments
+    ///
+    /// * `uniform_scale` - Scale of the generated glyphs. Recommended to use powers of 1 / 2^n.
+    pub fn with_uniform_scale(mut self, uniform_scale: f64) -> Args {
+        self.uniform_scale = uniform_scale;
+        self
     }
 }
 
@@ -57,6 +99,12 @@ fn scale_bounding_box(r: &mut Rect, scale_factor: i16) {
     r.y_max /= scale_factor;
 }
 
+#[derive(Clone, Copy)]
+struct GlyphImageData {
+    rect: Rect,
+    shape: ColoredShape,
+}
+
 pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) {
     let _ = log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
@@ -66,20 +114,22 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     info!("Face Height: {}", face_height);
 
     let c_string = CStr::from_ptr(str).to_str().unwrap();
-    // let count = c_string.len() as u32;
+    let count = c_string.len() as u32;
     let chars = c_string.chars();
 
     let msdf_config = Default::default();
-    let uniform_scale = 1.0 / 16.0;
-    // let clear = 0 as f32;
 
+    // Preallocated the glyph_faces
+    let glyph_faces: Vec<GlyphImageData> = Vec::with_capacity(count);
+
+    // Store the sizes and sort it.
+    // let clear = 0 as f32;
     // let mut atlas = ImageBuffer::from_pixel(512 * count, 512, Rgb([clear, clear, clear]));
 
     // Create an image that represents the size
     let mut index = 0;
     for c in chars {
         let glyph_index = face.glyph_index(c).unwrap();
-
         let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
 
         let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap() / 64;
@@ -96,20 +146,24 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
             .with_metrics(width, height)
             .with_bearings(bearing_x, bearing_y_calc);
 
+        // Store the shape
         let shape = face.load_shape(glyph_index).unwrap();
         let colored_shape = shape.color_edges_simple(3.0);
 
-        let scale = Vector2 { x: uniform_scale, y: uniform_scale };
+        let scale = Vector2 {
+            x: args.uniform_scale,
+            y: args.uniform_scale,
+        };
 
         let translation = Vector2 {
             x: (-1.0 * bounding_box.x_min as f64) as f64,
-            y: (-1.0 * bounding_box.y_min as f64) as f64
+            y: (-1.0 * bounding_box.y_min as f64) as f64,
         };
 
         // TODO: Determine how to add padding
         let projection = Projection { scale, translation };
-        let glyph_width = bounding_box.width() as f64 * uniform_scale;
-        let glyph_height = bounding_box.height() as f64 * uniform_scale;
+        let glyph_width = bounding_box.width() as f64 * args.uniform_scale;
+        let glyph_height = bounding_box.height() as f64 * args.uniform_scale;
 
         let msdf_data = colored_shape.generate_msdf(
             glyph_width as u32,
@@ -120,7 +174,7 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         );
 
         let glyph_image_buffer = msdf_data.to_image();
-        info!("{}", glyph.to_string());
+        // info!("{}", glyph.to_string());
         // TODO: Generate the atlas.
         _ = DynamicImage::from(glyph_image_buffer)
             .into_rgba8()
