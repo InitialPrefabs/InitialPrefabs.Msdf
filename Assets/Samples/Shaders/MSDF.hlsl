@@ -97,7 +97,7 @@ float median(float r, float g, float b) {
 
 float screenPxRange(float2 uv) {
     float2 unitRange = _PxRange / _BaseMap_TexelSize.zw;
-    float2 screenTexSize = 0.5 / fwidth(uv);
+    float2 screenTexSize = 1.0 / fwidth(uv);
     return max(0.5 * dot(unitRange, screenTexSize), 1.0);
 }
 
@@ -116,8 +116,25 @@ void UnlitPassFragment(
     half2 uv = input.uv;
     half3 msd = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv).rgb;
     float sd = median(msd.r, msd.g, msd.b);
+#if T
+    float dx = ddx(uv.x) * _BaseMap_TexelSize.z;
+    float dy = ddy(uv.y) * _BaseMap_TexelSize.w;
+    float toPixels = 8.0 * 1.0 / sqrt(dx * dx + dy * dy);
+    float sigDist = median(msd.r, msd.g, msd.b);
+    float w = fwidth(sigDist);
+    float opacity = smoothstep(0.5 - w, 0.5 + w, sigDist);
+    outColor = lerp(_BackgroundColor, _ForegroundColor, opacity);
+#endif
+
+#if _
+    float w = fwidth(sd);
+    float opacity = smoothstep(0.5 - w, 0.5 + w, sd);
+    outColor = lerp(_BackgroundColor, _ForegroundColor, opacity);
+#endif
+
     float screenPxDistance = screenPxRange(uv) * (sd - 0.5);
     float opacity = clamp(screenPxDistance + 0.5, 0.0, 1.0);
     outColor = lerp(_BackgroundColor, _ForegroundColor, opacity);
+    // outColor = half4(_ForegroundColor.rgb, opacity);
 }
 #endif

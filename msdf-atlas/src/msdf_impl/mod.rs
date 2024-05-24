@@ -66,12 +66,12 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     info!("Face Height: {}", face_height);
 
     let c_string = CStr::from_ptr(str).to_str().unwrap();
-    let count = c_string.len() as u32;
+    // let count = c_string.len() as u32;
     let chars = c_string.chars();
 
     let msdf_config = Default::default();
     let uniform_scale = 1.0 / 16.0;
-    let clear = 0 as f32;
+    // let clear = 0 as f32;
 
     // let mut atlas = ImageBuffer::from_pixel(512 * count, 512, Rgb([clear, clear, clear]));
 
@@ -80,7 +80,7 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     for c in chars {
         let glyph_index = face.glyph_index(c).unwrap();
 
-        let mut bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
+        let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
 
         let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap() / 64;
         let bearing_y_calc = (bounding_box.y_max - bounding_box.y_min) / 64;
@@ -89,7 +89,7 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         let height = bounding_box.height();
 
         // TODO: Figure out what the metrics and uvs are from the texture
-        let mut glyph = GlyphData::from_char(c)
+        let glyph = GlyphData::from_char(c)
             .with_advance(face.glyph_hor_advance(glyph_index).unwrap())
             .with_min_uv(bounding_box.x_min, bounding_box.y_min)
             .with_max_uv(bounding_box.x_max, bounding_box.y_max)
@@ -120,7 +120,6 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         );
 
         let glyph_image_buffer = msdf_data.to_image();
-
         info!("{}", glyph.to_string());
         // TODO: Generate the atlas.
         _ = DynamicImage::from(glyph_image_buffer)
