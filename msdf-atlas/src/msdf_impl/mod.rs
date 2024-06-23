@@ -9,8 +9,10 @@ use std::f64;
 use std::ffi::{c_char, CStr};
 use std::io::Error;
 use std::result::Result;
+use std::str::Chars;
+use std::sync::Arc;
 use std::{fs::File, io::Read};
-use ttf_parser::{Face, Rect};
+use ttf_parser::{Face, GlyphId, Rect};
 
 use crate::msdf_impl::glyph_data::GlyphData;
 
@@ -100,9 +102,49 @@ fn scale_bounding_box(r: &mut Rect, scale_factor: i16) {
 }
 
 #[derive(Clone, Copy)]
-struct GlyphImageData {
+struct GlyphBoundingBoxData {
     rect: Rect,
-    shape: ColoredShape,
+    unicode: char,
+    glyph_index: GlyphId,
+}
+
+impl GlyphBoundingBoxData {
+    pub fn new(unicode: char, glyph_index: GlyphId, r: Rect) -> GlyphBoundingBoxData {
+        Self {
+            rect: r,
+            glyph_index: glyph_index,
+            unicode: unicode,
+        }
+    }
+
+    pub fn area(&self) -> i32 {
+        println!("{}, {}", self.rect.width(), self.rect.height());
+        self.rect.width() as i32 * self.rect.height() as i32
+    }
+
+    pub fn get_translation(&self, scale : f64) -> Vector2<f64> {
+        Vector2 {
+            x: (-1.0 * self.rect.x_min as f64) as f64,
+            y: (-1.0 * self.rect.y_min as f64) as f64,
+        }
+    }
+
+    pub fn get_glyph_dimensions(&self, uniform_scale: f64) -> (u32, u32) {
+        let width =  (self.rect.width() as f64 * uniform_scale) as u32;
+        let height = (self.rect.height() as f64 * uniform_scale) as u32;
+        (width, height)
+    }
+}
+
+fn sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars) {
+    for c in chars {
+        let glyph_index = face.glyph_index(c).unwrap();
+        let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
+        rects.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
+    }
+    rects.sort_unstable_by(|lhs, rhs| {
+        lhs.area().cmp(&rhs.area())
+    });
 }
 
 pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) {
@@ -114,39 +156,27 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     info!("Face Height: {}", face_height);
 
     let c_string = CStr::from_ptr(str).to_str().unwrap();
-    let count = c_string.len() as u32;
+    let count = c_string.len() as usize;
     let chars = c_string.chars();
 
     let msdf_config = Default::default();
 
     // Preallocated the glyph_faces
-    let glyph_faces: Vec<GlyphImageData> = Vec::with_capacity(count);
+    let mut glyph_faces: Vec<GlyphBoundingBoxData> = Vec::with_capacity(count);
 
     // Store the sizes and sort it.
     // let clear = 0 as f32;
     // let mut atlas = ImageBuffer::from_pixel(512 * count, 512, Rgb([clear, clear, clear]));
 
-    // Create an image that represents the size
+    sort_by_area(&mut glyph_faces, &face, chars);
     let mut index = 0;
-    for c in chars {
-        let glyph_index = face.glyph_index(c).unwrap();
-        let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
+    for v in glyph_faces {
+        let glyph_index = v.glyph_index;
+        // let bearing_x = face.glyph_hor_advance(glyph_index).unwrap() / 64;
+        // let bearing_y = (v.rect.y_max - v.rect.y_min) / 64;
+        // let width = v.rect.width();
+        // let height = v.rect.height();
 
-        let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap() / 64;
-        let bearing_y_calc = (bounding_box.y_max - bounding_box.y_min) / 64;
-
-        let width = bounding_box.width();
-        let height = bounding_box.height();
-
-        // TODO: Figure out what the metrics and uvs are from the texture
-        let glyph = GlyphData::from_char(c)
-            .with_advance(face.glyph_hor_advance(glyph_index).unwrap())
-            .with_min_uv(bounding_box.x_min, bounding_box.y_min)
-            .with_max_uv(bounding_box.x_max, bounding_box.y_max)
-            .with_metrics(width, height)
-            .with_bearings(bearing_x, bearing_y_calc);
-
-        // Store the shape
         let shape = face.load_shape(glyph_index).unwrap();
         let colored_shape = shape.color_edges_simple(3.0);
 
@@ -154,16 +184,10 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
             x: args.uniform_scale,
             y: args.uniform_scale,
         };
-
-        let translation = Vector2 {
-            x: (-1.0 * bounding_box.x_min as f64) as f64,
-            y: (-1.0 * bounding_box.y_min as f64) as f64,
-        };
-
-        // TODO: Determine how to add padding
+        let translation = v.get_translation(64.0);
         let projection = Projection { scale, translation };
-        let glyph_width = bounding_box.width() as f64 * args.uniform_scale;
-        let glyph_height = bounding_box.height() as f64 * args.uniform_scale;
+
+        let (glyph_width, glyph_height) = v.get_glyph_dimensions(args.uniform_scale);
 
         let msdf_data = colored_shape.generate_msdf(
             glyph_width as u32,
@@ -173,13 +197,13 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
             &msdf_config,
         );
 
-        let glyph_image_buffer = msdf_data.to_image();
+        let glyph_image = msdf_data.to_image();
+
         // info!("{}", glyph.to_string());
         // TODO: Generate the atlas.
-        _ = DynamicImage::from(glyph_image_buffer)
+        _ = DynamicImage::from(glyph_image)
             .into_rgba8()
-            .save(format!("{}{}.png", c, index));
+            .save(format!("{}{}.png", v.unicode, index));
         index += 1;
-    }
-    // DynamicImage::from(atlas).into_rgb8().save("atlas.png").unwrap();
+   }
 }
