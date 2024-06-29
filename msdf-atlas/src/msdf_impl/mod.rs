@@ -2,9 +2,9 @@ use image::{DynamicImage, ImageBuffer, Rgb};
 use log::{info, LevelFilter};
 use mint::Vector2;
 use msdf::{GlyphLoader, Projection, SDFTrait};
+use multimap::MultiMap;
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
-use std::borrow::BorrowMut;
 use std::collections::HashMap;
 use std::ffi::{c_char, CStr};
 use std::io::Error;
@@ -148,23 +148,24 @@ impl GlyphBoundingBoxData {
 }
 
 fn sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars) {
-    let mut row_map: HashMap<i16, Vec<GlyphBoundingBoxData>> = HashMap::with_capacity(5);
+    let mut row_map: MultiMap<i16, GlyphBoundingBoxData> = MultiMap::new();
     for c in chars {
         let glyph_index = face.glyph_index(c).unwrap();
         let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
 
         let height = bounding_box.height();
+        row_map.insert(height, GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
 
-        if !row_map.contains_key(&height) {
-            let mut values : Vec<GlyphBoundingBoxData> = Vec::with_capacity(10);
-            values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
-            row_map.insert(height, values);
-        }
-        else {
-            let mut values_ref= row_map.get(&height).unwrap();
-            let mut borrwed_values = values_ref.borrow_mut();
-            borrwed_values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
-        }
+        // if !row_map.contains_key(&height) {
+        //     let mut values : Vec<GlyphBoundingBoxData> = Vec::with_capacity(10);
+        //     values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
+        //     row_map.insert(height, values);
+        // }
+        // else {
+        //     let mut values_ref= row_map.get(&height).unwrap();
+        //     let borrwed_values: &mut &Vec<GlyphBoundingBoxData> = values_ref.borrow_mut();
+        //     borrwed_values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
+        // }
 
         rects.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
     }
