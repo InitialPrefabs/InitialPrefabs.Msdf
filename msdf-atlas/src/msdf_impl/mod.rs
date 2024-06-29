@@ -1,28 +1,26 @@
 use image::{DynamicImage, ImageBuffer, Rgb};
 use log::{info, LevelFilter};
 use mint::Vector2;
-use msdf::{ColoredShape, GlyphLoader, Projection, SDFTrait};
+use msdf::{GlyphLoader, Projection, SDFTrait};
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
-use std::any::Any;
-use std::f64;
+use std::borrow::BorrowMut;
+use std::collections::HashMap;
 use std::ffi::{c_char, CStr};
 use std::io::Error;
 use std::result::Result;
 use std::str::Chars;
-use std::sync::Arc;
 use std::{fs::File, io::Read};
 use ttf_parser::{Face, GlyphId, Rect};
-
-use crate::msdf_impl::glyph_data::GlyphData;
 
 pub mod glyph_data;
 
 pub struct Args {
     /// Stores the angle in degrees for coloring the shape
-    angle: f64,
+    angle: f32,
     /// Scale of the generated glyphs. Recommended to use powers of 1 / 2^n.
-    uniform_scale: f64,
+    uniform_scale: f32,
+    padding: u32,
 }
 
 impl Args {
@@ -32,6 +30,7 @@ impl Args {
         Self {
             angle: 3.0,
             uniform_scale: 1.0,
+            padding: 0,
         }
     }
 
@@ -41,10 +40,12 @@ impl Args {
     ///
     /// * `angle` - The angle used to color the MSDF
     /// * `uniform_scale` - The scale to adjust the generated glyphs by
-    pub fn new(angle: f64, uniform_scale: f64) -> Args {
+    /// * `padding` - The amount of padding in between each glyph in the atlas
+    pub fn new(angle: f32, uniform_scale: f32, padding: u32) -> Args {
         Self {
             angle,
             uniform_scale,
+            padding,
         }
     }
 
@@ -53,7 +54,7 @@ impl Args {
     /// # Arguments
     ///
     /// * `angle` - The angle in degrees.
-    pub fn with_angle(mut self, angle: f64) -> Args {
+    pub fn with_angle(mut self, angle: f32) -> Args {
         self.angle = angle;
         self
     }
@@ -63,8 +64,18 @@ impl Args {
     /// # Arguments
     ///
     /// * `uniform_scale` - Scale of the generated glyphs. Recommended to use powers of 1 / 2^n.
-    pub fn with_uniform_scale(mut self, uniform_scale: f64) -> Args {
+    pub fn with_uniform_scale(mut self, uniform_scale: f32) -> Args {
         self.uniform_scale = uniform_scale;
+        self
+    }
+
+    /// Builder to adjust the padding between the glyphs
+    /// 
+    /// # Arguments
+    /// 
+    /// * `padding` - The amount of space between each glyph in the atlas.
+    pub fn with_padding(mut self, padding: u32) -> Args {
+        self.padding = padding;
         self
     }
 }
@@ -122,7 +133,7 @@ impl GlyphBoundingBoxData {
         self.rect.width() as i32 * self.rect.height() as i32
     }
 
-    pub fn get_translation(&self, scale : f64) -> Vector2<f64> {
+    pub fn get_translation(&self, scale: f64) -> Vector2<f64> {
         Vector2 {
             x: (-1.0 * self.rect.x_min as f64) as f64,
             y: (-1.0 * self.rect.y_min as f64) as f64,
@@ -130,21 +141,36 @@ impl GlyphBoundingBoxData {
     }
 
     pub fn get_glyph_dimensions(&self, uniform_scale: f64) -> (u32, u32) {
-        let width =  (self.rect.width() as f64 * uniform_scale) as u32;
+        let width = (self.rect.width() as f64 * uniform_scale) as u32;
         let height = (self.rect.height() as f64 * uniform_scale) as u32;
         (width, height)
     }
 }
 
 fn sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars) {
+    let mut row_map: HashMap<i16, Vec<GlyphBoundingBoxData>> = HashMap::with_capacity(5);
     for c in chars {
         let glyph_index = face.glyph_index(c).unwrap();
         let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
+
+        let height = bounding_box.height();
+
+        if !row_map.contains_key(&height) {
+            let mut values : Vec<GlyphBoundingBoxData> = Vec::with_capacity(10);
+            values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
+            row_map.insert(height, values);
+        }
+        else {
+            let mut values_ref= row_map.get(&height).unwrap();
+            let mut borrwed_values = values_ref.borrow_mut();
+            borrwed_values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
+        }
+
         rects.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
     }
-    rects.sort_unstable_by(|lhs, rhs| {
-        lhs.area().cmp(&rhs.area())
-    });
+
+    // We should try to sort by height first then sort by width.
+    rects.sort_unstable_by(|lhs, rhs| lhs.area().cmp(&rhs.area()));
 }
 
 pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) {
@@ -168,8 +194,19 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     // let clear = 0 as f32;
     // let mut atlas = ImageBuffer::from_pixel(512 * count, 512, Rgb([clear, clear, clear]));
 
+    let clear: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
+
+    let mut atlas = ImageBuffer::from_pixel(1024, 1024, clear);
+
     sort_by_area(&mut glyph_faces, &face, chars);
     let mut index = 0;
+    let mut x_offset = 0;
+
+    let scale = Vector2 {
+        x: args.uniform_scale.into(),
+        y: args.uniform_scale.into(),
+    };
+
     for v in glyph_faces {
         let glyph_index = v.glyph_index;
         // let bearing_x = face.glyph_hor_advance(glyph_index).unwrap() / 64;
@@ -179,15 +216,10 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
 
         let shape = face.load_shape(glyph_index).unwrap();
         let colored_shape = shape.color_edges_simple(3.0);
-
-        let scale = Vector2 {
-            x: args.uniform_scale,
-            y: args.uniform_scale,
-        };
         let translation = v.get_translation(64.0);
         let projection = Projection { scale, translation };
 
-        let (glyph_width, glyph_height) = v.get_glyph_dimensions(args.uniform_scale);
+        let (glyph_width, glyph_height) = v.get_glyph_dimensions(args.uniform_scale.into());
 
         let msdf_data = colored_shape.generate_msdf(
             glyph_width as u32,
@@ -199,11 +231,22 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
 
         let glyph_image = msdf_data.to_image();
 
+        for (x, y, pixel) in glyph_image.enumerate_pixels() {
+            // We need to create the offset
+            atlas.put_pixel(x + x_offset, y, pixel.clone());
+            info!("{}, {}, x offset: {} | char: {}", x + x_offset, y, x_offset, v.unicode);
+        }
+        // TODO: Figure out the new UVs that are written in the atlas.
+        x_offset += glyph_image.width() + args.padding;
+
+        // Now we have to copy the glyph image to a giant data buffer which is our atlas.
+
         // info!("{}", glyph.to_string());
         // TODO: Generate the atlas.
         _ = DynamicImage::from(glyph_image)
             .into_rgba8()
             .save(format!("{}{}.png", v.unicode, index));
         index += 1;
-   }
+    }
+    _ = DynamicImage::from(atlas).into_rgb8().save("atlas.png");
 }
