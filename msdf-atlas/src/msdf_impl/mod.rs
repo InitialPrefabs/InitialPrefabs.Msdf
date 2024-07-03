@@ -2,7 +2,6 @@ use image::{DynamicImage, ImageBuffer, Rgb};
 use log::{info, LevelFilter};
 use mint::Vector2;
 use msdf::{GlyphLoader, Projection, SDFTrait};
-use multimap::MultiMap;
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::collections::HashMap;
@@ -70,9 +69,9 @@ impl Args {
     }
 
     /// Builder to adjust the padding between the glyphs
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `padding` - The amount of space between each glyph in the atlas.
     pub fn with_padding(mut self, padding: u32) -> Args {
         self.padding = padding;
@@ -129,7 +128,6 @@ impl GlyphBoundingBoxData {
     }
 
     pub fn area(&self) -> i32 {
-        println!("{}, {}", self.rect.width(), self.rect.height());
         self.rect.width() as i32 * self.rect.height() as i32
     }
 
@@ -148,30 +146,45 @@ impl GlyphBoundingBoxData {
 }
 
 fn sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars) {
-    let mut row_map: MultiMap<i16, GlyphBoundingBoxData> = MultiMap::new();
+    // let mut row_map: MultiMap<i16, GlyphBoundingBoxData> = MultiMap::new();
+    let mut row_map: HashMap<i16, Vec<GlyphBoundingBoxData>> = HashMap::new();
+    let mut unique_keys: Vec<i16> = Vec::new();
     for c in chars {
         let glyph_index = face.glyph_index(c).unwrap();
         let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
 
         let height = bounding_box.height();
-        row_map.insert(height, GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
+        // row_map.insert(height, GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
 
-        // if !row_map.contains_key(&height) {
-        //     let mut values : Vec<GlyphBoundingBoxData> = Vec::with_capacity(10);
-        //     values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
-        //     row_map.insert(height, values);
-        // }
-        // else {
-        //     let mut values_ref= row_map.get(&height).unwrap();
-        //     let borrwed_values: &mut &Vec<GlyphBoundingBoxData> = values_ref.borrow_mut();
-        //     borrwed_values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
-        // }
-
-        rects.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
+        if !row_map.contains_key(&height) {
+            let mut values: Vec<GlyphBoundingBoxData> = Vec::with_capacity(10);
+            values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
+            row_map.insert(height, values);
+            unique_keys.push(height);
+        } else {
+            let values = row_map.get_mut(&height).unwrap();
+            values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
+        }
+        // rects.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
     }
+    // Sort from lowest
+    unique_keys.sort_unstable();
 
-    // We should try to sort by height first then sort by width.
-    rects.sort_unstable_by(|lhs, rhs| lhs.area().cmp(&rhs.area()));
+    // Iterate through and sort each vector
+    for height in unique_keys {
+        let glyph_data = row_map.get_mut(&height).unwrap();
+        glyph_data.sort_unstable_by(|lhs, rhs| lhs.area().cmp(&rhs.area()));
+
+        // Now we add to our rects practically nuking the values
+        rects.append(glyph_data);
+    }
+}
+
+fn calculate_minimum_atlas_height(glyph_data: &Vec<GlyphBoundingBoxData>) {
+    for glyph in glyph_data {
+        let height = &glyph.rect.height();
+        // todo: finish up the height calculations
+    }
 }
 
 pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) {
@@ -235,7 +248,13 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         for (x, y, pixel) in glyph_image.enumerate_pixels() {
             // We need to create the offset
             atlas.put_pixel(x + x_offset, y, pixel.clone());
-            info!("{}, {}, x offset: {} | char: {}", x + x_offset, y, x_offset, v.unicode);
+            info!(
+                "{}, {}, x offset: {} | char: {}",
+                x + x_offset,
+                y,
+                x_offset,
+                v.unicode
+            );
         }
         // TODO: Figure out the new UVs that are written in the atlas.
         x_offset += glyph_image.width() + args.padding;
