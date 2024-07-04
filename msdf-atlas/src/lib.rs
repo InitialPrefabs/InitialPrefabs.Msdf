@@ -44,11 +44,11 @@ mod tests {
     fn log_file() {
         unsafe {
             let raw_font_data = get_raw_font("Roboto-Medium.ttf").unwrap();
-            let c_string = CString::new("ghijkpqryz").unwrap().into_raw();
+            let c_string = CString::new("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ").unwrap().into_raw();
             let args = Args::default()
                 .with_angle(1.0 / 16.0)
                 .with_uniform_scale(1.0 / 32.0)
-                .with_padding(10);
+                .with_padding(0);
             get_font_metrics(&raw_font_data, c_string, args);
         }
     }

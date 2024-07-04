@@ -180,11 +180,26 @@ fn sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars
     }
 }
 
-fn calculate_minimum_atlas_height(glyph_data: &Vec<GlyphBoundingBoxData>) {
+fn calculate_minimum_atlas_height(glyph_data: &Vec<GlyphBoundingBoxData>, max_width: i32, scale: f32) -> u32 {
+    let mut current_width : i32 = 0;
+    let mut current_height : i32 = 0;
     for glyph in glyph_data {
-        let height = &glyph.rect.height();
-        // todo: finish up the height calculations
+        let height = (glyph.rect.height() as f32 * scale).round() as i32;
+        let width = (glyph.rect.width() as f32 * scale).round() as i32;
+
+        let next_width = current_width + width;
+
+        info!("w: {}, h: {}", width, height);
+        if next_width >= max_width {
+            current_width = 0;
+            current_height += height as i32;
+        } else {
+            current_width += width as i32;
+        }
     }
+
+    info!("current height: {}", current_height);
+    (current_height *2) as u32
 }
 
 pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) {
@@ -210,11 +225,14 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
 
     let clear: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
 
-    let mut atlas = ImageBuffer::from_pixel(1024, 1024, clear);
-
     sort_by_area(&mut glyph_faces, &face, chars);
+    let max_width = 512;
+    let max_height = calculate_minimum_atlas_height(&glyph_faces, max_width, args.uniform_scale);
+    info!("Max Width: {}, Max_Height: {}", max_width, max_height);
+    let mut atlas = ImageBuffer::from_pixel(max_width as u32, max_height, clear);
     let mut index = 0;
-    let mut x_offset = 0;
+    let mut x_offset : u32 = 0;
+    let mut y_offset : u32 = 0;
 
     let scale = Vector2 {
         x: args.uniform_scale.into(),
@@ -245,16 +263,18 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
 
         let glyph_image = msdf_data.to_image();
 
+        let next = x_offset + glyph_image.width();
+
+        if next >= max_width as u32 {
+            x_offset = 0;
+            // Increment the y offset
+            y_offset += glyph_image.height();
+        }
+
+        info!("x offset: {}, y_offset: {}", x_offset, y_offset);
         for (x, y, pixel) in glyph_image.enumerate_pixels() {
-            // We need to create the offset
-            atlas.put_pixel(x + x_offset, y, pixel.clone());
-            info!(
-                "{}, {}, x offset: {} | char: {}",
-                x + x_offset,
-                y,
-                x_offset,
-                v.unicode
-            );
+            // We need to copy the pixel given the offset
+            atlas.put_pixel(x + x_offset, y + y_offset, pixel.clone());
         }
         // TODO: Figure out the new UVs that are written in the atlas.
         x_offset += glyph_image.width() + args.padding;
