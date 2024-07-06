@@ -1,55 +1,55 @@
-[00:00:00.000] (4590) INFO   Units per EM: 2048
-[00:00:00.000] (4590) INFO   Face Height: 2400
-[00:00:00.001] (4590) INFO   Max Width: 512, Max_Height: 207
-[00:00:00.010] (4590) INFO   x offset: 0, y_offset: 0
-[00:00:00.024] (4590) INFO   x offset: 20, y_offset: 0
-[00:00:00.032] (4590) INFO   x offset: 63, y_offset: 0
-[00:00:00.043] (4590) INFO   x offset: 89, y_offset: 0
-[00:00:00.052] (4590) INFO   x offset: 124, y_offset: 0
-[00:00:00.058] (4590) INFO   x offset: 159, y_offset: 0
-[00:00:00.064] (4590) INFO   x offset: 194, y_offset: 0
-[00:00:00.067] (4590) INFO   x offset: 227, y_offset: 0
-[00:00:00.077] (4590) INFO   x offset: 240, y_offset: 0
-[00:00:00.083] (4590) INFO   x offset: 275, y_offset: 0
-[00:00:00.092] (4590) INFO   x offset: 310, y_offset: 0
-[00:00:00.100] (4590) INFO   x offset: 345, y_offset: 0
-[00:00:00.112] (4590) INFO   x offset: 380, y_offset: 0
-[00:00:00.122] (4590) INFO   x offset: 423, y_offset: 0
-[00:00:00.133] (4590) INFO   x offset: 464, y_offset: 0
-[00:00:00.146] (4590) INFO   x offset: 0, y_offset: 65
-[00:00:00.149] (4590) INFO   x offset: 39, y_offset: 65
-[00:00:00.156] (4590) INFO   x offset: 53, y_offset: 65
-[00:00:00.162] (4590) INFO   x offset: 92, y_offset: 65
-[00:00:00.169] (4590) INFO   x offset: 127, y_offset: 65
-[00:00:00.177] (4590) INFO   x offset: 186, y_offset: 65
-[00:00:00.185] (4590) INFO   x offset: 238, y_offset: 65
-[00:00:00.190] (4590) INFO   x offset: 285, y_offset: 65
-[00:00:00.197] (4590) INFO   x offset: 330, y_offset: 65
-[00:00:00.203] (4590) INFO   x offset: 373, y_offset: 65
-[00:00:00.208] (4590) INFO   x offset: 416, y_offset: 65
-[00:00:00.213] (4590) INFO   x offset: 457, y_offset: 65
-[00:00:00.219] (4590) INFO   x offset: 0, y_offset: 117
-[00:00:00.225] (4590) INFO   x offset: 41, y_offset: 117
-[00:00:00.234] (4590) INFO   x offset: 82, y_offset: 117
-[00:00:00.243] (4590) INFO   x offset: 121, y_offset: 117
-[00:00:00.251] (4590) INFO   x offset: 160, y_offset: 117
-[00:00:00.256] (4590) INFO   x offset: 199, y_offset: 117
-[00:00:00.267] (4590) INFO   x offset: 238, y_offset: 117
-[00:00:00.272] (4590) INFO   x offset: 275, y_offset: 117
-[00:00:00.277] (4590) INFO   x offset: 310, y_offset: 117
-[00:00:00.280] (4590) INFO   x offset: 344, y_offset: 117
-[00:00:00.282] (4590) INFO   x offset: 378, y_offset: 117
-[00:00:00.287] (4590) INFO   x offset: 391, y_offset: 117
-[00:00:00.294] (4590) INFO   x offset: 415, y_offset: 117
-[00:00:00.301] (4590) INFO   x offset: 451, y_offset: 117
-[00:00:00.307] (4590) INFO   x offset: 0, y_offset: 168
-[00:00:00.316] (4590) INFO   x offset: 34, y_offset: 168
-[00:00:00.324] (4590) INFO   x offset: 68, y_offset: 168
-[00:00:00.333] (4590) INFO   x offset: 101, y_offset: 168
-[00:00:00.338] (4590) INFO   x offset: 154, y_offset: 168
-[00:00:00.342] (4590) INFO   x offset: 187, y_offset: 168
-[00:00:00.345] (4590) INFO   x offset: 220, y_offset: 168
-[00:00:00.350] (4590) INFO   x offset: 243, y_offset: 168
-[00:00:00.355] (4590) INFO   x offset: 293, y_offset: 168
-[00:00:00.358] (4590) INFO   x offset: 328, y_offset: 168
-[00:00:00.362] (4590) INFO   x offset: 363, y_offset: 168
+[00:00:00.000] (628) INFO   Units per EM: 2048
+[00:00:00.000] (628) INFO   Face Height: 2400
+[00:00:00.001] (628) INFO   Max Width: 512, Max_Height: 207
+[00:00:00.008] (628) INFO   Unicode: 106, Char: j | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0, 0), (0.029296875, 0.28985506)
+[00:00:00.021] (628) INFO   Unicode: 81, Char: Q | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.0390625, 0), (0.11328125, 0.26086956)
+[00:00:00.026] (628) INFO   Unicode: 102, Char: f | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.123046875, 0), (0.1640625, 0.23671497)
+[00:00:00.035] (628) INFO   Unicode: 98, Char: b | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.17382813, 0), (0.23242188, 0.23671497)
+[00:00:00.045] (628) INFO   Unicode: 100, Char: d | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.2421875, 0), (0.30078125, 0.23671497)
+[00:00:00.051] (628) INFO   Unicode: 107, Char: k | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.31054688, 0), (0.36914063, 0.23188406)
+[00:00:00.057] (628) INFO   Unicode: 104, Char: h | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.37890625, 0), (0.43359375, 0.23188406)
+[00:00:00.060] (628) INFO   Unicode: 108, Char: l | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.44335938, 0), (0.45898438, 0.23188406)
+[00:00:00.069] (628) INFO   Unicode: 103, Char: g | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.46875, 0), (0.52734375, 0.23188406)
+[00:00:00.075] (628) INFO   Unicode: 121, Char: y | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.5371094, 0), (0.5957031, 0.22705314)
+[00:00:00.085] (628) INFO   Unicode: 112, Char: p | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.60546875, 0), (0.6640625, 0.22705314)
+[00:00:00.093] (628) INFO   Unicode: 113, Char: q | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.6738281, 0), (0.7324219, 0.22705314)
+[00:00:00.104] (628) INFO   Unicode: 79, Char: O | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.7421875, 0), (0.81640625, 0.22705314)
+[00:00:00.113] (628) INFO   Unicode: 71, Char: G | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.8261719, 0), (0.8964844, 0.22705314)
+[00:00:00.122] (628) INFO   Unicode: 67, Char: C | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.90625, 0), (0.9765625, 0.22705314)
+[00:00:00.133] (628) INFO   Unicode: 83, Char: S | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0, 0.31400967), (0.06640625, 0.5410628)
+[00:00:00.137] (628) INFO   Unicode: 105, Char: i | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.076171875, 0.31400967), (0.09375, 0.5410628)
+[00:00:00.142] (628) INFO   Unicode: 85, Char: U | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.103515625, 0.31400967), (0.16992188, 0.5362319)
+[00:00:00.147] (628) INFO   Unicode: 74, Char: J | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.1796875, 0.31400967), (0.23828125, 0.5362319)
+[00:00:00.154] (628) INFO   Unicode: 87, Char: W | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.24804688, 0.31400967), (0.35351563, 0.5362319)
+[00:00:00.162] (628) INFO   Unicode: 77, Char: M | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.36328125, 0.31400967), (0.45507813, 0.5362319)
+[00:00:00.169] (628) INFO   Unicode: 65, Char: A | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.46484375, 0.31400967), (0.546875, 0.5362319)
+[00:00:00.174] (628) INFO   Unicode: 86, Char: V | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.5566406, 0.31400967), (0.6347656, 0.5362319)
+[00:00:00.179] (628) INFO   Unicode: 89, Char: Y | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.64453125, 0.31400967), (0.71875, 0.5362319)
+[00:00:00.184] (628) INFO   Unicode: 88, Char: X | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.7285156, 0.31400967), (0.8027344, 0.5362319)
+[00:00:00.189] (628) INFO   Unicode: 72, Char: H | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.8125, 0.31400967), (0.8828125, 0.5362319)
+[00:00:00.194] (628) INFO   Unicode: 75, Char: K | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.8925781, 0.31400967), (0.9628906, 0.5362319)
+[00:00:00.199] (628) INFO   Unicode: 78, Char: N | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0, 0.5652174), (0.0703125, 0.7874396)
+[00:00:00.203] (628) INFO   Unicode: 84, Char: T | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.080078125, 0.5652174), (0.15039063, 0.7874396)
+[00:00:00.211] (628) INFO   Unicode: 82, Char: R | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.16015625, 0.5652174), (0.2265625, 0.7874396)
+[00:00:00.219] (628) INFO   Unicode: 80, Char: P | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.23632813, 0.5652174), (0.30273438, 0.7874396)
+[00:00:00.227] (628) INFO   Unicode: 68, Char: D | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.3125, 0.5652174), (0.37890625, 0.7874396)
+[00:00:00.231] (628) INFO   Unicode: 90, Char: Z | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.38867188, 0.5652174), (0.45507813, 0.7874396)
+[00:00:00.241] (628) INFO   Unicode: 66, Char: B | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.46484375, 0.5652174), (0.52734375, 0.7874396)
+[00:00:00.245] (628) INFO   Unicode: 69, Char: E | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.5371094, 0.5652174), (0.5957031, 0.7874396)
+[00:00:00.249] (628) INFO   Unicode: 70, Char: F | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.60546875, 0.5652174), (0.6621094, 0.7874396)
+[00:00:00.252] (628) INFO   Unicode: 76, Char: L | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.671875, 0.5652174), (0.7285156, 0.7874396)
+[00:00:00.254] (628) INFO   Unicode: 73, Char: I | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.73828125, 0.5652174), (0.75390625, 0.7874396)
+[00:00:00.257] (628) INFO   Unicode: 116, Char: t | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.7636719, 0.5652174), (0.80078125, 0.77294683)
+[00:00:00.264] (628) INFO   Unicode: 111, Char: o | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.8105469, 0.5652174), (0.87109375, 0.73429954)
+[00:00:00.271] (628) INFO   Unicode: 101, Char: e | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.8808594, 0.5652174), (0.9394531, 0.73429954)
+[00:00:00.277] (628) INFO   Unicode: 99, Char: c | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0, 0.8115942), (0.056640625, 0.98067635)
+[00:00:00.284] (628) INFO   Unicode: 97, Char: a | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.06640625, 0.8115942), (0.123046875, 0.98067635)
+[00:00:00.291] (628) INFO   Unicode: 115, Char: s | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.1328125, 0.8115942), (0.1875, 0.98067635)
+[00:00:00.298] (628) INFO   Unicode: 109, Char: m | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.19726563, 0.8115942), (0.29101563, 0.9758454)
+[00:00:00.303] (628) INFO   Unicode: 117, Char: u | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.30078125, 0.8115942), (0.35546875, 0.9758454)
+[00:00:00.306] (628) INFO   Unicode: 110, Char: n | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.36523438, 0.8115942), (0.41992188, 0.9758454)
+[00:00:00.309] (628) INFO   Unicode: 114, Char: r | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.4296875, 0.8115942), (0.46484375, 0.9758454)
+[00:00:00.313] (628) INFO   Unicode: 119, Char: w | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.47460938, 0.8115942), (0.5625, 0.9758454)
+[00:00:00.317] (628) INFO   Unicode: 120, Char: x | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.5722656, 0.8115942), (0.6308594, 0.9758454)
+[00:00:00.321] (628) INFO   Unicode: 118, Char: v | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.640625, 0.8115942), (0.69921875, 0.9758454)
+[00:00:00.324] (628) INFO   Unicode: 122, Char: z | Metrics: (0, 0) | Bearings: (0, 0) | Advance: 0 | BoundingBox: (0.7089844, 0.8115942), (0.76171875, 0.9758454)

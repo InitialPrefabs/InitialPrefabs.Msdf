@@ -99,3 +99,8 @@ allow_warnings = true
 [keybindings]
 # alt-m = "job:my-job"
 c = "job:clippy-all" # comment this to have 'c' run clippy on only the default target
+
+[export]
+enabled = true
+path = ".bacon-locations"
+line_format = "{kind} {path}:{line}:{column} {message}"

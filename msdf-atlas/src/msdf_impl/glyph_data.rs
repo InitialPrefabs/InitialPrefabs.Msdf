@@ -1,3 +1,5 @@
+use log::info;
+use mint::Vector2;
 use ttf_parser::Face;
 
 pub struct GlyphData {
@@ -79,15 +81,36 @@ impl GlyphData {
         self
     }
 
+    #[deprecated]
     pub fn with_min_uv(mut self, x: i16, y: i16) -> GlyphData {
         self.uv_x = x as f32;
         self.uv_y = y as f32;
         self
     }
 
+    #[deprecated]
     pub fn with_max_uv(mut self, x: i16, y: i16) -> GlyphData {
         self.uv_z = x as f32;
         self.uv_w = y as f32;
+        self
+    }
+
+    pub fn with_uvs(mut self, start: Vector2<i32>, end: Vector2<i32>, dimensions: Vector2<i32>) -> GlyphData {
+        let width = dimensions.x as f32;
+        let height = dimensions.y as f32;
+
+        let x_min = start.x as f32 / width;
+        let y_min = start.y as f32 / height;
+
+        let x_max = end.x as f32 / width;
+        let y_max = end.y as f32 / height;
+
+        self.uv_x = x_min;
+        self.uv_y = y_min;
+
+        self.uv_z = x_max;
+        self.uv_w = y_max;
+
         self
     }
 
