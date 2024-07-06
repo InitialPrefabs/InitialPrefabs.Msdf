@@ -1,108 +1,55 @@
-[00:00:00.000] (2c74) INFO   Units per EM: 2048
-[00:00:00.000] (2c74) INFO   Face Height: 2400
-[00:00:00.001] (2c74) INFO   w: 27, h: 34
-[00:00:00.002] (2c74) INFO   w: 30, h: 34
-[00:00:00.002] (2c74) INFO   w: 30, h: 34
-[00:00:00.002] (2c74) INFO   w: 45, h: 34
-[00:00:00.002] (2c74) INFO   w: 18, h: 34
-[00:00:00.002] (2c74) INFO   w: 28, h: 34
-[00:00:00.002] (2c74) INFO   w: 28, h: 34
-[00:00:00.002] (2c74) INFO   w: 48, h: 34
-[00:00:00.002] (2c74) INFO   w: 28, h: 35
-[00:00:00.002] (2c74) INFO   w: 29, h: 35
-[00:00:00.002] (2c74) INFO   w: 29, h: 35
-[00:00:00.002] (2c74) INFO   w: 30, h: 35
-[00:00:00.002] (2c74) INFO   w: 31, h: 35
-[00:00:00.002] (2c74) INFO   w: 19, h: 43
-[00:00:00.002] (2c74) INFO   w: 8, h: 46
-[00:00:00.002] (2c74) INFO   w: 29, h: 46
-[00:00:00.002] (2c74) INFO   w: 29, h: 46
-[00:00:00.003] (2c74) INFO   w: 30, h: 46
-[00:00:00.003] (2c74) INFO   w: 32, h: 46
-[00:00:00.003] (2c74) INFO   w: 34, h: 46
-[00:00:00.003] (2c74) INFO   w: 34, h: 46
-[00:00:00.003] (2c74) INFO   w: 34, h: 46
-[00:00:00.003] (2c74) INFO   w: 34, h: 46
-[00:00:00.003] (2c74) INFO   w: 36, h: 46
-[00:00:00.003] (2c74) INFO   w: 36, h: 46
-[00:00:00.003] (2c74) INFO   w: 36, h: 46
-[00:00:00.003] (2c74) INFO   w: 36, h: 46
-[00:00:00.003] (2c74) INFO   w: 38, h: 46
-[00:00:00.003] (2c74) INFO   w: 38, h: 46
-[00:00:00.003] (2c74) INFO   w: 40, h: 46
-[00:00:00.003] (2c74) INFO   w: 42, h: 46
-[00:00:00.003] (2c74) INFO   w: 47, h: 46
-[00:00:00.003] (2c74) INFO   w: 54, h: 46
-[00:00:00.004] (2c74) INFO   w: 30, h: 46
-[00:00:00.004] (2c74) INFO   w: 34, h: 46
-[00:00:00.004] (2c74) INFO   w: 9, h: 47
-[00:00:00.004] (2c74) INFO   w: 34, h: 47
-[00:00:00.004] (2c74) INFO   w: 36, h: 47
-[00:00:00.004] (2c74) INFO   w: 36, h: 47
-[00:00:00.004] (2c74) INFO   w: 38, h: 47
-[00:00:00.004] (2c74) INFO   w: 30, h: 47
-[00:00:00.004] (2c74) INFO   w: 30, h: 47
-[00:00:00.004] (2c74) INFO   w: 30, h: 47
-[00:00:00.004] (2c74) INFO   w: 30, h: 48
-[00:00:00.004] (2c74) INFO   w: 8, h: 48
-[00:00:00.004] (2c74) INFO   w: 28, h: 48
-[00:00:00.004] (2c74) INFO   w: 30, h: 48
-[00:00:00.004] (2c74) INFO   w: 30, h: 49
-[00:00:00.005] (2c74) INFO   w: 30, h: 49
-[00:00:00.005] (2c74) INFO   w: 21, h: 49
-[00:00:00.005] (2c74) INFO   w: 38, h: 54
-[00:00:00.005] (2c74) INFO   w: 15, h: 60
-[00:00:00.005] (2c74) INFO   current height: 141
-[00:00:00.005] (2c74) INFO   Max Width: 512, Max_Height: 282
-[00:00:00.010] (2c74) INFO   x offset: 0, y_offset: 0
-[00:00:00.015] (2c74) INFO   x offset: 27, y_offset: 0
-[00:00:00.019] (2c74) INFO   x offset: 57, y_offset: 0
-[00:00:00.024] (2c74) INFO   x offset: 87, y_offset: 0
-[00:00:00.028] (2c74) INFO   x offset: 132, y_offset: 0
-[00:00:00.032] (2c74) INFO   x offset: 149, y_offset: 0
-[00:00:00.037] (2c74) INFO   x offset: 176, y_offset: 0
-[00:00:00.044] (2c74) INFO   x offset: 204, y_offset: 0
-[00:00:00.052] (2c74) INFO   x offset: 251, y_offset: 0
-[00:00:00.061] (2c74) INFO   x offset: 278, y_offset: 0
-[00:00:00.067] (2c74) INFO   x offset: 307, y_offset: 0
-[00:00:00.074] (2c74) INFO   x offset: 336, y_offset: 0
-[00:00:00.081] (2c74) INFO   x offset: 365, y_offset: 0
-[00:00:00.086] (2c74) INFO   x offset: 396, y_offset: 0
-[00:00:00.087] (2c74) INFO   x offset: 415, y_offset: 0
-[00:00:00.089] (2c74) INFO   x offset: 422, y_offset: 0
-[00:00:00.094] (2c74) INFO   x offset: 450, y_offset: 0
-[00:00:00.098] (2c74) INFO   x offset: 478, y_offset: 0
-[00:00:00.108] (2c74) INFO   x offset: 0, y_offset: 45
-[00:00:00.112] (2c74) INFO   x offset: 32, y_offset: 45
-[00:00:00.119] (2c74) INFO   x offset: 65, y_offset: 45
-[00:00:00.127] (2c74) INFO   x offset: 98, y_offset: 45
-[00:00:00.135] (2c74) INFO   x offset: 132, y_offset: 45
-[00:00:00.140] (2c74) INFO   x offset: 166, y_offset: 45
-[00:00:00.144] (2c74) INFO   x offset: 202, y_offset: 45
-[00:00:00.149] (2c74) INFO   x offset: 238, y_offset: 45
-[00:00:00.154] (2c74) INFO   x offset: 274, y_offset: 45
-[00:00:00.159] (2c74) INFO   x offset: 310, y_offset: 45
-[00:00:00.165] (2c74) INFO   x offset: 348, y_offset: 45
-[00:00:00.170] (2c74) INFO   x offset: 386, y_offset: 45
-[00:00:00.176] (2c74) INFO   x offset: 426, y_offset: 45
-[00:00:00.183] (2c74) INFO   x offset: 0, y_offset: 90
-[00:00:00.190] (2c74) INFO   x offset: 46, y_offset: 90
-[00:00:00.197] (2c74) INFO   x offset: 99, y_offset: 90
-[00:00:00.203] (2c74) INFO   x offset: 128, y_offset: 90
-[00:00:00.206] (2c74) INFO   x offset: 162, y_offset: 90
-[00:00:00.215] (2c74) INFO   x offset: 170, y_offset: 90
-[00:00:00.225] (2c74) INFO   x offset: 204, y_offset: 90
-[00:00:00.233] (2c74) INFO   x offset: 240, y_offset: 90
-[00:00:00.244] (2c74) INFO   x offset: 276, y_offset: 90
-[00:00:00.252] (2c74) INFO   x offset: 313, y_offset: 90
-[00:00:00.260] (2c74) INFO   x offset: 342, y_offset: 90
-[00:00:00.265] (2c74) INFO   x offset: 371, y_offset: 90
-[00:00:00.274] (2c74) INFO   x offset: 401, y_offset: 90
-[00:00:00.276] (2c74) INFO   x offset: 430, y_offset: 90
-[00:00:00.281] (2c74) INFO   x offset: 437, y_offset: 90
-[00:00:00.286] (2c74) INFO   x offset: 464, y_offset: 90
-[00:00:00.295] (2c74) INFO   x offset: 0, y_offset: 138
-[00:00:00.303] (2c74) INFO   x offset: 29, y_offset: 138
-[00:00:00.307] (2c74) INFO   x offset: 58, y_offset: 138
-[00:00:00.320] (2c74) INFO   x offset: 79, y_offset: 138
-[00:00:00.326] (2c74) INFO   x offset: 116, y_offset: 138
+[00:00:00.000] (4590) INFO   Units per EM: 2048
+[00:00:00.000] (4590) INFO   Face Height: 2400
+[00:00:00.001] (4590) INFO   Max Width: 512, Max_Height: 207
+[00:00:00.010] (4590) INFO   x offset: 0, y_offset: 0
+[00:00:00.024] (4590) INFO   x offset: 20, y_offset: 0
+[00:00:00.032] (4590) INFO   x offset: 63, y_offset: 0
+[00:00:00.043] (4590) INFO   x offset: 89, y_offset: 0
+[00:00:00.052] (4590) INFO   x offset: 124, y_offset: 0
+[00:00:00.058] (4590) INFO   x offset: 159, y_offset: 0
+[00:00:00.064] (4590) INFO   x offset: 194, y_offset: 0
+[00:00:00.067] (4590) INFO   x offset: 227, y_offset: 0
+[00:00:00.077] (4590) INFO   x offset: 240, y_offset: 0
+[00:00:00.083] (4590) INFO   x offset: 275, y_offset: 0
+[00:00:00.092] (4590) INFO   x offset: 310, y_offset: 0
+[00:00:00.100] (4590) INFO   x offset: 345, y_offset: 0
+[00:00:00.112] (4590) INFO   x offset: 380, y_offset: 0
+[00:00:00.122] (4590) INFO   x offset: 423, y_offset: 0
+[00:00:00.133] (4590) INFO   x offset: 464, y_offset: 0
+[00:00:00.146] (4590) INFO   x offset: 0, y_offset: 65
+[00:00:00.149] (4590) INFO   x offset: 39, y_offset: 65
+[00:00:00.156] (4590) INFO   x offset: 53, y_offset: 65
+[00:00:00.162] (4590) INFO   x offset: 92, y_offset: 65
+[00:00:00.169] (4590) INFO   x offset: 127, y_offset: 65
+[00:00:00.177] (4590) INFO   x offset: 186, y_offset: 65
+[00:00:00.185] (4590) INFO   x offset: 238, y_offset: 65
+[00:00:00.190] (4590) INFO   x offset: 285, y_offset: 65
+[00:00:00.197] (4590) INFO   x offset: 330, y_offset: 65
+[00:00:00.203] (4590) INFO   x offset: 373, y_offset: 65
+[00:00:00.208] (4590) INFO   x offset: 416, y_offset: 65
+[00:00:00.213] (4590) INFO   x offset: 457, y_offset: 65
+[00:00:00.219] (4590) INFO   x offset: 0, y_offset: 117
+[00:00:00.225] (4590) INFO   x offset: 41, y_offset: 117
+[00:00:00.234] (4590) INFO   x offset: 82, y_offset: 117
+[00:00:00.243] (4590) INFO   x offset: 121, y_offset: 117
+[00:00:00.251] (4590) INFO   x offset: 160, y_offset: 117
+[00:00:00.256] (4590) INFO   x offset: 199, y_offset: 117
+[00:00:00.267] (4590) INFO   x offset: 238, y_offset: 117
+[00:00:00.272] (4590) INFO   x offset: 275, y_offset: 117
+[00:00:00.277] (4590) INFO   x offset: 310, y_offset: 117
+[00:00:00.280] (4590) INFO   x offset: 344, y_offset: 117
+[00:00:00.282] (4590) INFO   x offset: 378, y_offset: 117
+[00:00:00.287] (4590) INFO   x offset: 391, y_offset: 117
+[00:00:00.294] (4590) INFO   x offset: 415, y_offset: 117
+[00:00:00.301] (4590) INFO   x offset: 451, y_offset: 117
+[00:00:00.307] (4590) INFO   x offset: 0, y_offset: 168
+[00:00:00.316] (4590) INFO   x offset: 34, y_offset: 168
+[00:00:00.324] (4590) INFO   x offset: 68, y_offset: 168
+[00:00:00.333] (4590) INFO   x offset: 101, y_offset: 168
+[00:00:00.338] (4590) INFO   x offset: 154, y_offset: 168
+[00:00:00.342] (4590) INFO   x offset: 187, y_offset: 168
+[00:00:00.345] (4590) INFO   x offset: 220, y_offset: 168
+[00:00:00.350] (4590) INFO   x offset: 243, y_offset: 168
+[00:00:00.355] (4590) INFO   x offset: 293, y_offset: 168
+[00:00:00.358] (4590) INFO   x offset: 328, y_offset: 168
+[00:00:00.362] (4590) INFO   x offset: 363, y_offset: 168
