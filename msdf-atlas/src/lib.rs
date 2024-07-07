@@ -2,7 +2,9 @@ mod msdf_impl;
 
 #[cfg(test)]
 mod tests {
-    use crate::msdf_impl::{get_raw_font, glyph_data::GlyphData, get_font_metrics, Args};
+    use crate::msdf_impl::{
+        args::Args, get_font_metrics, get_raw_font, glyph_data::GlyphData, uv_space::UVSpace,
+    };
     use core::panic;
     use std::ffi::CString;
 
@@ -44,11 +46,14 @@ mod tests {
     fn log_file() {
         unsafe {
             let raw_font_data = get_raw_font("Roboto-Medium.ttf").unwrap();
-            let c_string = CString::new("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ").unwrap().into_raw();
+            let c_string = CString::new("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+                .unwrap()
+                .into_raw();
             let args = Args::default()
                 .with_angle(1.0 / 16.0)
                 .with_uniform_scale(1.0 / 32.0)
-                .with_padding(10);
+                .with_padding(10)
+                .with_uv_space(UVSpace::OneMinusV);
             get_font_metrics(&raw_font_data, c_string, args);
         }
     }

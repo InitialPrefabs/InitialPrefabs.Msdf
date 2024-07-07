@@ -1,6 +1,7 @@
-use log::info;
 use mint::Vector2;
 use ttf_parser::Face;
+
+use crate::msdf_impl::uv_space::UVSpace;
 
 pub struct GlyphData {
     pub unicode: i32,
@@ -95,7 +96,7 @@ impl GlyphData {
         self
     }
 
-    pub fn with_uvs(mut self, start: Vector2<i32>, end: Vector2<i32>, dimensions: Vector2<i32>) -> GlyphData {
+    pub fn with_uvs(mut self, start: Vector2<i32>, end: Vector2<i32>, dimensions: Vector2<i32>, uv_space: UVSpace) -> GlyphData {
         let width = dimensions.x as f32;
         let height = dimensions.y as f32;
 
@@ -105,11 +106,11 @@ impl GlyphData {
         let x_max = end.x as f32 / width;
         let y_max = end.y as f32 / height;
 
-        self.uv_x = x_min;
-        self.uv_y = y_min;
+        self.uv_x = if uv_space.bitwise_and(UVSpace::OneMinusU) { 1.0 - x_min } else { x_min };
+        self.uv_y = if uv_space.bitwise_and(UVSpace::OneMinusV) { 1.0 - y_min } else { y_min };
 
-        self.uv_z = x_max;
-        self.uv_w = y_max;
+        self.uv_z = if uv_space.bitwise_and(UVSpace::OneMinusU) { 1.0 - x_max } else { x_max };
+        self.uv_w = if uv_space.bitwise_and(UVSpace::OneMinusV) { 1.0 - y_max } else { y_max };
 
         self
     }
