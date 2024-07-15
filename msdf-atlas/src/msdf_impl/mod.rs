@@ -6,6 +6,7 @@ use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::collections::HashMap;
 use std::ffi::{c_char, CStr};
+use std::i16;
 use std::io::Error;
 use std::result::Result;
 use std::str::Chars;
@@ -168,6 +169,8 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
 
     // Preallocated the glyph_faces
     let mut glyph_faces: Vec<GlyphBoundingBoxData> = Vec::with_capacity(count);
+    // Preallocate the glyph data
+    let mut glyph_data: Vec<GlyphData> = Vec::with_capacity(count);
 
     let clear: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
 
@@ -184,6 +187,8 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     // Create our dynamic atlas buffer
     let mut atlas = ImageBuffer::from_pixel(max_width, max_height, clear);
     let scale = args.get_scale();
+
+    let point_size = args.point_size as f32;
 
     let mut current_line_no = 0;
 
@@ -219,6 +224,22 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
             current_line_no += 1;
         }
 
+        let units_per_em = face.units_per_em() as f32;
+
+        // Calculate the face data
+        let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0) as f32;
+        let advance = (face.glyph_hor_advance(glyph_index).unwrap_or(0) as f32 * point_size / units_per_em) as u16;
+
+        let bearing_x = (face.glyph_hor_side_bearing(glyph_index).unwrap() as f32 * point_size / units_per_em);
+        let bearing_y = (face.ascender() as f32 * point_size / units_per_em) as i16;
+
+        info!("{}", bearing_x);
+
+        let width = (v.rect.width() as f32 * point_size / units_per_em) as i16;
+        let height = (v.rect.height() as f32 * point_size / units_per_em) as i16;
+
+        let rect = face.glyph_bounding_box(glyph_index).unwrap();
+
         // Create the glyph and compute the uvs
         let glyph_data = GlyphData::from_char(v.unicode)
             .with_uvs(
@@ -236,7 +257,9 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
                 },
                 args.uv_space,
             )
-            .with_advance(face.glyph_hor_advance(glyph_index).unwrap());
+            .with_advance(advance)
+            .with_bearings(bearing_x as i16, bearing_y)
+            .with_metrics(width, height);
         info!("{}", glyph_data.to_string());
 
         // Now we have to copy the glyph image to a giant data buffer which is our atlas.
@@ -246,13 +269,6 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         }
         // TODO: Figure out the new UVs that are written in the atlas.
         x_offset += args.add_padding(glyph_image.width() as i32);
-
-        // info!("{}", glyph.to_string());
-        // TODO: Generate the atlas.
-        // _ = DynamicImage::from(glyph_image)
-        //     .into_rgba8()
-        //     .save(format!("{}{}.png", v.unicode, index));
-        // index += 1;
     }
     _ = DynamicImage::from(atlas).into_rgb8().save("atlas.png");
 }
