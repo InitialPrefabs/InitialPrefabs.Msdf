@@ -15,11 +15,14 @@ use ttf_parser::{Face, GlyphId, Rect};
 
 use crate::msdf_impl::args::Args;
 use crate::msdf_impl::glyph_data::GlyphData;
-use crate::msdf_impl::uv_space::UVSpace;
 
 pub mod args;
 pub mod glyph_data;
 pub mod uv_space;
+
+/**
+ * We know that font_size / fonts.units_per_em() will give us the scale.
+ */
 
 /// Loads an otf or ttf file.
 ///
@@ -194,10 +197,13 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
 
     for v in glyph_faces {
         let glyph_index = v.glyph_index;
-        // let bearing_x = face.glyph_hor_advance(glyph_index).unwrap() / 64;
-        // let bearing_y = (v.rect.y_max - v.rect.y_min) / 64;
-        // let width = v.rect.width();
-        // let height = v.rect.height();
+        let bearing_x = face.glyph_hor_advance(glyph_index).unwrap();
+        let bearing_y = (v.rect.y_max - v.rect.y_min);
+        let width = v.rect.width();
+        let height = v.rect.height();
+
+        let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
+        info!("char: {}, y min: {}, y max: {}, Height: {}", v.unicode, bounding_box.y_min, bounding_box.y_max, bounding_box.height());
 
         let shape = face.load_shape(glyph_index).unwrap();
         let colored_shape = shape.color_edges_simple(3.0);
@@ -233,8 +239,6 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         let bearing_x = (face.glyph_hor_side_bearing(glyph_index).unwrap() as f32 * point_size / units_per_em);
         let bearing_y = (face.ascender() as f32 * point_size / units_per_em) as i16;
 
-        info!("{}", bearing_x);
-
         let width = (v.rect.width() as f32 * point_size / units_per_em) as i16;
         let height = (v.rect.height() as f32 * point_size / units_per_em) as i16;
 
@@ -260,7 +264,7 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
             .with_advance(advance)
             .with_bearings(bearing_x as i16, bearing_y)
             .with_metrics(width, height);
-        info!("{}", glyph_data.to_string());
+        // info!("{}", glyph_data.to_string());
 
         // Now we have to copy the glyph image to a giant data buffer which is our atlas.
         for (x, y, pixel) in glyph_image.enumerate_pixels() {
