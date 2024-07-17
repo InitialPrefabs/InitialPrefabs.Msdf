@@ -165,3 +165,4 @@ impl PartialEq for GlyphData {
             && bearings_y == other.bearings_y
     }
 }
+

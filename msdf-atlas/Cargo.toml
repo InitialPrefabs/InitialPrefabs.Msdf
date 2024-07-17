@@ -13,3 +13,7 @@ image = "0.25.1"
 regex = "1.10.4"
 log = "0.4.21"
 simple-logging = "2.0.2"
+
+[build-dependcies]
+csbindgen = "1.8.0"
+

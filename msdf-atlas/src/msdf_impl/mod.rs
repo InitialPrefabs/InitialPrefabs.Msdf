@@ -16,8 +16,11 @@ use ttf_parser::{Face, GlyphId, Rect};
 use crate::msdf_impl::args::Args;
 use crate::msdf_impl::glyph_data::GlyphData;
 
+use self::glyph_package::GlyphPackage;
+
 pub mod args;
 pub mod glyph_data;
+pub mod glyph_package;
 pub mod uv_space;
 
 /**
@@ -80,6 +83,14 @@ impl GlyphBoundingBoxData {
         let width = (self.rect.width() as f64 * uniform_scale).round() as i32;
         let height = (self.rect.height() as f64 * uniform_scale).round() as i32;
         (width, height)
+    }
+
+    pub fn calculate_bearings_y(&self) -> i16 {
+        self.rect.y_max + self.rect.y_min
+    }
+
+    pub fn calculate_metrics(&self) -> (i16, i16) {
+        (self.rect.width(), self.rect.height())
     }
 }
 
@@ -156,13 +167,9 @@ fn calculate_minimum_atlas_height(
     (atlas_height as u32, line_heights)
 }
 
-pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) {
+pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) -> GlyphPackage {
     let _ = log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
-
-    let face_height = face.height();
-    info!("Units per EM: {}", face.units_per_em());
-    info!("Face Height: {}", face_height);
 
     let c_string = CStr::from_ptr(str).to_str().unwrap();
     let count = c_string.len() as usize;
@@ -195,22 +202,15 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
 
     let mut current_line_no = 0;
 
-    for v in glyph_faces {
-        let glyph_index = v.glyph_index;
-        let bearing_x = face.glyph_hor_advance(glyph_index).unwrap();
-        let bearing_y = (v.rect.y_max - v.rect.y_min);
-        let width = v.rect.width();
-        let height = v.rect.height();
-
-        let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
-        info!("char: {}, y min: {}, y max: {}, Height: {}", v.unicode, bounding_box.y_min, bounding_box.y_max, bounding_box.height());
+    for glyph_face in glyph_faces {
+        let glyph_index = glyph_face.glyph_index;
 
         let shape = face.load_shape(glyph_index).unwrap();
         let colored_shape = shape.color_edges_simple(3.0);
-        let translation = v.get_translation(64.0);
+        let translation = glyph_face.get_translation(64.0);
         let projection = Projection { scale, translation };
 
-        let (glyph_width, glyph_height) = v.get_glyph_dimensions(args.uniform_scale.into());
+        let (glyph_width, glyph_height) = glyph_face.get_glyph_dimensions(args.uniform_scale.into());
 
         let msdf_data = colored_shape.generate_msdf(
             glyph_width as u32,
@@ -234,18 +234,14 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
 
         // Calculate the face data
         let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0) as f32;
-        let advance = (face.glyph_hor_advance(glyph_index).unwrap_or(0) as f32 * point_size / units_per_em) as u16;
+        let advance = face.glyph_hor_advance(glyph_index).unwrap_or(0);
+        let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
+        let bearing_y = glyph_face.calculate_bearings_y();
 
-        let bearing_x = (face.glyph_hor_side_bearing(glyph_index).unwrap() as f32 * point_size / units_per_em);
-        let bearing_y = (face.ascender() as f32 * point_size / units_per_em) as i16;
-
-        let width = (v.rect.width() as f32 * point_size / units_per_em) as i16;
-        let height = (v.rect.height() as f32 * point_size / units_per_em) as i16;
-
-        let rect = face.glyph_bounding_box(glyph_index).unwrap();
+        let (width, height) = glyph_face.calculate_metrics();
 
         // Create the glyph and compute the uvs
-        let glyph_data = GlyphData::from_char(v.unicode)
+        let glyph_data = GlyphData::from_char(glyph_face.unicode)
             .with_uvs(
                 Vector2 {
                     x: x_offset,
@@ -264,7 +260,8 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
             .with_advance(advance)
             .with_bearings(bearing_x as i16, bearing_y)
             .with_metrics(width, height);
-        // info!("{}", glyph_data.to_string());
+
+        info!("{}", glyph_data.to_string());
 
         // Now we have to copy the glyph image to a giant data buffer which is our atlas.
         for (x, y, pixel) in glyph_image.enumerate_pixels() {
@@ -275,4 +272,10 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         x_offset += args.add_padding(glyph_image.width() as i32);
     }
     _ = DynamicImage::from(atlas).into_rgb8().save("atlas.png");
+
+    GlyphPackage {
+        units_per_em: face.units_per_em().into(),
+        glyph_data: glyph_data
+    }
 }
+

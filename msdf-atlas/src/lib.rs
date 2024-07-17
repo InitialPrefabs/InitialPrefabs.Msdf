@@ -1,4 +1,15 @@
+use std::ffi::c_char;
+
+use msdf_impl::{args::Args, get_font_metrics, get_raw_font};
+
+use crate::msdf_impl::glyph_package::GlyphPackage;
+
 mod msdf_impl;
+
+pub extern "C" fn get_glyph_package(font_path: &str, str: *mut c_char, args: Args) -> GlyphPackage {
+    let raw_font_data = get_raw_font(font_path).unwrap();
+    unsafe { get_font_metrics(&raw_font_data, str, args) }
+}
 
 #[cfg(test)]
 mod tests {
