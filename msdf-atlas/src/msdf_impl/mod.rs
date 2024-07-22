@@ -6,7 +6,7 @@ use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::collections::HashMap;
 use std::ffi::{c_char, CStr};
-use std::i16;
+use std::{i16, u16};
 use std::io::Error;
 use std::result::Result;
 use std::str::Chars;
@@ -16,7 +16,7 @@ use ttf_parser::{Face, GlyphId, Rect};
 use crate::msdf_impl::args::Args;
 use crate::msdf_impl::glyph_data::GlyphData;
 
-use self::glyph_package::GlyphPackage;
+use self::glyph_package::{ByteBuffer};
 
 pub mod args;
 pub mod glyph_data;
@@ -167,7 +167,7 @@ fn calculate_minimum_atlas_height(
     (atlas_height as u32, line_heights)
 }
 
-pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) -> GlyphPackage {
+pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) -> (u16, *mut ByteBuffer) {
     let _ = log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
 
@@ -273,9 +273,8 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     }
     _ = DynamicImage::from(atlas).into_rgb8().save("atlas.png");
 
-    GlyphPackage {
-        units_per_em: face.units_per_em().into(),
-        glyph_data: glyph_data
-    }
+    let byte_buffer = ByteBuffer::from_vec_struct(glyph_data);
+
+    (face.units_per_em().into(), Box::into_raw(Box::new(byte_buffer)))
 }
 
