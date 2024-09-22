@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 msdf = { path = "../msdf-rs/msdf" } 
-ttf-parser = "0.20.0"
+ttf-parser = "0.20"
 mint = "0.5.9"
 image = "0.25.1"
 regex = "1.10.4"

@@ -6,7 +6,6 @@ use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::collections::HashMap;
 use std::ffi::{c_char, CStr};
-use std::{i16, u16};
 use std::io::Error;
 use std::result::Result;
 use std::str::Chars;
@@ -60,11 +59,11 @@ struct GlyphBoundingBoxData {
 }
 
 impl GlyphBoundingBoxData {
-    pub fn new(unicode: char, glyph_index: GlyphId, r: Rect) -> GlyphBoundingBoxData {
+    pub fn new(unicode: char, glyph_index: GlyphId, rect: Rect) -> GlyphBoundingBoxData {
         Self {
-            rect: r,
-            glyph_index: glyph_index,
-            unicode: unicode,
+            rect,
+            glyph_index,
+            unicode,
         }
     }
 
@@ -74,8 +73,8 @@ impl GlyphBoundingBoxData {
 
     pub fn get_translation(&self, scale: f64) -> Vector2<f64> {
         Vector2 {
-            x: (-1.0 * self.rect.x_min as f64) as f64,
-            y: (-1.0 * self.rect.y_min as f64) as f64,
+            x: (-1.0 * self.rect.x_min as f64),
+            y: (-1.0 * self.rect.y_min as f64),
         }
     }
 
@@ -104,10 +103,10 @@ fn sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars
 
         let height = bounding_box.height();
 
-        if !row_map.contains_key(&height) {
+        if let std::collections::hash_map::Entry::Vacant(e) = row_map.entry(height) {
             let mut values: Vec<GlyphBoundingBoxData> = Vec::with_capacity(10);
             values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
-            row_map.insert(height, values);
+            e.insert(values);
             unique_keys.push(height);
         } else {
             let values = row_map.get_mut(&height).unwrap();
@@ -121,7 +120,7 @@ fn sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars
     for height in unique_keys {
         let glyph_data = row_map.get_mut(&height).unwrap();
         // Now we have to sort from biggest to smallest for each glyph
-        glyph_data.sort_unstable_by(|lhs, rhs| rhs.area().cmp(&lhs.area()));
+        glyph_data.sort_unstable_by_key(|rhs| std::cmp::Reverse(rhs.area()));
 
         // Now we add to our rects practically nuking the values
         rects.append(glyph_data);
@@ -149,7 +148,7 @@ fn calculate_minimum_atlas_height(
 
         let next_width = atlas_width + width;
         if next_width >= max_width {
-            atlas_width = 0.into();
+            atlas_width = 0;
             atlas_height += args.scale_dimension(line_heights[line_count]);
             line_heights.push(current_height);
             line_count += 1;
@@ -172,7 +171,7 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     let face = Face::parse(raw_font_data, 0).unwrap();
 
     let c_string = CStr::from_ptr(str).to_str().unwrap();
-    let count = c_string.len() as usize;
+    let count = c_string.len();
     let chars = c_string.chars();
 
     let msdf_config = Default::default();
@@ -258,7 +257,7 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
                 args.uv_space,
             )
             .with_advance(advance)
-            .with_bearings(bearing_x as i16, bearing_y)
+            .with_bearings(bearing_x, bearing_y)
             .with_metrics(width, height);
 
         info!("{}", glyph_data.to_string());
@@ -266,7 +265,7 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         // Now we have to copy the glyph image to a giant data buffer which is our atlas.
         for (x, y, pixel) in glyph_image.enumerate_pixels() {
             // We need to copy the pixel given the offset
-            atlas.put_pixel(x + x_offset as u32, y + y_offset as u32, pixel.clone());
+            atlas.put_pixel(x + x_offset as u32, y + y_offset as u32, *pixel);
         }
         // TODO: Figure out the new UVs that are written in the atlas.
         x_offset += args.add_padding(glyph_image.width() as i32);
@@ -275,6 +274,6 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
 
     let byte_buffer = ByteBuffer::from_vec_struct(glyph_data);
 
-    (face.units_per_em().into(), Box::into_raw(Box::new(byte_buffer)))
+    (face.units_per_em(), Box::into_raw(Box::new(byte_buffer)))
 }
 
