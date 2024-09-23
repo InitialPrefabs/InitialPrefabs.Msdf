@@ -71,13 +71,6 @@ impl GlyphBoundingBoxData {
         self.rect.width() as i32 * self.rect.height() as i32
     }
 
-    pub fn get_translation(&self, scale: f64) -> Vector2<f64> {
-        Vector2 {
-            x: (-1.0 * self.rect.x_min as f64),
-            y: (-1.0 * self.rect.y_min as f64),
-        }
-    }
-
     pub fn get_glyph_dimensions(&self, uniform_scale: f64) -> (i32, i32) {
         let width = (self.rect.width() as f64 * uniform_scale).round() as i32;
         let height = (self.rect.height() as f64 * uniform_scale).round() as i32;
@@ -93,7 +86,7 @@ impl GlyphBoundingBoxData {
     }
 }
 
-fn sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars) {
+fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars) {
     let mut row_map: HashMap<i16, Vec<GlyphBoundingBoxData>> = HashMap::new();
     let mut unique_keys: Vec<i16> = Vec::with_capacity(5);
 
@@ -183,17 +176,21 @@ pub unsafe fn get_font_metrics(
     // Preallocated the glyph_faces
     let mut glyph_faces: Vec<GlyphBoundingBoxData> = Vec::with_capacity(count);
     // Preallocate the glyph data
-    let mut glyph_data: Vec<GlyphData> = Vec::with_capacity(count);
+    let mut glyph_buffer: Vec<GlyphData> = Vec::with_capacity(count);
+
+    // font_size = (units_per_em / 1000) * desired_point_size;
+    let desired_point_size = args.point_size as f32;
+    let units_per_em = face.units_per_em() as f32;
 
     let clear: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
+    let font_size = units_per_em / 1000.0 * desired_point_size;
 
-    sort_by_area(&mut glyph_faces, &face, chars);
+    store_and_sort_by_area(&mut glyph_faces, &face, chars);
 
     let max_width = args.max_atlas_width;
     let (max_height, line_heights) = calculate_minimum_atlas_height(&glyph_faces, &args);
     info!("Max Width: {}, Max_Height: {}", max_width, max_height);
 
-    // let mut index = 0;
     let mut x_offset: i32 = 0;
     let mut y_offset: i32 = 0;
 
@@ -201,16 +198,19 @@ pub unsafe fn get_font_metrics(
     let mut atlas = ImageBuffer::from_pixel(max_width, max_height, clear);
     let scale = args.get_scale();
 
-    let point_size = args.point_size as f32;
-
     let mut current_line_no = 0;
 
     for glyph_face in glyph_faces {
         let glyph_index = glyph_face.glyph_index;
-
         let shape = face.load_shape(glyph_index).unwrap();
         let colored_shape = shape.color_edges_simple(3.0);
-        let translation = glyph_face.get_translation(64.0);
+        let translation = {
+            let this = &glyph_face;
+            Vector2 {
+                x: (-1.0 * this.rect.x_min as f64),
+                y: (-1.0 * this.rect.y_min as f64),
+            }
+        };
         let projection = Projection { scale, translation };
 
         let (glyph_width, glyph_height) =
@@ -234,11 +234,8 @@ pub unsafe fn get_font_metrics(
             current_line_no += 1;
         }
 
-        let units_per_em = face.units_per_em() as f32;
-
         // Calculate the face data
-        let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0) as f32;
-        let advance = face.glyph_hor_advance(glyph_index).unwrap_or(0);
+        let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0);
         let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
         let bearing_y = glyph_face.calculate_bearings_y();
 
@@ -261,11 +258,12 @@ pub unsafe fn get_font_metrics(
                 },
                 args.uv_space,
             )
-            .with_advance(advance)
+            .with_advance(horizontal_advance)
             .with_bearings(bearing_x, bearing_y)
             .with_metrics(width, height);
 
         info!("{}", glyph_data.to_string());
+        glyph_buffer.push(glyph_data);
 
         // Now we have to copy the glyph image to a giant data buffer which is our atlas.
         for (x, y, pixel) in glyph_image.enumerate_pixels() {
@@ -277,7 +275,9 @@ pub unsafe fn get_font_metrics(
     }
     _ = DynamicImage::from(atlas).into_rgb8().save("atlas.png");
 
-    let byte_buffer = ByteBuffer::from_vec_struct(glyph_data);
+    info!("Units Per EM: {}, Total Glyphs: {}", face.units_per_em(), glyph_buffer.len());
+
+    let byte_buffer = ByteBuffer::from_vec_struct(glyph_buffer);
     (
         face.units_per_em() as u32,
         Box::into_raw(Box::new(byte_buffer)),
