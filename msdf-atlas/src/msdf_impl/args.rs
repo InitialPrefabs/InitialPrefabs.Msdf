@@ -1,6 +1,7 @@
 use crate::msdf_impl::uv_space::UVSpace;
 use mint::Vector2;
 
+#[repr(C)]
 pub struct Args {
     /// Stores the angle in degrees for coloring the shape
     pub angle: f32,

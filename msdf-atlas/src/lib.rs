@@ -1,17 +1,30 @@
 use msdf_impl::{args::Args, byte_buffer::ByteBuffer, get_font_metrics, get_raw_font};
-use std::{ffi::c_char, u16};
+use std::ffi::{c_char, CStr};
 
 mod msdf_impl;
 
+#[repr(C)]
+pub struct Data {
+    units_per_em: u32,
+    glyph_data: *mut ByteBuffer
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn get_glyph_data(
-    font_path: &str,
+    font_path: &mut c_char,
     str: *mut c_char,
     args: Args,
-) -> (u16, *mut ByteBuffer) {
-    let raw_font_data = get_raw_font(font_path).unwrap();
+) -> Data {
+    let path = CStr::from_ptr(font_path)
+        .to_str()
+        .expect("Failed to convert c string to Rust string.");
+    let raw_font_data = get_raw_font(path).unwrap();
     unsafe { 
-        get_font_metrics(&raw_font_data, str, args)
+        let (units_per_em, glyph_data) = get_font_metrics(&raw_font_data, str, args);
+        Data {
+            units_per_em,
+            glyph_data
+        }
     }
 }
 

@@ -1,4 +1,5 @@
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub enum UVSpace {
     Default = 0,
     OneMinusU = 1 << 0,

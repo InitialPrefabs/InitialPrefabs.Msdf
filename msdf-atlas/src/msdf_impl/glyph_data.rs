@@ -3,6 +3,7 @@ use ttf_parser::Face;
 
 use crate::msdf_impl::uv_space::UVSpace;
 
+#[repr(C)]
 pub struct GlyphData {
     pub unicode: i32,
     pub advance: f32,
