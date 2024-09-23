@@ -1,12 +1,18 @@
+use msdf_impl::{args::Args, byte_buffer::ByteBuffer, get_font_metrics, get_raw_font};
 use std::{ffi::c_char, u16};
-use msdf_impl::{args::Args, get_font_metrics, get_raw_font, glyph_package::ByteBuffer};
 
 mod msdf_impl;
 
 #[no_mangle]
-pub extern "C" fn get_glyph_data(font_path: &str, str: *mut c_char, args: Args) -> (u16, *mut ByteBuffer) {
+pub unsafe extern "C" fn get_glyph_data(
+    font_path: &str,
+    str: *mut c_char,
+    args: Args,
+) -> (u16, *mut ByteBuffer) {
     let raw_font_data = get_raw_font(font_path).unwrap();
-    unsafe { get_font_metrics(&raw_font_data, str, args) }
+    unsafe { 
+        get_font_metrics(&raw_font_data, str, args)
+    }
 }
 
 #[cfg(test)]

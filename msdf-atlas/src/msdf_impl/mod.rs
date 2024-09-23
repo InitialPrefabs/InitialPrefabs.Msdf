@@ -15,11 +15,11 @@ use ttf_parser::{Face, GlyphId, Rect};
 use crate::msdf_impl::args::Args;
 use crate::msdf_impl::glyph_data::GlyphData;
 
-use self::glyph_package::{ByteBuffer};
+use self::byte_buffer::ByteBuffer;
 
 pub mod args;
 pub mod glyph_data;
-pub mod glyph_package;
+pub mod byte_buffer;
 pub mod uv_space;
 
 /**
@@ -166,7 +166,11 @@ fn calculate_minimum_atlas_height(
     (atlas_height as u32, line_heights)
 }
 
-pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Args) -> (u16, *mut ByteBuffer) {
+pub unsafe fn get_font_metrics(
+    raw_font_data: &[u8],
+    str: *mut c_char,
+    args: Args,
+) -> (u16, *mut ByteBuffer) {
     let _ = log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
 
@@ -209,7 +213,8 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
         let translation = glyph_face.get_translation(64.0);
         let projection = Projection { scale, translation };
 
-        let (glyph_width, glyph_height) = glyph_face.get_glyph_dimensions(args.uniform_scale.into());
+        let (glyph_width, glyph_height) =
+            glyph_face.get_glyph_dimensions(args.uniform_scale.into());
 
         let msdf_data = colored_shape.generate_msdf(
             glyph_width as u32,
@@ -273,7 +278,5 @@ pub unsafe fn get_font_metrics(raw_font_data: &[u8], str: *mut c_char, args: Arg
     _ = DynamicImage::from(atlas).into_rgb8().save("atlas.png");
 
     let byte_buffer = ByteBuffer::from_vec_struct(glyph_data);
-
     (face.units_per_em(), Box::into_raw(Box::new(byte_buffer)))
 }
-
