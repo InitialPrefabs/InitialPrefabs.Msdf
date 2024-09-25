@@ -16,8 +16,8 @@ namespace InitialPrefabs.Msdf
 
 
 
-        [DllImport(__DllName, EntryPoint = "get_glyph_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        internal static extern Data get_glyph_data(byte* font_path, byte* str, Args args);
+        [DllImport(__DllName, EntryPoint = "get_glyph_data_utf16", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        internal static extern Data get_glyph_data_utf16(ushort* font_path, ushort* atlas_path, ushort* chars_to_generate, Args args);
 
 
     }

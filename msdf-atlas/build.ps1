@@ -2,13 +2,21 @@ param(
     [Parameter(Mandatory)][bool]$release
 )
 
-$src = "";
-$dst = "..\Assets\com.initialprefabs.msdfgen\Plugins";
+$dllSource;
+$dllTarget = "../Assets/com.initialprefabs.msdfgen/Plugins";
+
+# C:\Users\porri\Documents\Projects\Unity\InitialPrefabs.Msdf\Assets\com.initialprefabs.msdfgen\InitialPrefabs.Msdf
+
+$csharpSource = "MsdfAtlas.cs";
+$csharpTarget = "../Assets/com.initialprefabs.msdfgen/InitialPrefabs.Msdf/MsdfAtlas.cs"
+
 if ($release) {
     cargo build --release
-    $src = "target/release/msdf_atlas.dll"
+    $dllSource = "target/release/msdf_atlas.dll"
 } else {
+    $dllSource = "target/debug/msdf_atlas.dll"
     cargo build
 }
 
-Copy-Item -Path $src -Destination $target
+Copy-Item -Path $dllSource -Destination $dllTarget
+Copy-Item -Path $csharpSource -Destination $csharpTarget

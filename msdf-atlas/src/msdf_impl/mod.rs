@@ -5,8 +5,9 @@ use msdf::{GlyphLoader, Projection, SDFTrait};
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::collections::HashMap;
-use std::ffi::{c_char, CStr};
+use std::ffi::OsStr;
 use std::io::Error;
+use std::path::Path;
 use std::result::Result;
 use std::str::Chars;
 use std::{fs::File, io::Read};
@@ -40,10 +41,23 @@ pub mod uv_space;
 ///
 /// If the file is corrupted, the file will not run.
 #[allow(unused)]
+#[warn(deprecated)]
 pub fn get_raw_font(file_path: &str) -> Result<Vec<u8>, Error> {
     let r = Regex::new(r"\.(otf|ttf)$").unwrap();
     if !r.is_match(file_path.as_bytes()) {
         panic!("The file, {} is not an otf or ttf file!", file_path);
+    }
+    let mut file = File::options().read(true).write(false).open(file_path)?;
+    let mut buffer = Vec::new();
+    file.read_to_end(&mut buffer)?;
+    Ok(buffer)
+}
+
+pub fn get_raw_font_os_string(file_path: &OsStr) -> Result<Vec<u8>, Error> {
+    let lossy_string = file_path.to_string_lossy();
+
+    if !lossy_string.ends_with(".otf") && !lossy_string.ends_with(".ttf") {
+        panic!("The file, {} is not an otf or ttf file!", lossy_string);
     }
     let mut file = File::options().read(true).write(false).open(file_path)?;
     let mut buffer = Vec::new();
@@ -161,15 +175,15 @@ fn calculate_minimum_atlas_height(
 
 pub unsafe fn get_font_metrics(
     raw_font_data: &[u8],
-    str: *mut c_char,
+    atlas_path: &Path,
+    chars_to_generate: String,
     args: Args,
 ) -> (u32, *mut ByteBuffer) {
     let _ = log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
 
-    let c_string = CStr::from_ptr(str).to_str().unwrap();
-    let count = c_string.len();
-    let chars = c_string.chars();
+    let count = chars_to_generate.len();
+    let chars = chars_to_generate.chars();
 
     let msdf_config = Default::default();
 
@@ -179,11 +193,11 @@ pub unsafe fn get_font_metrics(
     let mut glyph_buffer: Vec<GlyphData> = Vec::with_capacity(count);
 
     // font_size = (units_per_em / 1000) * desired_point_size;
-    let desired_point_size = args.point_size as f32;
-    let units_per_em = face.units_per_em() as f32;
+    // let desired_point_size = args.point_size as f32;
+    // let units_per_em = face.units_per_em() as f32;
 
     let clear: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
-    let font_size = units_per_em / 1000.0 * desired_point_size;
+    // let font_size = units_per_em / 1000.0 * desired_point_size;
 
     store_and_sort_by_area(&mut glyph_faces, &face, chars);
 
@@ -273,8 +287,8 @@ pub unsafe fn get_font_metrics(
         // TODO: Figure out the new UVs that are written in the atlas.
         x_offset += args.add_padding(glyph_image.width() as i32);
     }
-    _ = DynamicImage::from(atlas).into_rgb8().save("atlas.png");
-
+    _ = DynamicImage::from(atlas).into_rgb8().save(atlas_path);
+    info!("Generated atlas to {}", atlas_path.to_str().unwrap());
     info!(
         "Units Per EM: {}, Total Glyphs: {}",
         face.units_per_em(),
