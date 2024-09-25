@@ -7,7 +7,8 @@ fn main() {
         .input_extern_file("src/msdf_impl/byte_buffer.rs")
         .input_extern_file("src/msdf_impl/glyph_data.rs")
         .input_extern_file("src/msdf_impl/uv_space.rs")
-        .csharp_dll_name("example")
-        .generate_csharp_file("test.cs")
+        .csharp_namespace("InitialPrefabs.Msdf")
+        .csharp_dll_name("msdf_atlas")
+        .generate_csharp_file("MsdfAtlas.cs")
         .unwrap();
 }

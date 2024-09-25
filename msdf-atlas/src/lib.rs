@@ -18,6 +18,7 @@ pub unsafe extern "C" fn get_glyph_data(
     let path = CStr::from_ptr(font_path)
         .to_str()
         .expect("Failed to convert c string to Rust string.");
+    log::info!("Loading font: {}", path);
     let raw_font_data = get_raw_font(path).unwrap();
     unsafe { 
         let (units_per_em, glyph_data) = get_font_metrics(&raw_font_data, str, args);

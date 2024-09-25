@@ -43,7 +43,7 @@ pub mod uv_space;
 pub fn get_raw_font(file_path: &str) -> Result<Vec<u8>, Error> {
     let r = Regex::new(r"\.(otf|ttf)$").unwrap();
     if !r.is_match(file_path.as_bytes()) {
-        panic!("The file is not an otf or ttf file!");
+        panic!("The file, {} is not an otf or ttf file!", file_path);
     }
     let mut file = File::options().read(true).write(false).open(file_path)?;
     let mut buffer = Vec::new();
@@ -275,7 +275,11 @@ pub unsafe fn get_font_metrics(
     }
     _ = DynamicImage::from(atlas).into_rgb8().save("atlas.png");
 
-    info!("Units Per EM: {}, Total Glyphs: {}", face.units_per_em(), glyph_buffer.len());
+    info!(
+        "Units Per EM: {}, Total Glyphs: {}",
+        face.units_per_em(),
+        glyph_buffer.len()
+    );
 
     let byte_buffer = ByteBuffer::from_vec_struct(glyph_buffer);
     (

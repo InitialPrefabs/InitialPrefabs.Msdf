@@ -1,20 +1,12 @@
 {
     "name": "InitialPrefabs.Msdf",
     "rootNamespace": "InitialPrefabs.Msdf",
-    "references": [
-        "GUID:8a536b012e3318f4ca84cc81c764be8b",
-        "GUID:d8b63aba1907145bea998dd612889d6b"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "references": [],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
-    "overrideReferences": true,
-    "precompiledReferences": [
-        "System.Runtime.CompilerServices.Unsafe.dll",
-        "SpaceWizards.SharpFont.dll"
-    ],
+    "overrideReferences": false,
+    "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
