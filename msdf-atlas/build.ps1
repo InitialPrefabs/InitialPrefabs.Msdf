@@ -5,8 +5,6 @@ param(
 $dllSource;
 $dllTarget = "../Assets/com.initialprefabs.msdfgen/Plugins";
 
-# C:\Users\porri\Documents\Projects\Unity\InitialPrefabs.Msdf\Assets\com.initialprefabs.msdfgen\InitialPrefabs.Msdf
-
 $csharpSource = "MsdfAtlas.cs";
 $csharpTarget = "../Assets/com.initialprefabs.msdfgen/InitialPrefabs.Msdf/MsdfAtlas.cs"
 
