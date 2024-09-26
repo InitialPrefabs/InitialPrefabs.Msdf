@@ -95,6 +95,7 @@ impl GlyphBoundingBoxData {
     }
 
     pub fn calculate_bearings_y(&self) -> i16 {
+        // info!("BB y_max: {}, y_min: {}, rect height: {}, bearings_y: {}", self.rect.y_max, self.rect.y_min, self.rect.height(), self.rect.y_max + self.rect.y_min);
         self.rect.y_max + self.rect.y_min
     }
 
@@ -292,7 +293,7 @@ pub unsafe fn get_font_metrics(
         x_offset += args.add_padding(glyph_image.width() as i32);
     }
 
-    // glyph_buffer.sort_unstable_by(|lhs, rhs| lhs.unicode.partial_cmp(&rhs.unicode).unwrap());
+    glyph_buffer.sort_unstable_by(|lhs, rhs| lhs.unicode.partial_cmp(&rhs.unicode).unwrap());
 
     _ = DynamicImage::from(atlas).into_rgb8().save(atlas_path);
     info!("Generated atlas to {}", atlas_path.to_str().unwrap());

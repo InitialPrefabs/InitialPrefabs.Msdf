@@ -101,6 +101,9 @@ float screenPxRange(float2 uv) {
     return max(0.5 * dot(unitRange, screenTexSize), 1.0);
 }
 
+// Look into, because ultimately i may not need to use ddx in a 2d orthographic perspective.
+// https://github.com/Chlumsky/msdfgen/issues/36#issuecomment-429240110
+
 void UnlitPassFragment(
     Varyings input
     , out half4 outColor : SV_Target0
@@ -112,9 +115,22 @@ void UnlitPassFragment(
     UNITY_SETUP_INSTANCE_ID(input);
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
+    half2 uv = input.uv;
+    half3 sample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv).rgb;
+    half2 sz = _BaseMap_TexelSize.zw;
+    float dx = ddx(uv.x) * sz.x;
+    float dy = ddy(uv.y) * sz.y;
+    float toPixels = 8.0 * rsqrt(dx * dx + dy * dy);
+    float sigDist = median(sample.r, sample.g, sample.b);
+    float w = fwidth(sigDist);
+    float opacity = smoothstep(0.5 - w, 0.5 + w, sigDist);
+    outColor = float4(sample, opacity);
+
+#if A
     // The example shader needs work: https://github.com/Chlumsky/msdfgen/issues/22
     half2 uv = input.uv;
     half3 msd = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv).rgb;
+    float2 sz = _BaseMap_
     float sd = median(msd.r, msd.g, msd.b);
     float dx = ddx(uv.x) * _BaseMap_TexelSize.z;
     float dy = ddy(uv.y) * _BaseMap_TexelSize.w;
@@ -122,7 +138,10 @@ void UnlitPassFragment(
     float sigDist = median(msd.r, msd.g, msd.b);
     float w = fwidth(sigDist);
     float opacity = smoothstep(0.5 - w, 0.5 + w, sigDist);
-    outColor = lerp(_BackgroundColor, _ForegroundColor, opacity);
+    float4 col = lerp(_BackgroundColor, _ForegroundColor, opacity);
+    clip(col.r + col.g + col.b - 0.01);
+    outColor = col;
+#endif
 
 #if _
     float w = fwidth(sd);

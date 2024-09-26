@@ -65,7 +65,7 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
 
             var fontData = ScriptableObject.CreateInstance<SerializedFontData>();
 
-            fontData.FontData = data.ToRuntimeFaceData();
+            fontData.FaceData = data.ToRuntimeFaceData();
             fontData.Glyphs = new RuntimeGlyphData[data.glyph_data->ElementLen()];
 
             var size = data.glyph_data->ElementLen();

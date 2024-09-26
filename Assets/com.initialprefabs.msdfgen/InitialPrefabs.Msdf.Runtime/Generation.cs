@@ -28,16 +28,14 @@ namespace InitialPrefabs.Msdf.Runtime {
             var indices = new List<ushort>();
 
             var startPos = new float2();
-            var scale = FontData.FontData.CalculateScale(PointSize);
-            Debug.Log(scale);
-
 
             var glyphs = FontData.Glyphs;
             for (var i = 0; i < Chars.Length; i++) {
                 var glyphData = glyphs.First(x => (char)(x.Unicode) == Chars[i]);
-                var s = glyphData.Scale(scale);
+                var s = glyphData.ScaleWithDPI(PointSize, FontData.FaceData);
 
                 var localHeight = s.Metrics.y - s.Bearings.y;
+                Debug.Log($"Local Height for {Chars[i]}: {localHeight}, {s.Metrics.y}, {s.Bearings.y}");
                 var extrem = new float4(
                     startPos.x + s.Bearings.x,
                     startPos.y - localHeight,

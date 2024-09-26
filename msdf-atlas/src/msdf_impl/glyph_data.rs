@@ -94,10 +94,10 @@ impl GlyphData {
         let y_max = end.y as f32 / height;
 
         self.uv_x = if uv_space & UVSpace::OneMinusU > UVSpace::Default { 1.0 - x_min } else { x_min };
-        self.uv_y = if uv_space & UVSpace::OneMinusV > UVSpace::Default { 1.0 - y_min } else { y_min };
+        self.uv_y = if uv_space & UVSpace::OneMinusV > UVSpace::Default { 1.0 - y_max } else { y_min };
 
         self.uv_z = if uv_space & UVSpace::OneMinusU > UVSpace::Default { 1.0 - x_max } else { x_max };
-        self.uv_w = if uv_space & UVSpace::OneMinusV > UVSpace::Default { 1.0 - y_max } else { y_max };
+        self.uv_w = if uv_space & UVSpace::OneMinusV > UVSpace::Default { 1.0 - y_min } else { y_max };
 
         self
     }
