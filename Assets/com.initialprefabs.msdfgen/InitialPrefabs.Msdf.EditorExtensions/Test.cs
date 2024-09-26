@@ -2,8 +2,9 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEditor;
+using InitialPrefabs.Msdf.Runtime;
 
-namespace InitialPrefabs.Msdf {
+namespace InitialPrefabs.Msdf.EditorExtensions {
 
     public class Test {
 
@@ -62,8 +63,23 @@ namespace InitialPrefabs.Msdf {
                     point_size = 24,
                 });
 
-            Debug.Log(data.glyph_data->ElementLen());
+            var fontData = ScriptableObject.CreateInstance<SerializedFontData>();
+
+            fontData.FontData = data.ToRuntimeFaceData();
+            fontData.Glyphs = new RuntimeGlyphData[data.glyph_data->ElementLen()];
+
+            var size = data.glyph_data->ElementLen();
+            for (var i = 0; i < size; i++) {
+                var glyphData = data.glyph_data->ElementAt(i);
+                fontData.Glyphs[i] = glyphData.ToRuntime();
+            }
             NativeMethods.drop_byte_buffer(data.glyph_data);
+
+            var soPath = atlasPath[..atlasPath.IndexOf(".png")] + ".asset";
+
+            // Write the fontData to disk
+            AssetDatabase.CreateAsset(fontData, soPath);
+            AssetDatabase.SaveAssets();
         }
     }
 }

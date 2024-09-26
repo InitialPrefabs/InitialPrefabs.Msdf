@@ -6,7 +6,7 @@ $dllSource;
 $dllTarget = "../Assets/com.initialprefabs.msdfgen/Plugins";
 
 $csharpSource = "MsdfAtlas.cs";
-$csharpTarget = "../Assets/com.initialprefabs.msdfgen/InitialPrefabs.Msdf/MsdfAtlas.cs"
+$csharpTarget = "../Assets/com.initialprefabs.msdfgen/InitialPrefabs.Msdf.EditorExtensions/MsdfAtlas.cs"
 
 if ($release) {
     cargo build --release

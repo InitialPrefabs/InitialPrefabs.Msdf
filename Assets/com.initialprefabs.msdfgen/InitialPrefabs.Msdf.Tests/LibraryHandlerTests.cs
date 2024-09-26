@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using InitialPrefabs.Msdf.EditorExtensions;
+using NUnit.Framework;
 using System;
 
 namespace InitialPrefabs.Msdf.Tests {

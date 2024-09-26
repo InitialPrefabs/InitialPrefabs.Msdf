@@ -1,6 +1,7 @@
 use msdf_impl::{
     args::Args,
     byte_buffer::ByteBuffer,
+    font_data::FontData,
     get_font_metrics, get_raw_font_os_string,
     glyph_data::GlyphData,
     utils::{convert_u16_to_os_string, convert_u16_to_string},
@@ -8,12 +9,6 @@ use msdf_impl::{
 use std::path::Path;
 
 mod msdf_impl;
-
-#[repr(C)]
-pub struct Data {
-    units_per_em: u32,
-    glyph_data: *mut ByteBuffer,
-}
 
 /// Returns packed glyph data parsed from msdf.
 ///
@@ -34,19 +29,14 @@ pub unsafe extern "C" fn get_glyph_data_utf16(
     atlas_path: *const u16,
     chars_to_generate: *const u16,
     args: Args,
-) -> Data {
+) -> FontData {
     let font_path = convert_u16_to_os_string(font_path);
     let atlas_path = convert_u16_to_string(atlas_path);
     let chars = convert_u16_to_string(chars_to_generate);
 
     let atlas_path_buffer = Path::new(&atlas_path);
     let raw_font_data = get_raw_font_os_string(font_path.as_os_str()).unwrap();
-    let (units_per_em, glyph_data) =
-        get_font_metrics(&raw_font_data, atlas_path_buffer, chars, args);
-    Data {
-        units_per_em,
-        glyph_data,
-    }
+    get_font_metrics(&raw_font_data, atlas_path_buffer, chars, args)
 }
 
 /// Drops the byte_buffer safely from C#.
@@ -78,10 +68,7 @@ pub unsafe extern "C" fn drop_byte_buffer(ptr: *mut ByteBuffer) {
 ///
 /// Uses a rust function to convert an element in a continuous array as a GlyphData.
 #[no_mangle]
-pub unsafe extern "C" fn reinterpret_as_glyph_data(
-    byte_buffer: &ByteBuffer,
-    i: u16,
-) -> GlyphData {
+pub unsafe extern "C" fn reinterpret_as_glyph_data(byte_buffer: &ByteBuffer, i: u16) -> GlyphData {
     byte_buffer.element_at::<GlyphData>(i as usize)
 }
 

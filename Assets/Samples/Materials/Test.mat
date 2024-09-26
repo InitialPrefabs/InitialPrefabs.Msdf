@@ -95,7 +95,7 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
-    - _Cutoff: 0.36
+    - _Cutoff: 0.266
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -108,7 +108,7 @@ Material:
     - _OcclusionStrength: 1
     - _PXRange: 255
     - _Parallax: 0.005
-    - _PxRange: 40.8
+    - _PxRange: 58.7
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1

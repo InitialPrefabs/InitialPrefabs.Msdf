@@ -1,10 +1,13 @@
 {
-    "name": "InitialPrefabs.Collections",
-    "rootNamespace": "InitialPrefabs.Collections",
+    "name": "InitialPrefabs.Msdf.EditorExtensions",
+    "rootNamespace": "InitialPrefabs.Msdf.EditorExtensions",
     "references": [
-        "GUID:e0cd26848372d4e5c891c569017e11f1"
+        "GUID:f85d6a239c18c3a43b19427d925a8e2c",
+        "GUID:d8b63aba1907145bea998dd612889d6b"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": false,

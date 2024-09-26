@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace InitialPrefabs.Msdf {
+namespace InitialPrefabs.Msdf.EditorExtensions {
 
     internal readonly ref struct LibraryScope {
 

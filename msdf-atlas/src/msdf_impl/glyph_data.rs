@@ -83,20 +83,6 @@ impl GlyphData {
         self
     }
 
-    #[deprecated]
-    pub fn with_min_uv(mut self, x: i16, y: i16) -> GlyphData {
-        self.uv_x = x as f32;
-        self.uv_y = y as f32;
-        self
-    }
-
-    #[deprecated]
-    pub fn with_max_uv(mut self, x: i16, y: i16) -> GlyphData {
-        self.uv_z = x as f32;
-        self.uv_w = y as f32;
-        self
-    }
-
     pub fn with_uvs(mut self, start: Vector2<i32>, end: Vector2<i32>, dimensions: Vector2<i32>, uv_space: UVSpace) -> GlyphData {
         let width = dimensions.x as f32;
         let height = dimensions.y as f32;

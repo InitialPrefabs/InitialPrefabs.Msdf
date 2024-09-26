@@ -1,3 +1,4 @@
+use font_data::FontData;
 use image::{DynamicImage, ImageBuffer, Rgb};
 use log::{info, LevelFilter};
 use mint::Vector2;
@@ -20,9 +21,10 @@ use self::byte_buffer::ByteBuffer;
 
 pub mod args;
 pub mod byte_buffer;
+pub mod font_data;
 pub mod glyph_data;
-pub mod uv_space;
 pub mod utils;
+pub mod uv_space;
 
 /**
  * We know that font_size / fonts.units_per_em() will give us the scale.
@@ -179,7 +181,7 @@ pub unsafe fn get_font_metrics(
     atlas_path: &Path,
     chars_to_generate: String,
     args: Args,
-) -> (u32, *mut ByteBuffer) {
+) -> FontData {
     let _ = log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
 
@@ -282,12 +284,16 @@ pub unsafe fn get_font_metrics(
 
         // Now we have to copy the glyph image to a giant data buffer which is our atlas.
         for (x, y, pixel) in glyph_image.enumerate_pixels() {
+            let (new_x, new_y) = (x + x_offset as u32, y + y_offset as u32);
             // We need to copy the pixel given the offset
-            atlas.put_pixel(x + x_offset as u32, y + y_offset as u32, *pixel);
+            atlas.put_pixel(new_x, new_y, *pixel);
         }
-        // TODO: Figure out the new UVs that are written in the atlas.
+
         x_offset += args.add_padding(glyph_image.width() as i32);
     }
+
+    // glyph_buffer.sort_unstable_by(|lhs, rhs| lhs.unicode.partial_cmp(&rhs.unicode).unwrap());
+
     _ = DynamicImage::from(atlas).into_rgb8().save(atlas_path);
     info!("Generated atlas to {}", atlas_path.to_str().unwrap());
     info!(
@@ -297,8 +303,10 @@ pub unsafe fn get_font_metrics(
     );
 
     let byte_buffer = ByteBuffer::from_vec_struct(glyph_buffer);
-    (
-        face.units_per_em() as u32,
-        Box::into_raw(Box::new(byte_buffer)),
-    )
+    let line_height = (face.ascender() + face.descender()) as i32;
+    FontData {
+        line_height,
+        units_per_em: face.units_per_em() as u32,
+        glyph_data: Box::into_raw(Box::new(byte_buffer)),
+    }
 }

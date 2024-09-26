@@ -8,7 +8,7 @@ using System;
 using System.Runtime.InteropServices;
 
 
-namespace InitialPrefabs.Msdf
+namespace InitialPrefabs.Msdf.EditorExtensions
 {
     internal static unsafe partial class NativeMethods
     {
@@ -32,7 +32,7 @@ namespace InitialPrefabs.Msdf
         ///  cause this function to panic and crash Unity.
         /// </summary>
         [DllImport(__DllName, EntryPoint = "get_glyph_data_utf16", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        internal static extern Data get_glyph_data_utf16(ushort* font_path, ushort* atlas_path, ushort* chars_to_generate, Args args);
+        internal static extern FontData get_glyph_data_utf16(ushort* font_path, ushort* atlas_path, ushort* chars_to_generate, Args args);
 
         /// <summary>
         ///  Drops the byte_buffer safely from C#.
@@ -68,13 +68,6 @@ namespace InitialPrefabs.Msdf
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct Data
-    {
-        public uint units_per_em;
-        public ByteBuffer* glyph_data;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
     internal unsafe partial struct Args
     {
         public float angle;
@@ -107,6 +100,14 @@ namespace InitialPrefabs.Msdf
         public float uv_y;
         public float uv_z;
         public float uv_w;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal unsafe partial struct FontData
+    {
+        public int line_height;
+        public uint units_per_em;
+        public ByteBuffer* glyph_data;
     }
 
 
