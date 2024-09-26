@@ -1,9 +1,9 @@
 use mint::Vector2;
 use ttf_parser::Face;
-
 use crate::msdf_impl::uv_space::UVSpace;
 
 #[repr(C)]
+#[derive(Clone, Copy, Debug)]
 pub struct GlyphData {
     pub unicode: i32,
     pub advance: f32,
@@ -107,11 +107,11 @@ impl GlyphData {
         let x_max = end.x as f32 / width;
         let y_max = end.y as f32 / height;
 
-        self.uv_x = if uv_space.bitwise_and(UVSpace::OneMinusU) { 1.0 - x_min } else { x_min };
-        self.uv_y = if uv_space.bitwise_and(UVSpace::OneMinusV) { 1.0 - y_min } else { y_min };
+        self.uv_x = if uv_space & UVSpace::OneMinusU > UVSpace::Default { 1.0 - x_min } else { x_min };
+        self.uv_y = if uv_space & UVSpace::OneMinusV > UVSpace::Default { 1.0 - y_min } else { y_min };
 
-        self.uv_z = if uv_space.bitwise_and(UVSpace::OneMinusU) { 1.0 - x_max } else { x_max };
-        self.uv_w = if uv_space.bitwise_and(UVSpace::OneMinusV) { 1.0 - y_max } else { y_max };
+        self.uv_z = if uv_space & UVSpace::OneMinusU > UVSpace::Default { 1.0 - x_max } else { x_max };
+        self.uv_w = if uv_space & UVSpace::OneMinusV > UVSpace::Default { 1.0 - y_max } else { y_max };
 
         self
     }
@@ -151,13 +151,13 @@ impl ToString for GlyphData {
 impl PartialEq for GlyphData {
     fn eq(&self, other: &Self) -> bool {
         let (metrics_x, metrics_y) = other.metrics();
-        let (min_x, min_y, max_x, max_y) = other.uvs();
-        let (bearings_x, bearings_y) = other.bearings();
+        let (min_x, min_y, max_x, max_y) = self.uvs();
+        let (bearings_x, bearings_y) = self.bearings();
 
         self.unicode == other.unicode
             && self.advance == other.advance
-            && metrics_x == metrics_x
-            && metrics_y == metrics_y
+            && self.metrics_x == metrics_x
+            && self.metrics_y == metrics_y
             && min_x == other.uv_x
             && min_y == other.uv_y
             && max_x == other.uv_z
@@ -166,4 +166,3 @@ impl PartialEq for GlyphData {
             && bearings_y == other.bearings_y
     }
 }
-

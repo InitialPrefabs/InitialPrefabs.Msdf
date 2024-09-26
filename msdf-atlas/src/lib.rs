@@ -1,7 +1,11 @@
-use log::{info, LevelFilter};
-use msdf_impl::{args::Args, byte_buffer::ByteBuffer, get_font_metrics, get_raw_font_os_string};
-use simple_logging::log_to_file;
-use std::{ffi::OsString, os::windows::ffi::OsStringExt, path::Path};
+use msdf_impl::{
+    args::Args,
+    byte_buffer::ByteBuffer,
+    get_font_metrics, get_raw_font_os_string,
+    glyph_data::GlyphData,
+    utils::{convert_u16_to_os_string, convert_u16_to_string},
+};
+use std::path::Path;
 
 mod msdf_impl;
 
@@ -11,30 +15,19 @@ pub struct Data {
     glyph_data: *mut ByteBuffer,
 }
 
-fn convert_u16_to_os_string(ptr: *const u16) -> OsString {
-    unsafe {
-        let mut len = 0;
-        while *ptr.add(len) != 0 {
-            len += 1;
-        }
-
-        let slice = std::slice::from_raw_parts(ptr, len);
-        OsString::from_wide(slice)
-    }
-}
-
-fn convert_u16_to_string(ptr: *const u16) -> String {
-    unsafe {
-        let mut len = 0;
-        while *ptr.add(len) != 0 {
-            len += 1;
-        }
-
-        let slice = std::slice::from_raw_parts(ptr, len);
-        String::from_utf16(slice).unwrap()
-    }
-}
-
+/// Returns packed glyph data parsed from msdf.
+///
+/// # Arguments
+///
+/// * `font_path` - The absolute path to the font
+/// * `atlas_path` - The absolute path to the texture atlas to generate
+/// * `chars_to_generate` - A UTF16 encoded series of characters to generate the characters for
+/// * `args` - Parameters to set for the atlas generation
+///
+/// # Safety
+///
+/// This function relies on a C lib, msdfgen. Because of how we represent data, any bad data will
+/// cause this function to panic and crash Unity.
 #[no_mangle]
 pub unsafe extern "C" fn get_glyph_data_utf16(
     font_path: *const u16,
@@ -48,11 +41,48 @@ pub unsafe extern "C" fn get_glyph_data_utf16(
 
     let atlas_path_buffer = Path::new(&atlas_path);
     let raw_font_data = get_raw_font_os_string(font_path.as_os_str()).unwrap();
-    let (units_per_em, glyph_data) = get_font_metrics(&raw_font_data, atlas_path_buffer, chars, args);
+    let (units_per_em, glyph_data) =
+        get_font_metrics(&raw_font_data, atlas_path_buffer, chars, args);
     Data {
         units_per_em,
         glyph_data,
     }
+}
+
+/// Drops the byte_buffer safely from C#.
+///
+/// # Arguments
+///
+/// * `byte_buffer` - An allocated block of bytes
+///
+/// # Safety
+///
+/// Memory must be manually dropped from Rust as it was allocated. Do not call this function when
+/// you need to access the data safely.
+#[no_mangle]
+pub unsafe extern "C" fn drop_byte_buffer(ptr: *mut ByteBuffer) {
+    if !ptr.is_null() {
+        let b = *ptr;
+        b.destroy();
+    }
+}
+
+/// Reinterprets an element in the ByteBuffer as a GlyphData.
+///
+/// # Arguments
+///
+/// * `byte_buffer` - The byte buffer to reinterpret as an array of GlyphData.
+/// * `i` - The index to access
+///
+/// # Safety
+///
+/// Uses a rust function to convert an element in a continuous array as a GlyphData.
+#[no_mangle]
+pub unsafe extern "C" fn reinterpret_as_glyph_data(
+    byte_buffer: &ByteBuffer,
+    i: u16,
+) -> GlyphData {
+    byte_buffer.element_at::<GlyphData>(i as usize)
 }
 
 #[cfg(test)]

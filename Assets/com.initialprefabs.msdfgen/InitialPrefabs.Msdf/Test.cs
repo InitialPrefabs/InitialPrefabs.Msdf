@@ -49,7 +49,7 @@ namespace InitialPrefabs.Msdf {
             using var chars = new Utf16("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
             using var absoluteAtlasPath = new Utf16(Application.dataPath + atlasPath["Assets".Length..]);
 
-            NativeMethods.get_glyph_data_utf16(
+            var data = NativeMethods.get_glyph_data_utf16(
                 fontPath.AsU16Ptr(),
                 absoluteAtlasPath.AsU16Ptr(),
                 chars.AsU16Ptr(),
@@ -62,7 +62,8 @@ namespace InitialPrefabs.Msdf {
                     point_size = 24,
                 });
 
-            // TODO: After I'm done, I need to drop Data from the Rust side.
+            Debug.Log(data.glyph_data->ElementLen());
+            NativeMethods.drop_byte_buffer(data.glyph_data);
         }
     }
 }

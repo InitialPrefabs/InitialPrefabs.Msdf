@@ -1,6 +1,7 @@
 use std::mem::ManuallyDrop;
 
 #[repr(C)]
+#[derive(Copy, Clone)]
 pub struct ByteBuffer {
     ptr: *mut u8,
     length: i32,

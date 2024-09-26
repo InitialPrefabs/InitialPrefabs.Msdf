@@ -1,13 +1,11 @@
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub enum UVSpace {
-    Default = 0,
-    OneMinusU = 1 << 0,
-    OneMinusV = 1 << 1,
-}
+use bitflags::bitflags;
 
-impl UVSpace {
-    pub fn bitwise_and(self, other: UVSpace) -> bool {
-        (self as i32 & other as i32) > 0
+bitflags! {
+    #[repr(C)]
+    #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+    pub struct UVSpace : u32 {
+        const Default = 0;
+        const OneMinusU = 1 << 0;
+        const OneMinusV = 1 << 1;
     }
 }

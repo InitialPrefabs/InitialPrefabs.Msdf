@@ -22,6 +22,7 @@ pub mod args;
 pub mod byte_buffer;
 pub mod glyph_data;
 pub mod uv_space;
+pub mod utils;
 
 /**
  * We know that font_size / fonts.units_per_em() will give us the scale.
