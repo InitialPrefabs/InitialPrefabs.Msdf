@@ -12,7 +12,9 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
         public static RuntimeFaceData ToRuntimeFaceData(this ref FontData fontData) {
             return new RuntimeFaceData {
                 LineHeight = fontData.line_height,
-                UnitsPerEm = fontData.units_per_em
+                UnitsPerEm = fontData.units_per_em,
+                AscentLine = fontData.ascender,
+                DescentLine = fontData.descender
             };
         }
     }
