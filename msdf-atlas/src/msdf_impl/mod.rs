@@ -148,6 +148,21 @@ fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, ch
     }
 }
 
+#[inline]
+fn get_nearest_power_of_2(number: i32) -> i32 {
+    let higher_power = (number as f64).log(2.0).ceil() as i32;
+    let high = 1 << higher_power;
+
+    let lower_power = (number as f64).log(2.0).floor() as i32;
+    let low = 1 << lower_power;
+
+    if (number - low).abs() < (high - number).abs() {
+        low
+    } else {
+        high
+    }
+}
+
 fn calculate_minimum_atlas_height(
     glyph_data: &Vec<GlyphBoundingBoxData>,
     args: &Args,
@@ -184,6 +199,7 @@ fn calculate_minimum_atlas_height(
         atlas_height += last_height;
     }
 
+    atlas_height = get_nearest_power_of_2(atlas_height);
     (atlas_height as u32, line_heights)
 }
 
@@ -314,9 +330,13 @@ pub unsafe fn get_font_metrics(
     );
 
     let byte_buffer = ByteBuffer::from_vec_struct(glyph_buffer);
-    let line_height = (face.ascender() + face.descender()) as i32;
+    let ascender = face.ascender() as i32;
+    let descender = face.descender() as i32;
+    let line_height = ascender + descender;
     FontData {
         line_height,
+        ascender,
+        descender,
         units_per_em: face.units_per_em() as u32,
         glyph_data: Box::into_raw(Box::new(byte_buffer)),
     }

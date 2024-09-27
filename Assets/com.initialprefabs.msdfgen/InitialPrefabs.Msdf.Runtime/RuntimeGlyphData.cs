@@ -2,8 +2,10 @@
 using Unity.Mathematics;
 
 namespace InitialPrefabs.Msdf.Runtime {
+
     [Serializable]
     public struct RuntimeGlyphData {
+
         public int Unicode;
 #if UNITY_EDITOR
         public char Char;

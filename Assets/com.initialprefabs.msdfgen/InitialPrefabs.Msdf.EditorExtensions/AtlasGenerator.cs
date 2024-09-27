@@ -124,6 +124,7 @@ public class AtlasGenerator : EditorWindow {
             Debug.Log(soPath);
 
             AssetDatabase.CreateAsset(serializedFontData, soPath);
+            AssetDatabase.ImportAsset(fontPath);
             AssetDatabase.SaveAssets();
         });
     }

@@ -106,6 +106,8 @@ namespace InitialPrefabs.Msdf.EditorExtensions
     {
         public int line_height;
         public uint units_per_em;
+        public int ascender;
+        public int descender;
         public ByteBuffer* glyph_data;
     }
 
