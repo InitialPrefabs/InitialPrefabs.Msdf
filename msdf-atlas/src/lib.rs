@@ -74,11 +74,13 @@ pub unsafe extern "C" fn reinterpret_as_glyph_data(byte_buffer: &ByteBuffer, i: 
 
 #[cfg(test)]
 mod tests {
+    use image::RgbImage;
+
     use crate::msdf_impl::{
-        args::Args, get_font_metrics, get_raw_font, glyph_data::GlyphData, uv_space::UVSpace,
+        args::Args, enums::UVSpace, get_font_metrics, get_raw_font, glyph_data::GlyphData,
     };
     use core::panic;
-    use std::path::Path;
+    use std::{fs::remove_file, path::Path};
 
     #[test]
     fn get_raw_file_works() {
@@ -115,13 +117,13 @@ mod tests {
     }
 
     #[test]
-    fn log_file() {
+    fn generates_atlas_at_scale() {
         unsafe {
-            let raw_font_data = get_raw_font(
-                "C:\\Users\\porri\\Documents\\Projects\\Unity\\InitialPrefabs.Msdf\\msdf-atlas\\Roboto-Medium.ttf").unwrap();
+            // let raw_font_data = get_raw_font(
+            //     "C:\\Users\\porri\\Documents\\Projects\\Unity\\InitialPrefabs.Msdf\\msdf-atlas\\Roboto-Medium.ttf").unwrap();
 
-            let atlas_path = Path::new(
-                "C:\\Users\\porri\\Documents\\Projects\\Unity\\InitialPrefabs.Msdf\\Assets\\com.initialprefabs.msdfgen\\Example\\atlas.png");
+            let raw_font_data = get_raw_font("Roboto-Medium.ttf").unwrap();
+            let atlas_path = Path::new("atlas.png");
 
             let utf16: Vec<u16> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 .encode_utf16()
@@ -133,7 +135,40 @@ mod tests {
                 .with_padding(10)
                 .with_uv_space(UVSpace::OneMinusV);
 
-            get_font_metrics(&raw_font_data, atlas_path, string, args);
+            let font_data = get_font_metrics(&raw_font_data, atlas_path, string, args);
+            assert!(
+                atlas_path.exists(),
+                "The atlas was not written to the desired path"
+            );
+            assert!(font_data.line_height > 0, "Line height was not set.");
+            assert!(
+                font_data.ascender > 0,
+                "Ascender was not set or returned a negative value."
+            );
+            assert!(
+                font_data.descender < 0,
+                "Descender was not set or returned a positive value."
+            );
+            assert!(
+                !font_data.glyph_data.is_null(),
+                "The pointer was not set or dropped."
+            );
+
+            // Write a test to load the image
+            let opened_img = image::open(atlas_path);
+            assert!(opened_img.is_ok(), "Image was corrupted!");
+
+            let actual_img = opened_img.unwrap();
+            assert_eq!(actual_img.width(), 512, "The image scaled when it should not have.");
+            assert_eq!(actual_img.height(), 256, "The image scaled too much or did not expand to the nearest power of 2.");
+
+            let r = remove_file(atlas_path);
+            assert!(r.is_ok(), "atlas.png was not removed!");
         }
+    }
+
+    #[test]
+    fn generate_atlas_at_size() {
+
     }
 }

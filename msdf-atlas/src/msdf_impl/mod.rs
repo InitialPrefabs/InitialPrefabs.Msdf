@@ -21,10 +21,10 @@ use self::byte_buffer::ByteBuffer;
 
 pub mod args;
 pub mod byte_buffer;
+pub mod enums;
 pub mod font_data;
 pub mod glyph_data;
 pub mod utils;
-pub mod uv_space;
 
 /**
  * We know that font_size / fonts.units_per_em() will give us the scale.
@@ -163,17 +163,29 @@ fn get_nearest_power_of_2(number: i32) -> i32 {
     }
 }
 
-fn calculate_minimum_atlas_height(
+#[inline]
+fn get_next_power_of_2(number: i32) -> i32 {
+    1 << ((number as f32).log(2.0).ceil() as i32)
+}
+
+/// Calculates the minimum atlas width and height.
+///
+/// # Arguments
+///
+/// * `glyph_data` - The generated glyphs to check against
+/// * `args` - Generator parameters
+#[inline]
+fn calculate_minimum_atlas_dimensions(
     glyph_data: &Vec<GlyphBoundingBoxData>,
     args: &Args,
-) -> (u32, Vec<i16>) {
+) -> (u32, u32, Vec<i16>) {
     let mut atlas_width: i32 = 0;
     let mut atlas_height: i32 = 0;
 
     let mut line_count = 0;
     let mut line_heights: Vec<i16> = Vec::with_capacity(5);
 
-    let max_width = args.max_atlas_width as i32;
+    let mut max_width = args.max_atlas_width as i32;
 
     line_heights.push(glyph_data.first().unwrap().rect.height());
 
@@ -181,6 +193,12 @@ fn calculate_minimum_atlas_height(
         let current_height = glyph.rect.height();
 
         let width = args.scale_dimension(glyph.rect.width());
+
+        // Sometimes the glyph will be larger than the atlas size, so we need to scale our max
+        // width to the nearest power of 2
+        if width >= max_width {
+            max_width = get_next_power_of_2(width);
+        }
 
         let next_width = atlas_width + width;
         if next_width >= max_width {
@@ -200,7 +218,7 @@ fn calculate_minimum_atlas_height(
     }
 
     atlas_height = get_nearest_power_of_2(atlas_height);
-    (atlas_height as u32, line_heights)
+    (max_width as u32, atlas_height as u32, line_heights)
 }
 
 pub unsafe fn get_font_metrics(
@@ -211,28 +229,21 @@ pub unsafe fn get_font_metrics(
 ) -> FontData {
     let _ = log_to_file("font-metrics.log", LevelFilter::Info);
     let face = Face::parse(raw_font_data, 0).unwrap();
-
     let count = chars_to_generate.len();
     let chars = chars_to_generate.chars();
 
     let msdf_config = Default::default();
 
-    // Preallocated the glyph_faces
+    // Preallocated the glyph_faces and glyph data
     let mut glyph_faces: Vec<GlyphBoundingBoxData> = Vec::with_capacity(count);
-    // Preallocate the glyph data
     let mut glyph_buffer: Vec<GlyphData> = Vec::with_capacity(count);
 
-    // font_size = (units_per_em / 1000) * desired_point_size;
-    // let desired_point_size = args.point_size as f32;
-    // let units_per_em = face.units_per_em() as f32;
-
     let clear: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
-    // let font_size = units_per_em / 1000.0 * desired_point_size;
 
     store_and_sort_by_area(&mut glyph_faces, &face, chars);
 
-    let max_width = args.max_atlas_width;
-    let (max_height, line_heights) = calculate_minimum_atlas_height(&glyph_faces, &args);
+    let (max_width, max_height, line_heights) =
+        calculate_minimum_atlas_dimensions(&glyph_faces, &args);
     info!("Max Width: {}, Max_Height: {}", max_width, max_height);
 
     let mut x_offset: i32 = 0;
@@ -244,10 +255,18 @@ pub unsafe fn get_font_metrics(
 
     let mut current_line_no = 0;
 
+    let radians = args.get_radians();
+
     for glyph_face in glyph_faces {
         let glyph_index = glyph_face.glyph_index;
         let shape = face.load_shape(glyph_index).unwrap();
-        let colored_shape = shape.color_edges_simple(3.0);
+
+        let colored_shape = match args.color_type {
+            enums::ColorType::Simple => shape.color_edges_simple(radians),
+            enums::ColorType::InkTrap => shape.color_edges_ink_trap(radians),
+            enums::ColorType::Distance => shape.color_edges_by_distance(radians),
+        };
+
         let translation = {
             let this = &glyph_face;
             Vector2 {

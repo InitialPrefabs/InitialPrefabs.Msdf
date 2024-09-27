@@ -1,4 +1,4 @@
-use crate::msdf_impl::uv_space::UVSpace;
+use crate::msdf_impl::enums::{ColorType, UVSpace};
 use mint::Vector2;
 
 #[repr(C)]
@@ -9,8 +9,9 @@ pub struct Args {
     pub padding: u32,
     pub max_atlas_width: u32,
     pub range: f32,
-    // TODO: Add the path for where we want to store the atlas
     pub uv_space: UVSpace,
+    pub color_type: ColorType,
+    pub degrees: f32,
 }
 
 impl Args {
@@ -24,6 +25,8 @@ impl Args {
             max_atlas_width: 512,
             range: 4.0,
             uv_space: UVSpace::Default,
+            degrees: 3.0,
+            color_type: ColorType::Simple,
         }
     }
 
@@ -60,6 +63,27 @@ impl Args {
         self
     }
 
+    /// The angle determines what is considered a corner when generating an MSDF texture.
+    ///
+    /// # Arguments
+    ///
+    /// * `degrees` - The angle that is considered an edge when generating the font texture.
+    pub fn with_angle(mut self, degrees: f32) -> Args {
+        self.degrees = degrees;
+        self
+    }
+
+    /// The ColorType determines how MSDFGen will fill the distance between an edge for each
+    /// channel.
+    ///
+    /// # Arguments
+    ///
+    /// * `color_type` - The type of coloring algorithm to use.
+    pub fn with_color_type(mut self, color_type: ColorType) -> Args {
+        self.color_type = color_type;
+        self
+    }
+
     /// Builder to just the max atlas width.
     ///
     /// # Arguments
@@ -87,5 +111,10 @@ impl Args {
     pub fn get_scale(&self) -> Vector2<f64> {
         let scale = self.uniform_scale as f64;
         Vector2 { x: scale, y: scale }
+    }
+
+    #[allow(dead_code)]
+    pub fn get_radians(&self) -> f64 {
+        self.degrees.to_radians() as f64
     }
 }

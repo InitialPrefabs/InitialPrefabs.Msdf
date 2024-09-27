@@ -1,6 +1,6 @@
 use mint::Vector2;
 use ttf_parser::Face;
-use crate::msdf_impl::uv_space::UVSpace;
+use super::enums::UVSpace;
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]

@@ -1,5 +1,12 @@
 use bitflags::bitflags;
 
+#[repr(C)]
+pub enum ColorType {
+    Simple,
+    InkTrap,
+    Distance,
+}
+
 bitflags! {
     #[repr(C)]
     #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
