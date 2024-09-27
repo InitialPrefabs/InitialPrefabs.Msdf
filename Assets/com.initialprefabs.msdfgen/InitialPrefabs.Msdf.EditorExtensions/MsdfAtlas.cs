@@ -73,6 +73,7 @@ namespace InitialPrefabs.Msdf.EditorExtensions
         public float uniform_scale;
         public uint padding;
         public uint max_atlas_width;
+        public float range;
         public UVSpace uv_space;
     }
 

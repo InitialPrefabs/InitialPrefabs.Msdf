@@ -102,7 +102,8 @@ public class AtlasGenerator : EditorWindow {
                 uniform_scale = uniformScale,
                 padding = padding,
                 uv_space = uVSpace,
-                max_atlas_width = atlasWidth
+                max_atlas_width = atlasWidth,
+                range = range,
             };
 
             var data = NativeMethods.get_glyph_data_utf16(

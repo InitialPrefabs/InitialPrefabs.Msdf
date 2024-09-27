@@ -8,6 +8,7 @@ pub struct Args {
     pub uniform_scale: f32,
     pub padding: u32,
     pub max_atlas_width: u32,
+    pub range: f32,
     // TODO: Add the path for where we want to store the atlas
     pub uv_space: UVSpace,
 }
@@ -21,6 +22,7 @@ impl Args {
             uniform_scale: 1.0,
             padding: 0,
             max_atlas_width: 512,
+            range: 4.0,
             uv_space: UVSpace::Default,
         }
     }

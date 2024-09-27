@@ -247,7 +247,7 @@ pub unsafe fn get_font_metrics(
         let msdf_data = colored_shape.generate_msdf(
             glyph_width as u32,
             glyph_height as u32,
-            4.0,
+            args.range as f64,
             &projection,
             &msdf_config,
         );
