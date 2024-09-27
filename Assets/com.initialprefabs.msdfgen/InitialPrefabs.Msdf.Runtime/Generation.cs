@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace InitialPrefabs.Msdf.Runtime {
 
@@ -20,6 +19,9 @@ namespace InitialPrefabs.Msdf.Runtime {
 
         [SerializeField]
         private Mesh mesh;
+
+        private void Awake() {
+        }
 
         private void Start() {
             mesh = new Mesh();

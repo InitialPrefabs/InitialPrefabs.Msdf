@@ -129,7 +129,6 @@ mod tests {
 
             let string = String::from_utf16(&utf16).unwrap();
             let args = Args::default()
-                .with_angle(1.0 / 16.0)
                 .with_uniform_scale(1.0 / 32.0)
                 .with_padding(10)
                 .with_uv_space(UVSpace::OneMinusV);

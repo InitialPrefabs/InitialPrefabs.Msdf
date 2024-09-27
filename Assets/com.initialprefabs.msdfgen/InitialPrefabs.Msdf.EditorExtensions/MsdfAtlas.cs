@@ -70,11 +70,9 @@ namespace InitialPrefabs.Msdf.EditorExtensions
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe partial struct Args
     {
-        public float angle;
         public float uniform_scale;
         public uint padding;
         public uint max_atlas_width;
-        public uint point_size;
         public UVSpace uv_space;
     }
 

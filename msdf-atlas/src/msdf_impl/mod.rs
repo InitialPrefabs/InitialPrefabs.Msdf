@@ -109,9 +109,19 @@ fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, ch
     let mut unique_keys: Vec<i16> = Vec::with_capacity(5);
 
     for c in chars {
-        let glyph_index = face.glyph_index(c).unwrap();
-        let bounding_box = face.glyph_bounding_box(glyph_index).unwrap();
+        let opt_glyph = face.glyph_index(c);
+        if opt_glyph.is_none() {
+            continue;
+        }
 
+        let glyph_index = opt_glyph.unwrap();
+
+        let opt_bounding_box = face.glyph_bounding_box(glyph_index);
+        if opt_bounding_box.is_none() {
+            continue;
+        }
+
+        let bounding_box = opt_bounding_box.unwrap();
         let height = bounding_box.height();
 
         if let std::collections::hash_map::Entry::Vacant(e) = row_map.entry(height) {

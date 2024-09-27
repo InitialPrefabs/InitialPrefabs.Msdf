@@ -4,12 +4,10 @@ use mint::Vector2;
 #[repr(C)]
 pub struct Args {
     /// Stores the angle in degrees for coloring the shape
-    pub angle: f32,
     /// Scale of the generated glyphs. Recommended to use powers of 1 / 2^n.
     pub uniform_scale: f32,
     pub padding: u32,
     pub max_atlas_width: u32,
-    pub point_size: u32,
     // TODO: Add the path for where we want to store the atlas
     pub uv_space: UVSpace,
 }
@@ -20,11 +18,9 @@ impl Args {
     #[allow(dead_code)]
     pub fn default() -> Self {
         Self {
-            angle: 3.0,
             uniform_scale: 1.0,
             padding: 0,
             max_atlas_width: 512,
-            point_size: 12,
             uv_space: UVSpace::Default,
         }
     }
@@ -37,17 +33,6 @@ impl Args {
     #[allow(dead_code)]
     pub fn with_uv_space(mut self, uv_space: UVSpace) -> Args {
         self.uv_space = uv_space;
-        self
-    }
-
-    /// Builder to adjust the angle separately.
-    ///
-    /// # Arguments
-    ///
-    /// * `angle` - The angle in degrees.
-    #[allow(dead_code)]
-    pub fn with_angle(mut self, angle: f32) -> Args {
-        self.angle = angle;
         self
     }
 
@@ -70,17 +55,6 @@ impl Args {
     #[allow(dead_code)]
     pub fn with_padding(mut self, padding: u32) -> Args {
         self.padding = padding;
-        self
-    }
-
-    /// Builder to adjust the font reference.
-    ///
-    /// # Arguments
-    ///
-    /// * `point_size` - The size of the font
-    #[allow(dead_code)]
-    pub fn with_point_size(mut self, point_size: u32) -> Args {
-        self.point_size = point_size;
         self
     }
 
