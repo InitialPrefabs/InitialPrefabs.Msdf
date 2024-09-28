@@ -178,6 +178,7 @@ fn find_best_fit_width(
 
         if scaled_width >= atlas_width {
             atlas_width = get_next_power_of_2(atlas_width);
+            debug!("Resized the atlas width from: {} -> {}", desired_width, atlas_width);
         }
     }
     atlas_width
@@ -238,7 +239,7 @@ pub unsafe fn get_font_metrics(
     chars_to_generate: String,
     args: Args,
 ) -> FontData {
-    let _ = log_to_file("font-metrics.log", LevelFilter::Info);
+    let _ = log_to_file("font-metrics.log", LevelFilter::Debug);
     let face = Face::parse(raw_font_data, 0).unwrap();
     let count = chars_to_generate.len();
     let chars = chars_to_generate.chars();
