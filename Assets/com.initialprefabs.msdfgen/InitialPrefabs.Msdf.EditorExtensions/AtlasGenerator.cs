@@ -1,7 +1,5 @@
 ﻿using InitialPrefabs.Msdf.Runtime;
-using System.Runtime.InteropServices;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -97,12 +95,17 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 }
             });
 
+            var dirLabel = root.Q<Label>("dir-label");
             var export = root.Q<Button>("export");
             root.schedule.Execute(timerState => {
                 export.SetEnabled(fontProp.objectReferenceValue != null);
+                dirLabel.text = resourcePathProp.stringValue;
             }).Every(500);
 
-            _ = root.Q<ObjectField>("font").RegisterValueChangedCallback(changeEvt => {
+            var fontField = root.Q<ObjectField>("font");
+            fontField.value = fontProp.objectReferenceValue;
+
+            _ = fontField.RegisterValueChangedCallback(changeEvt => {
                 if (changeEvt.previousValue != changeEvt.newValue && changeEvt.newValue is Font font) {
                     using var _ = new SerializedObjectScope(serializedObject);
                     fontProp.objectReferenceValue = font;

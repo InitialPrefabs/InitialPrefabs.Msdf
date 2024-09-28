@@ -176,7 +176,6 @@ mod tests {
                 256,
                 "The image scaled too much or did not expand to the nearest power of 2."
             );
-
             let r = remove_file(atlas_path);
             assert!(r.is_ok(), "atlas.png was not removed!");
         }

@@ -89,9 +89,16 @@ impl GlyphBoundingBoxData {
     }
 
     #[inline]
-    pub fn get_glyph_dimensions(&self, args: &Args) -> (i32, i32) {
+    pub fn get_scaled_glyph_dimensions_with_padding(&self, args: &Args) -> (i32, i32) {
         let width = args.scale_dimension_with_padding(self.rect.width().into());
         let height = args.scale_dimension_with_padding(self.rect.height().into());
+        (width, height)
+    }
+
+    #[inline]
+    pub fn get_scaled_glyph_dimensions_no_padding(&self, args: &Args) -> (i32, i32) {
+        let width =  (self.rect.width() as f32 * args.uniform_scale).round() as i32;
+        let height =  (self.rect.height() as f32 * args.uniform_scale).round() as i32;
         (width, height)
     }
 
@@ -210,20 +217,22 @@ fn calculate_minimum_atlas_dimensions(
     let mut chars: Vec<char> = Vec::with_capacity(10);
 
     for glyph in glyph_data {
-        let current_height = args.scale_dimension_with_padding(glyph.rect.height().into());
-        let width = args.scale_dimension_with_padding(glyph.rect.width().into());
+        // let current_height = args.scale_dimension_with_padding(glyph.rect.height().into());
+        // let width = args.scale_dimension_with_padding(glyph.rect.width().into());
 
-        let next_width = atlas_width + width;
+        let (current_scaled_width, current_scaled_height) = glyph.get_scaled_glyph_dimensions_with_padding(&args);
+
+        let next_width = atlas_width + current_scaled_width;
         if next_width >= max_width {
             // We don't need to scale because we've already scaled the current_height
             atlas_height += line_heights[line_count];
-            line_heights.push(current_height);
-            debug!("Pushed new height: {}", current_height);
+            line_heights.push(current_scaled_height);
+            debug!("Pushed new height: {}", current_scaled_height);
             line_count += 1;
             // We have to use the scaled width because it is added to the next line.
             let s: String = chars.iter().collect();
             debug!("Calculation: Chars for line {}: {}, Line Width: {}", line_count - 1, s, atlas_width);
-            atlas_width = width;
+            atlas_width = current_scaled_width;
             chars.clear();
         } else {
             atlas_width = next_width;
@@ -307,19 +316,19 @@ pub unsafe fn get_font_metrics(
         };
         let projection = Projection { scale, translation };
 
-        let (glyph_width, glyph_height) = glyph_face.get_glyph_dimensions(&args);
+        let (scaled_glyph_width_padding, _) = glyph_face.get_scaled_glyph_dimensions_with_padding(&args);
+        let (scaled_glyph_width, scaled_glyph_height) = glyph_face.get_scaled_glyph_dimensions_no_padding(&args);
 
         let msdf_data = colored_shape.generate_msdf(
-            glyph_width as u32,
-            glyph_height as u32,
+            scaled_glyph_width as u32,
+            scaled_glyph_height as u32,
             args.range as f64,
             &projection,
             &msdf_config,
         );
 
         let glyph_image = msdf_data.to_image();
-        let scaled_width =  args.scale_dimension_with_padding(glyph_face.rect.width().into());
-        let next_width = x_offset + scaled_width;
+        let next_width = x_offset + scaled_glyph_width_padding;
 
         if next_width >= max_width as i32 {
             // Increment the y offset by just adding the current line's height
@@ -348,8 +357,8 @@ pub unsafe fn get_font_metrics(
                     y: y_offset,
                 },
                 Vector2 {
-                    x: x_offset + glyph_image.width() as i32,
-                    y: y_offset + glyph_image.height() as i32,
+                    x: x_offset + scaled_glyph_width as i32,
+                    y: y_offset + scaled_glyph_height as i32,
                 },
                 Vector2 {
                     x: max_width as i32,
@@ -370,7 +379,7 @@ pub unsafe fn get_font_metrics(
             atlas.put_pixel(new_x, new_y, *pixel);
         }
 
-        x_offset += scaled_width;
+        x_offset += scaled_glyph_width_padding;
     }
 
     glyph_buffer.sort_unstable_by(|lhs, rhs| lhs.unicode.partial_cmp(&rhs.unicode).unwrap());
