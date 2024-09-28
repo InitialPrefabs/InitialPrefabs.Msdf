@@ -207,29 +207,41 @@ fn calculate_minimum_atlas_dimensions(
 
     line_heights.push(first_height);
 
+    let mut chars: Vec<char> = Vec::with_capacity(10);
+
     for glyph in glyph_data {
         let current_height = args.scale_dimension_with_padding(glyph.rect.height().into());
         let width = args.scale_dimension_with_padding(glyph.rect.width().into());
 
         let next_width = atlas_width + width;
         if next_width >= max_width {
-            atlas_height += args.scale_dimension_with_padding(line_heights[line_count]);
+            // We don't need to scale because we've already scaled the current_height
+            atlas_height += line_heights[line_count];
             line_heights.push(current_height);
+            debug!("Pushed new height: {}", current_height);
             line_count += 1;
             // We have to use the scaled width because it is added to the next line.
+            let s: String = chars.iter().collect();
+            debug!("Calculation: Chars for line {}: {}, Line Width: {}", line_count - 1, s, atlas_width);
             atlas_width = width;
+            chars.clear();
         } else {
             atlas_width = next_width;
         }
+
+        chars.push(glyph.unicode);
     }
 
     // If we haven't finished the end of the line, we need to add the height from the last glyph.
     if atlas_width < max_width {
         let last_height = args.scale_dimension_with_padding(line_heights[line_count]);
+        debug!("Pushed last height: {}", last_height);
         atlas_height += last_height;
     }
 
+    debug!("Original Height: {}", atlas_height);
     atlas_height = get_next_power_of_2(atlas_height);
+    debug!("New Height: {}", atlas_height);
     (max_width as u32, atlas_height as u32, line_heights)
 }
 
@@ -274,6 +286,8 @@ pub unsafe fn get_font_metrics(
 
     let radians = args.get_radians();
 
+    let mut chars: Vec<char> = Vec::with_capacity(10);
+
     for glyph_face in glyph_faces {
         let glyph_index = glyph_face.glyph_index;
         let shape = face.load_shape(glyph_index).unwrap();
@@ -304,16 +318,20 @@ pub unsafe fn get_font_metrics(
         );
 
         let glyph_image = msdf_data.to_image();
-        let next_width =
-            x_offset + args.scale_dimension_with_padding(glyph_face.rect.width().into());
+        let scaled_width =  args.scale_dimension_with_padding(glyph_face.rect.width().into());
+        let next_width = x_offset + scaled_width;
 
         if next_width >= max_width as i32 {
-            // Increment the y offset
-            y_offset += args.scale_dimension_with_padding(line_heights[current_line_no]);
+            // Increment the y offset by just adding the current line's height
+            y_offset += line_heights[current_line_no];
             current_line_no += 1;
             // We reset the x_offset because we have to go the next row in the atlas.
+            let s: String = chars.iter().collect();
+            debug!("Generation: Chars for line {}: {}, Line Width: {}", current_line_no - 1, s, x_offset);
             x_offset = 0;
+            chars.clear();
         }
+        chars.push(glyph_face.unicode);
 
         // Calculate the face data
         let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0);
@@ -352,7 +370,7 @@ pub unsafe fn get_font_metrics(
             atlas.put_pixel(new_x, new_y, *pixel);
         }
 
-        x_offset += args.add_padding(glyph_image.width() as i32);
+        x_offset += scaled_width;
     }
 
     glyph_buffer.sort_unstable_by(|lhs, rhs| lhs.unicode.partial_cmp(&rhs.unicode).unwrap());

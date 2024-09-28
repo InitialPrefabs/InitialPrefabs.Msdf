@@ -75,6 +75,8 @@ namespace InitialPrefabs.Msdf.EditorExtensions
         public uint max_atlas_width;
         public float range;
         public UVSpace uv_space;
+        public ColorType color_type;
+        public float degrees;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -111,6 +113,13 @@ namespace InitialPrefabs.Msdf.EditorExtensions
         public ByteBuffer* glyph_data;
     }
 
+
+    internal enum ColorType : uint
+    {
+        Simple,
+        InkTrap,
+        Distance,
+    }
 
     [Flags]
     internal enum UVSpace : uint

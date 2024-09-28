@@ -20,7 +20,7 @@ impl Args {
     #[allow(dead_code)]
     pub fn default() -> Self {
         Self {
-            uniform_scale: 1.0,
+            uniform_scale: 1.0 / 64.0,
             padding: 0,
             max_atlas_width: 512,
             range: 4.0,
