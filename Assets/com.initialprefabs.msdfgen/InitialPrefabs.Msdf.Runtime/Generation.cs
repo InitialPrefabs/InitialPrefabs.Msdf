@@ -34,7 +34,7 @@ namespace InitialPrefabs.Msdf.Runtime {
             var glyphs = FontData.Glyphs;
             for (var i = 0; i < Chars.Length; i++) {
                 var glyphData = glyphs.First(x => (char)(x.Unicode) == Chars[i]);
-                var s = glyphData.ScaleWithDPI(PointSize, FontData.FaceData);
+                var s = glyphData; // glyphData.ScaleWithDPI(PointSize, FontData.FaceData);
 
                 var localHeight = s.Metrics.y - s.Bearings.y;
                 Debug.Log($"Local Height for {Chars[i]}: {localHeight}, {s.Metrics.y}, {s.Bearings.y}");

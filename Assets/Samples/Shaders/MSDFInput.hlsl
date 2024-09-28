@@ -5,11 +5,8 @@
 
 CBUFFER_START(UnityPerMaterial)
     float4 _BaseMap_ST;
-    half4 _ForegroundColor;
-    half4 _BackgroundColor;
-    half _PxRange;
+    half _DistanceFactor;
     half _Cutoff;
-    half _Surface;
 CBUFFER_END
 
 #endif

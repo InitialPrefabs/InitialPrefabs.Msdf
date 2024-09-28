@@ -1,32 +1,14 @@
-[00:00:00.003] (7a34) DEBUG  Pushed new height: 37
-[00:00:00.003] (7a34) DEBUG  Calculation: Chars for line 0: ▒▓┼╬╫╪█░╢╣╟╠┤╡├╞▌▐║│()/\, Line Width: 510
-[00:00:00.003] (7a34) DEBUG  Pushed new height: 32
-[00:00:00.003] (7a34) DEBUG  Calculation: Chars for line 1: {}[]|ƒjÉÿÖÜÇQÑÄ¶$@Å§¢√å, Line Width: 502
-[00:00:00.004] (7a34) DEBUG  Pushed new height: 32
-[00:00:00.004] (7a34) DEBUG  Calculation: Chars for line 2: δòóéèßìíbdàáùúlôêîâûfk, Line Width: 491
-[00:00:00.004] (7a34) DEBUG  Pushed new height: 30
-[00:00:00.004] (7a34) DEBUG  Calculation: Chars for line 3: hiöëïäüΦñOΘCG08S3%?çg&, Line Width: 495
-[00:00:00.004] (7a34) DEBUG  Pushed new height: 29
-[00:00:00.004] (7a34) DEBUG  Calculation: Chars for line 4: pqφ96¿Ω2yU5J!¼£DB¡µ½RPA, Line Width: 504
-[00:00:00.004] (7a34) DEBUG  Pushed new height: 29
-[00:00:00.004] (7a34) DEBUG  Calculation: Chars for line 5: Y¥VÆX#MW4KTHΣΓZ7NtLE1F, Line Width: 508
-[00:00:00.004] (7a34) DEBUG  Pushed new height: 27
-[00:00:00.004] (7a34) DEBUG  Calculation: Chars for line 6: I╩╧╝╚╛╘╦╤╗╔╕╒;±┴╨╜╙└┘┬╥, Line Width: 507
-[00:00:00.004] (7a34) DEBUG  Pushed new height: 25
-[00:00:00.004] (7a34) DEBUG  Calculation: Chars for line 7: ╖╓┐┌≥≤▀▄εæoecasασ:τmnur, Line Width: 506
-[00:00:00.004] (7a34) DEBUG  Pushed new height: 18
-[00:00:00.004] (7a34) DEBUG  Calculation: Chars for line 8: wxvπz÷+♥<>*²»«º≈^ª¬•,'=, Line Width: 492
-[00:00:00.004] (7a34) DEBUG  Pushed last height: 11
-[00:00:00.005] (7a34) DEBUG  Original Height: 294
-[00:00:00.005] (7a34) DEBUG  New Height: 512
-[00:00:00.005] (7a34) DEBUG  Max Width: 512, Max_Height: 512, Total Lines: 10
-[00:00:00.154] (7a34) DEBUG  Generation: Chars for line 0: ▒▓┼╬╫╪█░╢╣╟╠┤╡├╞▌▐║│()/\, Line Width: 510
-[00:00:00.305] (7a34) DEBUG  Generation: Chars for line 1: {}[]|ƒjÉÿÖÜÇQÑÄ¶$@Å§¢√å, Line Width: 502
-[00:00:00.414] (7a34) DEBUG  Generation: Chars for line 2: δòóéèßìíbdàáùúlôêîâûfk, Line Width: 491
-[00:00:00.569] (7a34) DEBUG  Generation: Chars for line 3: hiöëïäüΦñOΘCG08S3%?çg&, Line Width: 495
-[00:00:00.674] (7a34) DEBUG  Generation: Chars for line 4: pqφ96¿Ω2yU5J!¼£DB¡µ½RPA, Line Width: 504
-[00:00:00.723] (7a34) DEBUG  Generation: Chars for line 5: Y¥VÆX#MW4KTHΣΓZ7NtLE1F, Line Width: 508
-[00:00:00.756] (7a34) DEBUG  Generation: Chars for line 6: I╩╧╝╚╛╘╦╤╗╔╕╒;±┴╨╜╙└┘┬╥, Line Width: 507
-[00:00:00.834] (7a34) DEBUG  Generation: Chars for line 7: ╖╓┐┌≥≤▀▄εæoecasασ:τmnur, Line Width: 506
-[00:00:00.901] (7a34) DEBUG  Generation: Chars for line 8: wxvπz÷+♥<>*²»«º≈^ª¬•,'=, Line Width: 492
-[00:00:01.122] (7a34) DEBUG  Generated atlas to C:/Users/porri/Documents/Projects/Unity/InitialPrefabs.Msdf/Assets/Samples/UbuntuMonoNerdFontMono-Regular.png
+[00:00:00.001] (710) DEBUG  Pushed new height: 50
+[00:00:00.001] (710) DEBUG  Calculation: Chars for line 0: jQqpgybdkhilfOG, Line Width: 477
+[00:00:00.001] (710) DEBUG  Pushed new height: 49
+[00:00:00.001] (710) DEBUG  Calculation: Chars for line 1: CSUJWMAVXYR, Line Width: 500
+[00:00:00.001] (710) DEBUG  Pushed new height: 40
+[00:00:00.001] (710) DEBUG  Calculation: Chars for line 2: DKTHNZEBPFLIta, Line Width: 505
+[00:00:00.002] (710) DEBUG  Pushed last height: 6
+[00:00:00.002] (710) DEBUG  Original Height: 170
+[00:00:00.002] (710) DEBUG  New Height: 256
+[00:00:00.002] (710) DEBUG  Max Width: 512, Max_Height: 256, Total Lines: 4
+[00:00:00.073] (710) DEBUG  Generation: Chars for line 0: jQqpgybdkhilfOG, Line Width: 477
+[00:00:00.129] (710) DEBUG  Generation: Chars for line 1: CSUJWMAVXYR, Line Width: 500
+[00:00:00.167] (710) DEBUG  Generation: Chars for line 2: DKTHNZEBPFLIta, Line Width: 505
+[00:00:00.312] (710) DEBUG  Generated atlas to C:/Users/porri/Documents/Projects/Unity/InitialPrefabs.Msdf/Assets/Samples/LiberationSans.png
