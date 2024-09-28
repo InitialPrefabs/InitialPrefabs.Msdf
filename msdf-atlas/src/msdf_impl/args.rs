@@ -97,7 +97,7 @@ impl Args {
 
     #[allow(dead_code)]
     #[inline(always)]
-    pub fn scale_dimension(&self, unit: i16) -> i32 {
+    pub fn scale_dimension_with_padding(&self, unit: i32) -> i32 {
         self.add_padding((unit as f32 * self.uniform_scale).round() as i32)
     }
 

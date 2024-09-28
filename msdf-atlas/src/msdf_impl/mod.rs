@@ -1,6 +1,6 @@
 use font_data::FontData;
 use image::{DynamicImage, ImageBuffer, Rgb};
-use log::{info, LevelFilter};
+use log::{debug, LevelFilter};
 use mint::Vector2;
 use msdf::{GlyphLoader, Projection, SDFTrait};
 use regex::bytes::Regex;
@@ -88,14 +88,14 @@ impl GlyphBoundingBoxData {
         self.rect.width() as i32 * self.rect.height() as i32
     }
 
-    pub fn get_glyph_dimensions(&self, uniform_scale: f64) -> (i32, i32) {
-        let width = (self.rect.width() as f64 * uniform_scale).round() as i32;
-        let height = (self.rect.height() as f64 * uniform_scale).round() as i32;
+    #[inline]
+    pub fn get_glyph_dimensions(&self, args: &Args) -> (i32, i32) {
+        let width = args.scale_dimension_with_padding(self.rect.width().into());
+        let height = args.scale_dimension_with_padding(self.rect.height().into());
         (width, height)
     }
 
     pub fn calculate_bearings_y(&self) -> i16 {
-        // info!("BB y_max: {}, y_min: {}, rect height: {}, bearings_y: {}", self.rect.y_max, self.rect.y_min, self.rect.height(), self.rect.y_max + self.rect.y_min);
         self.rect.y_max + self.rect.y_min
     }
 
@@ -149,23 +149,38 @@ fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, ch
 }
 
 #[inline]
-fn get_nearest_power_of_2(number: i32) -> i32 {
-    let higher_power = (number as f64).log(2.0).ceil() as i32;
-    let high = 1 << higher_power;
-
-    let lower_power = (number as f64).log(2.0).floor() as i32;
-    let low = 1 << lower_power;
-
-    if (number - low).abs() < (high - number).abs() {
-        low
+pub fn get_next_power_of_2(number: i32) -> i32 {
+    // We know the # is a power of 2
+    if number & (number - 1) == 0 {
+        1 << ((number as f32).log(2.0) + 1.0) as i32
     } else {
-        high
+        1 << ((number as f32).log(2.0).ceil() as i32)
     }
 }
 
+/// Accounts for if our glyph is much larger than our intended atlas width, we scale the atlas
+/// width to the next biggest power of 2.
+///
+/// # Arguments
+///
+/// * `desired_width` - The desired width of the atlas
+/// * `glyph_data` - The glyphs to look through
+/// * `args` - Generator params
 #[inline]
-fn get_next_power_of_2(number: i32) -> i32 {
-    1 << ((number as f32).log(2.0).ceil() as i32)
+fn find_best_fit_width(
+    desired_width: i32,
+    glyph_data: &Vec<GlyphBoundingBoxData>,
+    args: &Args,
+) -> i32 {
+    let mut atlas_width = desired_width;
+    for glyph in glyph_data {
+        let scaled_width = args.scale_dimension_with_padding(glyph.rect.width().into());
+
+        if scaled_width >= atlas_width {
+            atlas_width = get_next_power_of_2(atlas_width);
+        }
+    }
+    atlas_width
 }
 
 /// Calculates the minimum atlas width and height.
@@ -178,34 +193,30 @@ fn get_next_power_of_2(number: i32) -> i32 {
 fn calculate_minimum_atlas_dimensions(
     glyph_data: &Vec<GlyphBoundingBoxData>,
     args: &Args,
-) -> (u32, u32, Vec<i16>) {
+) -> (u32, u32, Vec<i32>) {
     let mut atlas_width: i32 = 0;
     let mut atlas_height: i32 = 0;
 
     let mut line_count = 0;
-    let mut line_heights: Vec<i16> = Vec::with_capacity(5);
+    let mut line_heights: Vec<i32> = Vec::with_capacity(5);
 
-    let mut max_width = args.max_atlas_width as i32;
+    let max_width = find_best_fit_width(args.max_atlas_width as i32, glyph_data, args);
+    let first_height =
+        args.scale_dimension_with_padding(glyph_data.first().unwrap().rect.height().into());
 
-    line_heights.push(glyph_data.first().unwrap().rect.height());
+    line_heights.push(first_height);
 
     for glyph in glyph_data {
-        let current_height = glyph.rect.height();
-
-        let width = args.scale_dimension(glyph.rect.width());
-
-        // Sometimes the glyph will be larger than the atlas size, so we need to scale our max
-        // width to the nearest power of 2
-        if width >= max_width {
-            max_width = get_next_power_of_2(width);
-        }
+        let current_height = args.scale_dimension_with_padding(glyph.rect.height().into());
+        let width = args.scale_dimension_with_padding(glyph.rect.width().into());
 
         let next_width = atlas_width + width;
         if next_width >= max_width {
-            atlas_width = 0;
-            atlas_height += args.scale_dimension(line_heights[line_count]);
+            atlas_height += args.scale_dimension_with_padding(line_heights[line_count]);
             line_heights.push(current_height);
             line_count += 1;
+            // We have to use the scaled width because it is added to the next line.
+            atlas_width = width;
         } else {
             atlas_width = next_width;
         }
@@ -213,11 +224,11 @@ fn calculate_minimum_atlas_dimensions(
 
     // If we haven't finished the end of the line, we need to add the height from the last glyph.
     if atlas_width < max_width {
-        let last_height = args.scale_dimension(line_heights[line_count]);
+        let last_height = args.scale_dimension_with_padding(line_heights[line_count]);
         atlas_height += last_height;
     }
 
-    atlas_height = get_nearest_power_of_2(atlas_height);
+    atlas_height = get_next_power_of_2(atlas_height);
     (max_width as u32, atlas_height as u32, line_heights)
 }
 
@@ -244,7 +255,12 @@ pub unsafe fn get_font_metrics(
 
     let (max_width, max_height, line_heights) =
         calculate_minimum_atlas_dimensions(&glyph_faces, &args);
-    info!("Max Width: {}, Max_Height: {}", max_width, max_height);
+    debug!(
+        "Max Width: {}, Max_Height: {}, Total Lines: {}",
+        max_width,
+        max_height,
+        line_heights.len()
+    );
 
     let mut x_offset: i32 = 0;
     let mut y_offset: i32 = 0;
@@ -276,8 +292,7 @@ pub unsafe fn get_font_metrics(
         };
         let projection = Projection { scale, translation };
 
-        let (glyph_width, glyph_height) =
-            glyph_face.get_glyph_dimensions(args.uniform_scale.into());
+        let (glyph_width, glyph_height) = glyph_face.get_glyph_dimensions(&args);
 
         let msdf_data = colored_shape.generate_msdf(
             glyph_width as u32,
@@ -288,13 +303,15 @@ pub unsafe fn get_font_metrics(
         );
 
         let glyph_image = msdf_data.to_image();
-        let next = x_offset + args.add_padding(glyph_image.width() as i32);
+        let next_width =
+            x_offset + args.scale_dimension_with_padding(glyph_face.rect.width().into());
 
-        if next >= max_width as i32 {
-            x_offset = 0;
+        if next_width >= max_width as i32 {
             // Increment the y offset
-            y_offset += args.scale_dimension(line_heights[current_line_no]);
+            y_offset += args.scale_dimension_with_padding(line_heights[current_line_no]);
             current_line_no += 1;
+            // We reset the x_offset because we have to go the next row in the atlas.
+            x_offset = 0;
         }
 
         // Calculate the face data
@@ -325,7 +342,6 @@ pub unsafe fn get_font_metrics(
             .with_bearings(bearing_x, bearing_y)
             .with_metrics(width, height);
 
-        info!("{}", glyph_data.to_string());
         glyph_buffer.push(glyph_data);
 
         // Now we have to copy the glyph image to a giant data buffer which is our atlas.
@@ -341,12 +357,7 @@ pub unsafe fn get_font_metrics(
     glyph_buffer.sort_unstable_by(|lhs, rhs| lhs.unicode.partial_cmp(&rhs.unicode).unwrap());
 
     _ = DynamicImage::from(atlas).into_rgb8().save(atlas_path);
-    info!("Generated atlas to {}", atlas_path.to_str().unwrap());
-    info!(
-        "Units Per EM: {}, Total Glyphs: {}",
-        face.units_per_em(),
-        glyph_buffer.len()
-    );
+    debug!("Generated atlas to {}", atlas_path.to_str().unwrap());
 
     let byte_buffer = ByteBuffer::from_vec_struct(glyph_buffer);
     let ascender = face.ascender() as i32;

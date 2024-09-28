@@ -1,55 +1,231 @@
-[00:00:00.001] (41b0) INFO   Max Width: 512, Max_Height: 256
-[00:00:00.007] (41b0) INFO   Unicode: 106, Char: j | Metrics: (464, 1930) | Bearings: (-75, 1056) | Advance: 513 | BoundingBox: (0, 0.765625), (0.029296875, 1)
-[00:00:00.015] (41b0) INFO   Unicode: 81, Char: Q | Metrics: (1210, 1728) | Bearings: (96, 1224) | Advance: 1414 | BoundingBox: (0.0390625, 0.7890625), (0.11328125, 1)
-[00:00:00.017] (41b0) INFO   Unicode: 102, Char: f | Metrics: (681, 1557) | Bearings: (45, 1557) | Advance: 726 | BoundingBox: (0.123046875, 0.80859375), (0.1640625, 1)
-[00:00:00.022] (41b0) INFO   Unicode: 98, Char: b | Metrics: (950, 1556) | Bearings: (124, 1516) | Advance: 1153 | BoundingBox: (0.17382813, 0.80859375), (0.23242188, 1)
-[00:00:00.027] (41b0) INFO   Unicode: 100, Char: d | Metrics: (948, 1556) | Bearings: (79, 1516) | Advance: 1156 | BoundingBox: (0.2421875, 0.80859375), (0.30078125, 1)
-[00:00:00.030] (41b0) INFO   Unicode: 107, Char: k | Metrics: (953, 1536) | Bearings: (125, 1536) | Advance: 1069 | BoundingBox: (0.31054688, 0.8125), (0.36914063, 1)
-[00:00:00.033] (41b0) INFO   Unicode: 104, Char: h | Metrics: (895, 1536) | Bearings: (121, 1536) | Advance: 1137 | BoundingBox: (0.37890625, 0.8125), (0.43359375, 1)
-[00:00:00.033] (41b0) INFO   Unicode: 108, Char: l | Metrics: (243, 1536) | Bearings: (140, 1536) | Advance: 523 | BoundingBox: (0.44335938, 0.8125), (0.45898438, 1)
-[00:00:00.042] (41b0) INFO   Unicode: 103, Char: g | Metrics: (954, 1528) | Bearings: (82, 676) | Advance: 1161 | BoundingBox: (0.46875, 0.8125), (0.52734375, 1)
-[00:00:00.046] (41b0) INFO   Unicode: 121, Char: y | Metrics: (970, 1519) | Bearings: (12, 645) | Advance: 997 | BoundingBox: (0.5371094, 0.81640625), (0.5957031, 1)
-[00:00:00.053] (41b0) INFO   Unicode: 112, Char: p | Metrics: (948, 1518) | Bearings: (124, 686) | Advance: 1153 | BoundingBox: (0.60546875, 0.81640625), (0.6640625, 1)
-[00:00:00.060] (41b0) INFO   Unicode: 113, Char: q | Metrics: (947, 1518) | Bearings: (79, 686) | Advance: 1163 | BoundingBox: (0.6738281, 0.81640625), (0.7324219, 1)
-[00:00:00.067] (41b0) INFO   Unicode: 79, Char: O | Metrics: (1208, 1496) | Bearings: (102, 1456) | Advance: 1414 | BoundingBox: (0.7421875, 0.81640625), (0.81640625, 1)
-[00:00:00.072] (41b0) INFO   Unicode: 71, Char: G | Metrics: (1158, 1496) | Bearings: (106, 1456) | Advance: 1394 | BoundingBox: (0.8261719, 0.81640625), (0.8964844, 1)
-[00:00:00.077] (41b0) INFO   Unicode: 67, Char: C | Metrics: (1157, 1496) | Bearings: (102, 1456) | Advance: 1337 | BoundingBox: (0.90625, 0.81640625), (0.9765625, 1)
-[00:00:00.083] (41b0) INFO   Unicode: 83, Char: S | Metrics: (1088, 1496) | Bearings: (74, 1456) | Advance: 1236 | BoundingBox: (0, 0.5625), (0.06640625, 0.74609375)
-[00:00:00.085] (41b0) INFO   Unicode: 105, Char: i | Metrics: (275, 1493) | Bearings: (125, 1493) | Advance: 523 | BoundingBox: (0.076171875, 0.5625), (0.09375, 0.74609375)
-[00:00:00.088] (41b0) INFO   Unicode: 85, Char: U | Metrics: (1088, 1476) | Bearings: (125, 1436) | Advance: 1335 | BoundingBox: (0.103515625, 0.56640625), (0.16992188, 0.74609375)
-[00:00:00.091] (41b0) INFO   Unicode: 74, Char: J | Metrics: (951, 1476) | Bearings: (45, 1436) | Advance: 1137 | BoundingBox: (0.1796875, 0.56640625), (0.23828125, 0.74609375)
-[00:00:00.095] (41b0) INFO   Unicode: 87, Char: W | Metrics: (1717, 1456) | Bearings: (48, 1456) | Advance: 1802 | BoundingBox: (0.24804688, 0.56640625), (0.35351563, 0.74609375)
-[00:00:00.099] (41b0) INFO   Unicode: 77, Char: M | Metrics: (1494, 1456) | Bearings: (148, 1456) | Advance: 1793 | BoundingBox: (0.36328125, 0.56640625), (0.45507813, 0.74609375)
-[00:00:00.102] (41b0) INFO   Unicode: 65, Char: A | Metrics: (1328, 1456) | Bearings: (18, 1456) | Advance: 1363 | BoundingBox: (0.46484375, 0.56640625), (0.546875, 0.74609375)
-[00:00:00.105] (41b0) INFO   Unicode: 86, Char: V | Metrics: (1291, 1456) | Bearings: (18, 1456) | Advance: 1325 | BoundingBox: (0.5566406, 0.56640625), (0.6347656, 0.74609375)
-[00:00:00.107] (41b0) INFO   Unicode: 89, Char: Y | Metrics: (1231, 1456) | Bearings: (7, 1456) | Advance: 1248 | BoundingBox: (0.64453125, 0.56640625), (0.71875, 0.74609375)
-[00:00:00.110] (41b0) INFO   Unicode: 88, Char: X | Metrics: (1216, 1456) | Bearings: (41, 1456) | Advance: 1296 | BoundingBox: (0.7285156, 0.56640625), (0.8027344, 0.74609375)
-[00:00:00.113] (41b0) INFO   Unicode: 72, Char: H | Metrics: (1156, 1456) | Bearings: (148, 1456) | Advance: 1455 | BoundingBox: (0.8125, 0.56640625), (0.8828125, 0.74609375)
-[00:00:00.115] (41b0) INFO   Unicode: 75, Char: K | Metrics: (1156, 1456) | Bearings: (148, 1456) | Advance: 1291 | BoundingBox: (0.8925781, 0.56640625), (0.9628906, 0.74609375)
-[00:00:00.118] (41b0) INFO   Unicode: 78, Char: N | Metrics: (1155, 1456) | Bearings: (148, 1456) | Advance: 1454 | BoundingBox: (0, 0.36328125), (0.0703125, 0.54296875)
-[00:00:00.121] (41b0) INFO   Unicode: 84, Char: T | Metrics: (1155, 1456) | Bearings: (45, 1456) | Advance: 1243 | BoundingBox: (0.080078125, 0.36328125), (0.15039063, 0.54296875)
-[00:00:00.126] (41b0) INFO   Unicode: 82, Char: R | Metrics: (1098, 1456) | Bearings: (148, 1456) | Advance: 1278 | BoundingBox: (0.16015625, 0.36328125), (0.2265625, 0.54296875)
-[00:00:00.130] (41b0) INFO   Unicode: 80, Char: P | Metrics: (1088, 1456) | Bearings: (148, 1456) | Advance: 1309 | BoundingBox: (0.23632813, 0.36328125), (0.30273438, 0.54296875)
-[00:00:00.135] (41b0) INFO   Unicode: 68, Char: D | Metrics: (1086, 1456) | Bearings: (148, 1456) | Advance: 1338 | BoundingBox: (0.3125, 0.36328125), (0.37890625, 0.54296875)
-[00:00:00.137] (41b0) INFO   Unicode: 90, Char: Z | Metrics: (1084, 1456) | Bearings: (80, 1456) | Advance: 1233 | BoundingBox: (0.38867188, 0.36328125), (0.45507813, 0.54296875)
-[00:00:00.143] (41b0) INFO   Unicode: 66, Char: B | Metrics: (1039, 1456) | Bearings: (148, 1456) | Advance: 1292 | BoundingBox: (0.46484375, 0.36328125), (0.52734375, 0.54296875)
-[00:00:00.145] (41b0) INFO   Unicode: 69, Char: E | Metrics: (952, 1456) | Bearings: (148, 1456) | Advance: 1158 | BoundingBox: (0.5371094, 0.36328125), (0.5957031, 0.54296875)
-[00:00:00.147] (41b0) INFO   Unicode: 70, Char: F | Metrics: (925, 1456) | Bearings: (148, 1456) | Advance: 1125 | BoundingBox: (0.60546875, 0.36328125), (0.6621094, 0.54296875)
-[00:00:00.149] (41b0) INFO   Unicode: 76, Char: L | Metrics: (914, 1456) | Bearings: (148, 1456) | Advance: 1108 | BoundingBox: (0.671875, 0.36328125), (0.7285156, 0.54296875)
-[00:00:00.149] (41b0) INFO   Unicode: 73, Char: I | Metrics: (252, 1456) | Bearings: (163, 1456) | Advance: 578 | BoundingBox: (0.73828125, 0.36328125), (0.75390625, 0.54296875)
-[00:00:00.151] (41b0) INFO   Unicode: 116, Char: t | Metrics: (618, 1365) | Bearings: (8, 1325) | Advance: 681 | BoundingBox: (0.7636719, 0.375), (0.80078125, 0.54296875)
-[00:00:00.155] (41b0) INFO   Unicode: 111, Char: o | Metrics: (1006, 1122) | Bearings: (79, 1082) | Advance: 1166 | BoundingBox: (0.8105469, 0.40625), (0.87109375, 0.54296875)
-[00:00:00.159] (41b0) INFO   Unicode: 101, Char: e | Metrics: (952, 1122) | Bearings: (83, 1082) | Advance: 1099 | BoundingBox: (0.8808594, 0.40625), (0.9394531, 0.54296875)
-[00:00:00.162] (41b0) INFO   Unicode: 99, Char: c | Metrics: (934, 1122) | Bearings: (79, 1082) | Advance: 1072 | BoundingBox: (0, 0.20703125), (0.056640625, 0.34375)
-[00:00:00.167] (41b0) INFO   Unicode: 97, Char: a | Metrics: (929, 1122) | Bearings: (90, 1082) | Advance: 1108 | BoundingBox: (0.06640625, 0.20703125), (0.123046875, 0.34375)
-[00:00:00.171] (41b0) INFO   Unicode: 115, Char: s | Metrics: (895, 1122) | Bearings: (75, 1082) | Advance: 1057 | BoundingBox: (0.1328125, 0.20703125), (0.1875, 0.34375)
-[00:00:00.176] (41b0) INFO   Unicode: 109, Char: m | Metrics: (1533, 1102) | Bearings: (124, 1102) | Advance: 1782 | BoundingBox: (0.19726563, 0.2109375), (0.29101563, 0.34375)
-[00:00:00.178] (41b0) INFO   Unicode: 117, Char: u | Metrics: (896, 1102) | Bearings: (119, 1062) | Advance: 1138 | BoundingBox: (0.30078125, 0.2109375), (0.35546875, 0.34375)
-[00:00:00.180] (41b0) INFO   Unicode: 110, Char: n | Metrics: (895, 1102) | Bearings: (121, 1102) | Advance: 1139 | BoundingBox: (0.36523438, 0.2109375), (0.41992188, 0.34375)
-[00:00:00.181] (41b0) INFO   Unicode: 114, Char: r | Metrics: (568, 1102) | Bearings: (124, 1102) | Advance: 720 | BoundingBox: (0.4296875, 0.2109375), (0.46484375, 0.34375)
-[00:00:00.184] (41b0) INFO   Unicode: 119, Char: w | Metrics: (1451, 1082) | Bearings: (33, 1082) | Advance: 1522 | BoundingBox: (0.47460938, 0.2109375), (0.5625, 0.34375)
-[00:00:00.186] (41b0) INFO   Unicode: 120, Char: x | Metrics: (969, 1082) | Bearings: (31, 1082) | Advance: 1030 | BoundingBox: (0.5722656, 0.2109375), (0.6308594, 0.34375)
-[00:00:00.187] (41b0) INFO   Unicode: 118, Char: v | Metrics: (964, 1082) | Bearings: (22, 1082) | Advance: 1013 | BoundingBox: (0.640625, 0.2109375), (0.69921875, 0.34375)
-[00:00:00.189] (41b0) INFO   Unicode: 122, Char: z | Metrics: (878, 1082) | Bearings: (82, 1082) | Advance: 1030 | BoundingBox: (0.7089844, 0.2109375), (0.76171875, 0.34375)
-[00:00:00.297] (41b0) INFO   Generated atlas to atlas.png
-[00:00:00.297] (41b0) INFO   Units Per EM: 2048, Total Glyphs: 52
+[00:00:00.000] (32a0) INFO   Rescaled from 512 -> 2048
+[00:00:00.001] (32a0) INFO   Unicode: j, Scaled Width: 469
+[00:00:00.001] (32a0) INFO   Unicode: Q, Scaled Width: 1215
+[00:00:00.001] (32a0) INFO   Unicode: f, Scaled Width: 686
+[00:00:00.001] (32a0) INFO   Finished preprocessing row: 0, added chars: jQ, current row width: 1684
+[00:00:00.001] (32a0) INFO   Unicode: b, Scaled Width: 955
+[00:00:00.001] (32a0) INFO   Unicode: d, Scaled Width: 953
+[00:00:00.001] (32a0) INFO   Finished preprocessing row: 1, added chars: fb, current row width: 1641
+[00:00:00.002] (32a0) INFO   Unicode: k, Scaled Width: 958
+[00:00:00.002] (32a0) INFO   Unicode: h, Scaled Width: 900
+[00:00:00.002] (32a0) INFO   Finished preprocessing row: 2, added chars: dk, current row width: 1911
+[00:00:00.002] (32a0) INFO   Unicode: l, Scaled Width: 248
+[00:00:00.002] (32a0) INFO   Unicode: g, Scaled Width: 959
+[00:00:00.002] (32a0) INFO   Finished preprocessing row: 3, added chars: hl, current row width: 1148
+[00:00:00.002] (32a0) INFO   Unicode: y, Scaled Width: 975
+[00:00:00.002] (32a0) INFO   Unicode: p, Scaled Width: 953
+[00:00:00.003] (32a0) INFO   Finished preprocessing row: 4, added chars: gy, current row width: 1934
+[00:00:00.003] (32a0) INFO   Unicode: q, Scaled Width: 952
+[00:00:00.003] (32a0) INFO   Unicode: O, Scaled Width: 1213
+[00:00:00.003] (32a0) INFO   Finished preprocessing row: 5, added chars: pq, current row width: 1905
+[00:00:00.003] (32a0) INFO   Unicode: G, Scaled Width: 1163
+[00:00:00.003] (32a0) INFO   Finished preprocessing row: 6, added chars: O, current row width: 1213
+[00:00:00.003] (32a0) INFO   Unicode: C, Scaled Width: 1162
+[00:00:00.003] (32a0) INFO   Finished preprocessing row: 7, added chars: G, current row width: 1163
+[00:00:00.004] (32a0) INFO   Unicode: S, Scaled Width: 1093
+[00:00:00.004] (32a0) INFO   Finished preprocessing row: 8, added chars: C, current row width: 1162
+[00:00:00.004] (32a0) INFO   Unicode: i, Scaled Width: 280
+[00:00:00.004] (32a0) INFO   Unicode: U, Scaled Width: 1093
+[00:00:00.004] (32a0) INFO   Finished preprocessing row: 9, added chars: Si, current row width: 1373
+[00:00:00.004] (32a0) INFO   Unicode: J, Scaled Width: 956
+[00:00:00.004] (32a0) INFO   Finished preprocessing row: 10, added chars: U, current row width: 1093
+[00:00:00.004] (32a0) INFO   Unicode: W, Scaled Width: 1722
+[00:00:00.004] (32a0) INFO   Finished preprocessing row: 11, added chars: J, current row width: 956
+[00:00:00.005] (32a0) INFO   Unicode: M, Scaled Width: 1499
+[00:00:00.005] (32a0) INFO   Finished preprocessing row: 12, added chars: W, current row width: 1722
+[00:00:00.005] (32a0) INFO   Unicode: A, Scaled Width: 1333
+[00:00:00.005] (32a0) INFO   Finished preprocessing row: 13, added chars: M, current row width: 1499
+[00:00:00.005] (32a0) INFO   Unicode: V, Scaled Width: 1296
+[00:00:00.005] (32a0) INFO   Finished preprocessing row: 14, added chars: A, current row width: 1333
+[00:00:00.005] (32a0) INFO   Unicode: Y, Scaled Width: 1236
+[00:00:00.005] (32a0) INFO   Finished preprocessing row: 15, added chars: V, current row width: 1296
+[00:00:00.006] (32a0) INFO   Unicode: X, Scaled Width: 1221
+[00:00:00.006] (32a0) INFO   Finished preprocessing row: 16, added chars: Y, current row width: 1236
+[00:00:00.006] (32a0) INFO   Unicode: H, Scaled Width: 1161
+[00:00:00.006] (32a0) INFO   Finished preprocessing row: 17, added chars: X, current row width: 1221
+[00:00:00.006] (32a0) INFO   Unicode: K, Scaled Width: 1161
+[00:00:00.006] (32a0) INFO   Finished preprocessing row: 18, added chars: H, current row width: 1161
+[00:00:00.006] (32a0) INFO   Unicode: N, Scaled Width: 1160
+[00:00:00.006] (32a0) INFO   Finished preprocessing row: 19, added chars: K, current row width: 1161
+[00:00:00.007] (32a0) INFO   Unicode: T, Scaled Width: 1160
+[00:00:00.007] (32a0) INFO   Finished preprocessing row: 20, added chars: N, current row width: 1160
+[00:00:00.007] (32a0) INFO   Unicode: R, Scaled Width: 1103
+[00:00:00.007] (32a0) INFO   Finished preprocessing row: 21, added chars: T, current row width: 1160
+[00:00:00.007] (32a0) INFO   Unicode: P, Scaled Width: 1093
+[00:00:00.007] (32a0) INFO   Finished preprocessing row: 22, added chars: R, current row width: 1103
+[00:00:00.007] (32a0) INFO   Unicode: D, Scaled Width: 1091
+[00:00:00.007] (32a0) INFO   Finished preprocessing row: 23, added chars: P, current row width: 1093
+[00:00:00.008] (32a0) INFO   Unicode: Z, Scaled Width: 1089
+[00:00:00.008] (32a0) INFO   Finished preprocessing row: 24, added chars: D, current row width: 1091
+[00:00:00.008] (32a0) INFO   Unicode: B, Scaled Width: 1044
+[00:00:00.008] (32a0) INFO   Finished preprocessing row: 25, added chars: Z, current row width: 1089
+[00:00:00.008] (32a0) INFO   Unicode: E, Scaled Width: 957
+[00:00:00.008] (32a0) INFO   Unicode: F, Scaled Width: 930
+[00:00:00.009] (32a0) INFO   Finished preprocessing row: 26, added chars: BE, current row width: 2001
+[00:00:00.009] (32a0) INFO   Unicode: L, Scaled Width: 919
+[00:00:00.009] (32a0) INFO   Unicode: I, Scaled Width: 257
+[00:00:00.009] (32a0) INFO   Finished preprocessing row: 27, added chars: FL, current row width: 1849
+[00:00:00.009] (32a0) INFO   Unicode: t, Scaled Width: 623
+[00:00:00.009] (32a0) INFO   Unicode: o, Scaled Width: 1011
+[00:00:00.009] (32a0) INFO   Unicode: e, Scaled Width: 957
+[00:00:00.009] (32a0) INFO   Finished preprocessing row: 28, added chars: Ito, current row width: 1891
+[00:00:00.010] (32a0) INFO   Unicode: c, Scaled Width: 939
+[00:00:00.010] (32a0) INFO   Unicode: a, Scaled Width: 934
+[00:00:00.010] (32a0) INFO   Finished preprocessing row: 29, added chars: ec, current row width: 1896
+[00:00:00.010] (32a0) INFO   Unicode: s, Scaled Width: 900
+[00:00:00.010] (32a0) INFO   Unicode: m, Scaled Width: 1538
+[00:00:00.010] (32a0) INFO   Finished preprocessing row: 30, added chars: as, current row width: 1834
+[00:00:00.011] (32a0) INFO   Unicode: u, Scaled Width: 901
+[00:00:00.011] (32a0) INFO   Finished preprocessing row: 31, added chars: m, current row width: 1538
+[00:00:00.011] (32a0) INFO   Unicode: n, Scaled Width: 900
+[00:00:00.011] (32a0) INFO   Unicode: r, Scaled Width: 573
+[00:00:00.011] (32a0) INFO   Finished preprocessing row: 32, added chars: un, current row width: 1801
+[00:00:00.011] (32a0) INFO   Unicode: w, Scaled Width: 1456
+[00:00:00.011] (32a0) INFO   Unicode: x, Scaled Width: 974
+[00:00:00.012] (32a0) INFO   Finished preprocessing row: 33, added chars: rw, current row width: 2029
+[00:00:00.012] (32a0) INFO   Unicode: v, Scaled Width: 969
+[00:00:00.012] (32a0) INFO   Unicode: z, Scaled Width: 883
+[00:00:00.012] (32a0) INFO   Finished preprocessing row: 34, added chars: xv, current row width: 1943
+[00:00:00.012] (32a0) INFO   Line Count: 35
+[00:00:00.012] (32a0) INFO   Max Width: 2048, Max_Height: 65536, Total Lines: 36
+[00:00:04.186] (32a0) INFO   Glyph Width: 464, scaled: 469
+[00:00:04.186] (32a0) INFO   Unicode: 106, Char: j | Metrics: (464, 1930) | Bearings: (-75, 1056) | Advance: 513 | BoundingBox: (0, 0.97047424), (0.2290039, 1)
+[00:00:08.833] (32a0) INFO   Glyph Width: 1210, scaled: 1215
+[00:00:08.833] (32a0) INFO   Unicode: 81, Char: Q | Metrics: (1210, 1728) | Bearings: (96, 1224) | Advance: 1414 | BoundingBox: (0.23144531, 0.9735565), (0.82470703, 1)
+[00:00:10.712] (32a0) INFO   Glyph Width: 681, scaled: 686
+[00:00:10.712] (32a0) INFO   Finished row: 0, current row width: 1694, next_width: 2380
+[00:00:10.712] (32a0) INFO   Unicode: 102, Char: f | Metrics: (681, 1557) | Bearings: (45, 1557) | Advance: 726 | BoundingBox: (0, 0.9465637), (0.33496094, 0.97039795)
+[00:00:14.522] (32a0) INFO   Glyph Width: 950, scaled: 955
+[00:00:14.522] (32a0) INFO   Unicode: 98, Char: b | Metrics: (950, 1556) | Bearings: (124, 1516) | Advance: 1153 | BoundingBox: (0.33740234, 0.946579), (0.80371094, 0.97039795)
+[00:00:18.269] (32a0) INFO   Glyph Width: 948, scaled: 953
+[00:00:18.269] (32a0) INFO   Finished row: 1, current row width: 1651, next_width: 2604
+[00:00:18.269] (32a0) INFO   Unicode: 100, Char: d | Metrics: (948, 1556) | Bearings: (79, 1516) | Advance: 1156 | BoundingBox: (0, 0.92266846), (0.46533203, 0.9464874)
+[00:00:20.499] (32a0) INFO   Glyph Width: 953, scaled: 958
+[00:00:20.500] (32a0) INFO   Unicode: 107, Char: k | Metrics: (953, 1536) | Bearings: (125, 1536) | Advance: 1069 | BoundingBox: (0.46777344, 0.92297363), (0.9355469, 0.9464874)
+[00:00:22.763] (32a0) INFO   Glyph Width: 895, scaled: 900
+[00:00:22.763] (32a0) INFO   Finished row: 2, current row width: 1921, next_width: 2821
+[00:00:22.763] (32a0) INFO   Unicode: 104, Char: h | Metrics: (895, 1536) | Bearings: (121, 1536) | Advance: 1137 | BoundingBox: (0, 0.89907837), (0.43945313, 0.92259216)
+[00:00:23.325] (32a0) INFO   Glyph Width: 243, scaled: 248
+[00:00:23.325] (32a0) INFO   Unicode: 108, Char: l | Metrics: (243, 1536) | Bearings: (140, 1536) | Advance: 523 | BoundingBox: (0.44189453, 0.89907837), (0.5629883, 0.92259216)
+[00:00:27.531] (32a0) INFO   Glyph Width: 954, scaled: 959
+[00:00:27.531] (32a0) INFO   Finished row: 3, current row width: 1158, next_width: 2117
+[00:00:27.531] (32a0) INFO   Unicode: 103, Char: g | Metrics: (954, 1528) | Bearings: (82, 676) | Advance: 1161 | BoundingBox: (0, 0.87561035), (0.46826172, 0.8990021)
+[00:00:29.968] (32a0) INFO   Glyph Width: 970, scaled: 975
+[00:00:29.969] (32a0) INFO   Unicode: 121, Char: y | Metrics: (970, 1519) | Bearings: (12, 645) | Advance: 997 | BoundingBox: (0.47070313, 0.8757477), (0.94677734, 0.8990021)
+[00:00:33.342] (32a0) INFO   Glyph Width: 948, scaled: 953
+[00:00:33.342] (32a0) INFO   Finished row: 4, current row width: 1944, next_width: 2897
+[00:00:33.342] (32a0) INFO   Unicode: 112, Char: p | Metrics: (948, 1518) | Bearings: (124, 686) | Advance: 1153 | BoundingBox: (0, 0.8522949), (0.46533203, 0.87553406)
+[00:00:36.951] (32a0) INFO   Glyph Width: 947, scaled: 952
+[00:00:36.951] (32a0) INFO   Unicode: 113, Char: q | Metrics: (947, 1518) | Bearings: (79, 686) | Advance: 1163 | BoundingBox: (0.46777344, 0.8522949), (0.9326172, 0.87553406)
+[00:00:41.540] (32a0) INFO   Glyph Width: 1208, scaled: 1213
+[00:00:41.540] (32a0) INFO   Finished row: 5, current row width: 1915, next_width: 3128
+[00:00:41.540] (32a0) INFO   Unicode: 79, Char: O | Metrics: (1208, 1496) | Bearings: (102, 1456) | Advance: 1414 | BoundingBox: (0, 0.8293152), (0.59228516, 0.8522186)
+[00:00:44.856] (32a0) INFO   Glyph Width: 1158, scaled: 1163
+[00:00:44.856] (32a0) INFO   Finished row: 6, current row width: 1218, next_width: 2381
+[00:00:44.856] (32a0) INFO   Unicode: 71, Char: G | Metrics: (1158, 1496) | Bearings: (106, 1456) | Advance: 1394 | BoundingBox: (0, 0.80633545), (0.5678711, 0.8292389)
+[00:00:48.550] (32a0) INFO   Glyph Width: 1157, scaled: 1162
+[00:00:48.550] (32a0) INFO   Finished row: 7, current row width: 1168, next_width: 2330
+[00:00:48.550] (32a0) INFO   Unicode: 67, Char: C | Metrics: (1157, 1496) | Bearings: (102, 1456) | Advance: 1337 | BoundingBox: (0, 0.7833557), (0.5673828, 0.80625916)
+[00:00:52.171] (32a0) INFO   Glyph Width: 1088, scaled: 1093
+[00:00:52.171] (32a0) INFO   Finished row: 8, current row width: 1167, next_width: 2260
+[00:00:52.171] (32a0) INFO   Unicode: 83, Char: S | Metrics: (1088, 1496) | Bearings: (74, 1456) | Advance: 1236 | BoundingBox: (0, 0.760376), (0.5336914, 0.7832794)
+[00:00:53.235] (32a0) INFO   Glyph Width: 275, scaled: 280
+[00:00:53.236] (32a0) INFO   Unicode: 105, Char: i | Metrics: (275, 1493) | Bearings: (125, 1493) | Advance: 523 | BoundingBox: (0.5361328, 0.76042175), (0.67285156, 0.7832794)
+[00:00:55.588] (32a0) INFO   Glyph Width: 1088, scaled: 1093
+[00:00:55.588] (32a0) INFO   Finished row: 9, current row width: 1383, next_width: 2476
+[00:00:55.588] (32a0) INFO   Unicode: 85, Char: U | Metrics: (1088, 1476) | Bearings: (125, 1436) | Advance: 1335 | BoundingBox: (0, 0.7377014), (0.5336914, 0.7602997)
+[00:00:57.813] (32a0) INFO   Glyph Width: 951, scaled: 956
+[00:00:57.813] (32a0) INFO   Finished row: 10, current row width: 1098, next_width: 2054
+[00:00:57.813] (32a0) INFO   Unicode: 74, Char: J | Metrics: (951, 1476) | Bearings: (45, 1436) | Advance: 1137 | BoundingBox: (0, 0.71502686), (0.46679688, 0.7376251)
+[00:01:01.496] (32a0) INFO   Glyph Width: 1717, scaled: 1722
+[00:01:01.496] (32a0) INFO   Finished row: 11, current row width: 961, next_width: 2683
+[00:01:01.496] (32a0) INFO   Unicode: 87, Char: W | Metrics: (1717, 1456) | Bearings: (48, 1456) | Advance: 1802 | BoundingBox: (0, 0.6926575), (0.8408203, 0.71495056)
+[00:01:04.919] (32a0) INFO   Glyph Width: 1494, scaled: 1499
+[00:01:04.919] (32a0) INFO   Finished row: 12, current row width: 1727, next_width: 3226
+[00:01:04.919] (32a0) INFO   Unicode: 77, Char: M | Metrics: (1494, 1456) | Bearings: (148, 1456) | Advance: 1793 | BoundingBox: (0, 0.6702881), (0.7319336, 0.6925812)
+[00:01:08.174] (32a0) INFO   Glyph Width: 1328, scaled: 1333
+[00:01:08.174] (32a0) INFO   Finished row: 13, current row width: 1504, next_width: 2837
+[00:01:08.174] (32a0) INFO   Unicode: 65, Char: A | Metrics: (1328, 1456) | Bearings: (18, 1456) | Advance: 1363 | BoundingBox: (0, 0.6479187), (0.6508789, 0.6702118)
+[00:01:10.534] (32a0) INFO   Glyph Width: 1291, scaled: 1296
+[00:01:10.534] (32a0) INFO   Finished row: 14, current row width: 1338, next_width: 2634
+[00:01:10.534] (32a0) INFO   Unicode: 86, Char: V | Metrics: (1291, 1456) | Bearings: (18, 1456) | Advance: 1325 | BoundingBox: (0, 0.6255493), (0.6328125, 0.6478424)
+[00:01:12.900] (32a0) INFO   Glyph Width: 1231, scaled: 1236
+[00:01:12.900] (32a0) INFO   Finished row: 15, current row width: 1301, next_width: 2537
+[00:01:12.901] (32a0) INFO   Unicode: 89, Char: Y | Metrics: (1231, 1456) | Bearings: (7, 1456) | Advance: 1248 | BoundingBox: (0, 0.60317993), (0.6035156, 0.625473)
+[00:01:15.472] (32a0) INFO   Glyph Width: 1216, scaled: 1221
+[00:01:15.472] (32a0) INFO   Finished row: 16, current row width: 1241, next_width: 2462
+[00:01:15.472] (32a0) INFO   Unicode: 88, Char: X | Metrics: (1216, 1456) | Bearings: (41, 1456) | Advance: 1296 | BoundingBox: (0, 0.58081055), (0.5961914, 0.60310364)
+[00:01:17.620] (32a0) INFO   Glyph Width: 1156, scaled: 1161
+[00:01:17.620] (32a0) INFO   Finished row: 17, current row width: 1226, next_width: 2387
+[00:01:17.620] (32a0) INFO   Unicode: 72, Char: H | Metrics: (1156, 1456) | Bearings: (148, 1456) | Advance: 1455 | BoundingBox: (0, 0.55844116), (0.56689453, 0.58073425)
+[00:01:20.003] (32a0) INFO   Glyph Width: 1156, scaled: 1161
+[00:01:20.003] (32a0) INFO   Finished row: 18, current row width: 1166, next_width: 2327
+[00:01:20.003] (32a0) INFO   Unicode: 75, Char: K | Metrics: (1156, 1456) | Bearings: (148, 1456) | Advance: 1291 | BoundingBox: (0, 0.5360718), (0.56689453, 0.55836487)
+[00:01:22.483] (32a0) INFO   Glyph Width: 1155, scaled: 1160
+[00:01:22.483] (32a0) INFO   Finished row: 19, current row width: 1166, next_width: 2326
+[00:01:22.483] (32a0) INFO   Unicode: 78, Char: N | Metrics: (1155, 1456) | Bearings: (148, 1456) | Advance: 1454 | BoundingBox: (0, 0.5137024), (0.56640625, 0.5359955)
+[00:01:24.431] (32a0) INFO   Glyph Width: 1155, scaled: 1160
+[00:01:24.431] (32a0) INFO   Finished row: 20, current row width: 1165, next_width: 2325
+[00:01:24.431] (32a0) INFO   Unicode: 84, Char: T | Metrics: (1155, 1456) | Bearings: (45, 1456) | Advance: 1243 | BoundingBox: (0, 0.491333), (0.56640625, 0.5136261)
+[00:01:27.979] (32a0) INFO   Glyph Width: 1098, scaled: 1103
+[00:01:27.979] (32a0) INFO   Finished row: 21, current row width: 1165, next_width: 2268
+[00:01:27.979] (32a0) INFO   Unicode: 82, Char: R | Metrics: (1098, 1456) | Bearings: (148, 1456) | Advance: 1278 | BoundingBox: (0, 0.46896362), (0.5385742, 0.4912567)
+[00:01:31.313] (32a0) INFO   Glyph Width: 1088, scaled: 1093
+[00:01:31.313] (32a0) INFO   Finished row: 22, current row width: 1108, next_width: 2201
+[00:01:31.313] (32a0) INFO   Unicode: 80, Char: P | Metrics: (1088, 1456) | Bearings: (148, 1456) | Advance: 1309 | BoundingBox: (0, 0.44659424), (0.5336914, 0.46888733)
+[00:01:34.638] (32a0) INFO   Glyph Width: 1086, scaled: 1091
+[00:01:34.638] (32a0) INFO   Finished row: 23, current row width: 1098, next_width: 2189
+[00:01:34.638] (32a0) INFO   Unicode: 68, Char: D | Metrics: (1086, 1456) | Bearings: (148, 1456) | Advance: 1338 | BoundingBox: (0, 0.42422485), (0.53271484, 0.44651794)
+[00:01:36.744] (32a0) INFO   Glyph Width: 1084, scaled: 1089
+[00:01:36.744] (32a0) INFO   Finished row: 24, current row width: 1096, next_width: 2185
+[00:01:36.744] (32a0) INFO   Unicode: 90, Char: Z | Metrics: (1084, 1456) | Bearings: (80, 1456) | Advance: 1233 | BoundingBox: (0, 0.40185547), (0.5317383, 0.42414856)
+[00:01:41.596] (32a0) INFO   Glyph Width: 1039, scaled: 1044
+[00:01:41.596] (32a0) INFO   Finished row: 25, current row width: 1094, next_width: 2138
+[00:01:41.596] (32a0) INFO   Unicode: 66, Char: B | Metrics: (1039, 1456) | Bearings: (148, 1456) | Advance: 1292 | BoundingBox: (0, 0.37948608), (0.5097656, 0.40177917)
+[00:01:43.457] (32a0) INFO   Glyph Width: 952, scaled: 957
+[00:01:43.457] (32a0) INFO   Unicode: 69, Char: E | Metrics: (952, 1456) | Bearings: (148, 1456) | Advance: 1158 | BoundingBox: (0.51220703, 0.37948608), (0.9794922, 0.40177917)
+[00:01:45.281] (32a0) INFO   Glyph Width: 925, scaled: 930
+[00:01:45.281] (32a0) INFO   Finished row: 26, current row width: 2011, next_width: 2941
+[00:01:45.281] (32a0) INFO   Unicode: 70, Char: F | Metrics: (925, 1456) | Bearings: (148, 1456) | Advance: 1125 | BoundingBox: (0, 0.3571167), (0.45410156, 0.3794098)
+[00:01:46.831] (32a0) INFO   Glyph Width: 914, scaled: 919
+[00:01:46.831] (32a0) INFO   Unicode: 76, Char: L | Metrics: (914, 1456) | Bearings: (148, 1456) | Advance: 1108 | BoundingBox: (0.45654297, 0.3571167), (0.90527344, 0.3794098)
+[00:01:47.309] (32a0) INFO   Glyph Width: 252, scaled: 257
+[00:01:47.309] (32a0) INFO   Finished row: 27, current row width: 1859, next_width: 2116
+[00:01:47.309] (32a0) INFO   Unicode: 73, Char: I | Metrics: (252, 1456) | Bearings: (163, 1456) | Advance: 578 | BoundingBox: (0, 0.3347473), (0.12548828, 0.3570404)
+[00:01:48.714] (32a0) INFO   Glyph Width: 618, scaled: 623
+[00:01:48.714] (32a0) INFO   Unicode: 116, Char: t | Metrics: (618, 1365) | Bearings: (8, 1325) | Advance: 681 | BoundingBox: (0.12792969, 0.33613586), (0.4321289, 0.3570404)
+[00:01:51.487] (32a0) INFO   Glyph Width: 1006, scaled: 1011
+[00:01:51.487] (32a0) INFO   Unicode: 111, Char: o | Metrics: (1006, 1122) | Bearings: (79, 1082) | Advance: 1166 | BoundingBox: (0.4345703, 0.33984375), (0.92822266, 0.3570404)
+[00:01:54.225] (32a0) INFO   Glyph Width: 952, scaled: 957
+[00:01:54.225] (32a0) INFO   Finished row: 28, current row width: 1906, next_width: 2863
+[00:01:54.225] (32a0) INFO   Unicode: 101, Char: e | Metrics: (952, 1122) | Bearings: (83, 1082) | Advance: 1099 | BoundingBox: (0, 0.31747437), (0.46728516, 0.33467102)
+[00:01:56.325] (32a0) INFO   Glyph Width: 934, scaled: 939
+[00:01:56.325] (32a0) INFO   Unicode: 99, Char: c | Metrics: (934, 1122) | Bearings: (79, 1082) | Advance: 1072 | BoundingBox: (0.46972656, 0.31747437), (0.92822266, 0.33467102)
+[00:01:59.550] (32a0) INFO   Glyph Width: 929, scaled: 934
+[00:01:59.550] (32a0) INFO   Finished row: 29, current row width: 1906, next_width: 2840
+[00:01:59.550] (32a0) INFO   Unicode: 97, Char: a | Metrics: (929, 1122) | Bearings: (90, 1082) | Advance: 1108 | BoundingBox: (0, 0.30020142), (0.4560547, 0.31739807)
+[00:02:01.876] (32a0) INFO   Glyph Width: 895, scaled: 900
+[00:02:01.876] (32a0) INFO   Unicode: 115, Char: s | Metrics: (895, 1122) | Bearings: (75, 1082) | Advance: 1057 | BoundingBox: (0.4584961, 0.30020142), (0.8979492, 0.31739807)
+[00:02:04.982] (32a0) INFO   Glyph Width: 1533, scaled: 1538
+[00:02:04.983] (32a0) INFO   Finished row: 30, current row width: 1844, next_width: 3382
+[00:02:04.983] (32a0) INFO   Unicode: 109, Char: m | Metrics: (1533, 1102) | Bearings: (124, 1102) | Advance: 1782 | BoundingBox: (0, 0.28323364), (0.75097656, 0.30012512)
+[00:02:06.514] (32a0) INFO   Glyph Width: 896, scaled: 901
+[00:02:06.514] (32a0) INFO   Finished row: 31, current row width: 1543, next_width: 2444
+[00:02:06.514] (32a0) INFO   Unicode: 117, Char: u | Metrics: (896, 1102) | Bearings: (119, 1062) | Advance: 1138 | BoundingBox: (0, 0.26626587), (0.4399414, 0.28315735)
+[00:02:07.963] (32a0) INFO   Glyph Width: 895, scaled: 900
+[00:02:07.963] (32a0) INFO   Unicode: 110, Char: n | Metrics: (895, 1102) | Bearings: (121, 1102) | Advance: 1139 | BoundingBox: (0.4423828, 0.26626587), (0.88183594, 0.28315735)
+[00:02:08.887] (32a0) INFO   Glyph Width: 568, scaled: 573
+[00:02:08.887] (32a0) INFO   Finished row: 32, current row width: 1811, next_width: 2384
+[00:02:08.887] (32a0) INFO   Unicode: 114, Char: r | Metrics: (568, 1102) | Bearings: (124, 1102) | Advance: 720 | BoundingBox: (0, 0.2492981), (0.27978516, 0.26618958)
+[00:02:11.098] (32a0) INFO   Glyph Width: 1451, scaled: 1456
+[00:02:11.098] (32a0) INFO   Unicode: 119, Char: w | Metrics: (1451, 1082) | Bearings: (33, 1082) | Advance: 1522 | BoundingBox: (0.28222656, 0.24960327), (0.99316406, 0.26618958)
+[00:02:12.685] (32a0) INFO   Glyph Width: 969, scaled: 974
+[00:02:12.685] (32a0) INFO   Finished row: 33, current row width: 2039, next_width: 3013
+[00:02:12.685] (32a0) INFO   Unicode: 120, Char: x | Metrics: (969, 1082) | Bearings: (31, 1082) | Advance: 1030 | BoundingBox: (0, 0.2326355), (0.47558594, 0.2492218)
+[00:02:14.032] (32a0) INFO   Glyph Width: 964, scaled: 969
+[00:02:14.032] (32a0) INFO   Unicode: 118, Char: v | Metrics: (964, 1082) | Bearings: (22, 1082) | Advance: 1013 | BoundingBox: (0.47802734, 0.2326355), (0.9511719, 0.2492218)
+[00:02:15.279] (32a0) INFO   Glyph Width: 878, scaled: 883
+[00:02:15.279] (32a0) INFO   Finished row: 34, current row width: 1953, next_width: 2836
+[00:02:15.280] (32a0) INFO   Unicode: 122, Char: z | Metrics: (878, 1082) | Bearings: (82, 1082) | Advance: 1030 | BoundingBox: (0, 0.2159729), (0.43115234, 0.2325592)
+[00:04:10.863] (32a0) INFO   Generated atlas to atlas.png
+[00:04:10.864] (32a0) INFO   Units Per EM: 2048, Total Glyphs: 52
