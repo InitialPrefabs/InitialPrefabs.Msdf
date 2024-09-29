@@ -41,6 +41,15 @@ impl Args {
         self
     }
 
+    /// Defines the range of the args
+    /// # Arguments
+    /// * `range` - The msdf range for the distance field.
+    #[allow(dead_code)]
+    pub fn with_range(mut self, range: f32) -> Args {
+        self.range = range;
+        self
+    }
+
     /// Builder to adjust the scale of the generated glyphs
     ///
     /// # Arguments

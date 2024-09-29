@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    FontSize: 322
+    FontSize: 279
     TextToRender: A
     FontData: {fileID: 11400000, guid: e7caf8aa4c20f604383d8d8195dea820, type: 2}
     Material: {fileID: 2100000, guid: 5130f521a51e937418f05dddc069e464, type: 2}

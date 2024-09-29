@@ -1,8 +1,11 @@
-[00:00:00.000] (3ee4) DEBUG  Pushed new height: 22
-[00:00:00.001] (3ee4) DEBUG  Calculation: Chars for line 0: jQqpgybdkhilfOGCSUJWMAVXYRDKTHNZEBPFLItaoecsmnurw, Line Width: 1021
+[00:00:00.001] (3ee4) DEBUG  Pushed new height: 27
+[00:00:00.001] (3ee4) DEBUG  Calculation: Chars for line 0: jQqpgybdkhilfOGCSUJWMAVX, Line Width: 501
+[00:00:00.001] (3ee4) DEBUG  Pushed new height: 22
+[00:00:00.001] (3ee4) DEBUG  Calculation: Chars for line 1: YRDKTHNZEBPFLItaoecsmnur, Line Width: 492
 [00:00:00.001] (3ee4) DEBUG  Pushed last height: 5
-[00:00:00.001] (3ee4) DEBUG  Original Height: 40
-[00:00:00.001] (3ee4) DEBUG  New Height: 64
-[00:00:00.001] (3ee4) DEBUG  Max Width: 1024, Max_Height: 64, Total Lines: 2
-[00:00:00.113] (3ee4) DEBUG  Generation: Chars for line 0: jQqpgybdkhilfOGCSUJWMAVXYRDKTHNZEBPFLItaoecsmnurw, Line Width: 1021
-[00:00:00.277] (3ee4) DEBUG  Generated atlas to C:/Users/porri/Documents/Projects/Unity/InitialPrefabs.Msdf/Assets/Samples/LiberationSans.png
+[00:00:00.001] (3ee4) DEBUG  Original Height: 67
+[00:00:00.002] (3ee4) DEBUG  New Height: 128
+[00:00:00.002] (3ee4) DEBUG  Max Width: 512, Max_Height: 128, Total Lines: 3
+[00:00:00.042] (3ee4) DEBUG  Generation: Chars for line 0: jQqpgybdkhilfOGCSUJWMAVX, Line Width: 501
+[00:00:00.068] (3ee4) DEBUG  Generation: Chars for line 1: YRDKTHNZEBPFLItaoecsmnur, Line Width: 492
+[00:00:00.230] (3ee4) DEBUG  Generated atlas to C:/Users/porri/Documents/Projects/Unity/InitialPrefabs.Msdf/Assets/Samples/LiberationSans.png

@@ -140,6 +140,7 @@ mod tests {
             let string = String::from_utf16(&utf16).unwrap();
             let args = Args::default()
                 .with_uniform_scale(1.0 / 32.0)
+                .with_range(640.0)
                 .with_padding(10)
                 .with_uv_space(UVSpace::OneMinusV);
 
@@ -196,6 +197,8 @@ mod tests {
                 .with_uniform_scale(1.0)
                 .with_padding(10)
                 .with_uv_space(UVSpace::OneMinusV)
+                .with_range(640.0)
+                .with_angle(180.0)
                 .with_max_atlas(512);
 
             let font_data = get_font_metrics(&raw_font_data, atlas_path, string, args);

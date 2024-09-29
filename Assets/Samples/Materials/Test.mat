@@ -91,12 +91,12 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BlendOp: 0
-    - _BoxSampleSize: 1
+    - _BoxSampleSize: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
-    - _Cutoff: 0
+    - _Cutoff: 0.059
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistanceFactor: 27.42
@@ -122,7 +122,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
-    - _Strength: 0.5
+    - _Strength: 0.427
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1

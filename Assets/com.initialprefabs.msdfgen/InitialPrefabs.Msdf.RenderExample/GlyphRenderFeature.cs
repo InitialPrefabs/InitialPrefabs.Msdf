@@ -96,8 +96,8 @@ namespace InitialPrefabs.Msdf.RenderExample {
                     // calculate the px range, assume the texture size is the metrics
                     // Ideally this should be put to a compute buffer, receive the vertex ID and flatten it to it's associated
                     // unitRange. Every 4 vertices = 1 element
-                    var unitRange = 6 / metrics;
-                    Debug.Log(unitRange);
+                    // TODO: Write the Range into the RuntimeFontFace
+                    var unitRange = 100 / metrics;
 
                     var localHeight = s.Metrics.y - s.Bearings.y;
                     var extrem = new float4(

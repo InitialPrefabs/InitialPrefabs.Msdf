@@ -296,6 +296,10 @@ pub unsafe fn get_font_metrics(
     // Create our dynamic atlas buffer
     let mut atlas = ImageBuffer::from_pixel(max_width, max_height, clear);
     let scale = args.get_scale();
+    // let scale = Vector2 { 
+    //     x: 0.1,
+    //     y: 0.1
+    // };
 
     let mut current_line_no = 0;
 

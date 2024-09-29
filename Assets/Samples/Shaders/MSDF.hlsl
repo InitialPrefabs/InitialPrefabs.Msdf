@@ -49,7 +49,7 @@ float screenPxRange(float2 uv, float2 unitRange) {
 }
 
 float screenPxRange(float2 uv) {
-    float2 unitRange = 6.0 / _BaseMap_ST.zw;
+    float2 unitRange = 100 / _BaseMap_ST.zw;
     float2 screenTexSize = 1.0 / fwidth(uv);
     return max(0.5 * dot(unitRange, screenTexSize), 1.0);
 }
@@ -60,17 +60,11 @@ half2 SafeNormalize(half2 v) {
     return v * len;
 }
 
-float FilterSdfTextureExact(float sdf, float2 uvCoordinate, float2 textureSize) {
-    // Calculate the derivative of the UV coordinate and build the jacobian-matrix from it.
+half FilterSdfTextureExact(float sdf, float2 uvCoordinate, float2 textureSize) {
     half2x2 pixelFootprint = half2x2(ddx(uvCoordinate), ddy(uvCoordinate));
-    // Calculate the area under the pixel.
-    // Note the use of abs(), because the area may be negative.
-    float pixelFootprintDiameterSqr = abs(determinant(pixelFootprint));
-    // Multiply by texture size.
+    half pixelFootprintDiameterSqr = abs(determinant(pixelFootprint));
     pixelFootprintDiameterSqr *= textureSize.x * textureSize.y ;
-    // Compute the diameter.
-    float pixelFootprintDiameter = sqrt(pixelFootprintDiameterSqr);
-    // Clamp the filter width to [0, 1] so we won't overfilter, which fades the texture into grey
+    half pixelFootprintDiameter = sqrt(pixelFootprintDiameterSqr);
     pixelFootprintDiameter = saturate(pixelFootprintDiameter);
     return saturate(inverseLerp(-pixelFootprintDiameter, pixelFootprintDiameter, sdf));
 }
@@ -88,36 +82,31 @@ void UnlitPassFragment(
     UNITY_SETUP_INSTANCE_ID(input);
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
-    int totalSamples = _BoxSampleSize * _BoxSampleSize;
-    float sum = 0;
-
-    for (int dx = -_BoxSampleSize; dx <= _BoxSampleSize; dx++) {
-        for (int dy = -_BoxSampleSize; dy <= _BoxSampleSize; dy++) {
-            float2 neighbor = input.uv + float2(dx, dy) / _ScreenParams.xy;
-            float3 sample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, neighbor).rgb;
-            sum += median(sample.r, sample.g, sample.b) - _Strength;
-        }
-    }
-
-    float sigDist = sum / totalSamples;
+    // Custom AA
+    float3 sample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv).rgb;
+    float sigDist = median(sample.r, sample.g, sample.b) - 0.5;
     sigDist = FilterSdfTextureExact(sigDist, input.uv, _BaseMap_TexelSize.zw);
-    half t = smoothstep(0, 1, sigDist);
-    outColor = t;
+    // half t = smoothstep(0, 0.5, sigDist);
+    outColor = sigDist;
 
-    // float dist = _Cutoff - sampleCol.a;
+    // Simple for SDF not MSDF
+    // float4 sample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
+    // float dist = _Cutoff - sample.a;
     // float2 ddist = float2(ddx(dist), ddy(dist));
     // float pixelDist = dist / length(ddist);
     // float a = saturate(0.5 - pixelDist);
     // clip(a - 0.01);
     // outColor = float4(input.color.rgb, a);
 
-    // float pxRange = screenPxRange(input.uv);
+    // What the msdf author recommended. Use a constant screen px range.
+    // Should code generate and set the uniform
+    // float pxRange = screenPxRange(input.uv, input.unitRange);
     // float4 texel = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
     // float dist = median(texel.r, texel.g, texel.b);
     // float pxDist = pxRange * (dist - 0.5);
     // float opacity = saturate(pxDist + 0.5);
     // clip(opacity - _Cutoff);
-    // outColor = float4(0.80469, 0.917969, 0.9804688, opacity);
+    // outColor = float4(input.color.rgb, opacity);
 
     #if B
         float2 msdfUnit = _PxRange / _BaseMap_TexelSize.zw;

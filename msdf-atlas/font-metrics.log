@@ -1,14 +1,14 @@
-[00:00:00.001] (23f4) DEBUG  Pushed new height: 52
-[00:00:00.001] (23f4) DEBUG  Calculation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
-[00:00:00.001] (23f4) DEBUG  Pushed new height: 51
-[00:00:00.001] (23f4) DEBUG  Calculation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
-[00:00:00.001] (23f4) DEBUG  Pushed new height: 40
-[00:00:00.001] (23f4) DEBUG  Calculation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
-[00:00:00.001] (23f4) DEBUG  Pushed last height: 6
-[00:00:00.001] (23f4) DEBUG  Original Height: 174
-[00:00:00.001] (23f4) DEBUG  New Height: 256
-[00:00:00.001] (23f4) DEBUG  Max Width: 512, Max_Height: 256, Total Lines: 4
-[00:00:00.075] (23f4) DEBUG  Generation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
-[00:00:00.108] (23f4) DEBUG  Generation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
-[00:00:00.151] (23f4) DEBUG  Generation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
-[00:00:00.511] (23f4) DEBUG  Generated atlas to atlas.png
+[00:00:00.000] (9e40) DEBUG  Pushed new height: 52
+[00:00:00.001] (9e40) DEBUG  Calculation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
+[00:00:00.001] (9e40) DEBUG  Pushed new height: 51
+[00:00:00.001] (9e40) DEBUG  Calculation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
+[00:00:00.001] (9e40) DEBUG  Pushed new height: 40
+[00:00:00.001] (9e40) DEBUG  Calculation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
+[00:00:00.001] (9e40) DEBUG  Pushed last height: 6
+[00:00:00.001] (9e40) DEBUG  Original Height: 174
+[00:00:00.001] (9e40) DEBUG  New Height: 256
+[00:00:00.001] (9e40) DEBUG  Max Width: 512, Max_Height: 256, Total Lines: 4
+[00:00:00.076] (9e40) DEBUG  Generation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
+[00:00:00.110] (9e40) DEBUG  Generation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
+[00:00:00.154] (9e40) DEBUG  Generation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
+[00:00:00.521] (9e40) DEBUG  Generated atlas to atlas.png

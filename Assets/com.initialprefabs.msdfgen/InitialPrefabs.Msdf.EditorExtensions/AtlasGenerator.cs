@@ -95,6 +95,8 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 }
             });
 
+            root.Q<TextField>("chars").BindProperty(defaultCharsProp);
+
             var dirLabel = root.Q<Label>("dir-label");
             var export = root.Q<Button>("export");
             root.schedule.Execute(timerState => {
