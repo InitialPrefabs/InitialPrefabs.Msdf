@@ -5,8 +5,10 @@
 
 CBUFFER_START(UnityPerMaterial)
     float4 _BaseMap_ST;
-    half _DistanceFactor;
-    half _Cutoff;
+    float _PxRange;
+    float _Cutoff;
+    float _Strength;
+    int _BoxSampleSize;
 CBUFFER_END
 
 #endif

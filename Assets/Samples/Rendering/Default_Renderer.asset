@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    FontSize: 234
-    TextToRender: jab
+    FontSize: 322
+    TextToRender: A
     FontData: {fileID: 11400000, guid: e7caf8aa4c20f604383d8d8195dea820, type: 2}
     Material: {fileID: 2100000, guid: 5130f521a51e937418f05dddc069e464, type: 2}
+    FontTexture: {fileID: 2800000, guid: 36e71cdfae8a9fb49926231a8f5438fa, type: 3}
     StartPos:
-      x: 32
-      y: 877.48
+      x: 8.2
+      y: 832.3
     Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &11400000
 MonoBehaviour:

@@ -3,6 +3,9 @@ Shader "Unlit/MSDF"
     Properties
     {
         _BaseMap("Main Texture", 2D) = "white" {}
+        _Strength("Strength", Range(0.0, 1.0)) = 0
+        _PxRange("PX Range", Float) = 4
+        _BoxSampleSize("Box Sample Size", Range(1, 5)) = 4
         _Cutoff("AlphaCutout", Range(0.0, 1.0)) = 0.5
     }
 

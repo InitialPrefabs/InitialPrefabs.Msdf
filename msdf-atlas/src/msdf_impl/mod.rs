@@ -2,7 +2,7 @@ use font_data::FontData;
 use image::{DynamicImage, ImageBuffer, Rgb};
 use log::{debug, LevelFilter};
 use mint::Vector2;
-use msdf::{GlyphLoader, Projection, SDFTrait};
+use msdf::{DistanceCheckMode, ErrorCorrectionConfig, ErrorCorrectionMode, GlyphLoader, MSDFConfig, Projection, SDFTrait};
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::collections::HashMap;
@@ -265,13 +265,19 @@ pub unsafe fn get_font_metrics(
     let count = chars_to_generate.len();
     let chars = chars_to_generate.chars();
 
-    let msdf_config = Default::default();
+    let mut msdf_config: MSDFConfig = Default::default();
+    msdf_config.overlap_support = true;
+
+    let mut error_correction_config = ErrorCorrectionConfig::default();
+    error_correction_config.distance_check_mode = DistanceCheckMode::AlwaysCheckDistance;
+    error_correction_config.error_correction_mode = ErrorCorrectionMode::Indiscriminate;
+    msdf_config.error_correction_config = error_correction_config;
 
     // Preallocated the glyph_faces and glyph data
     let mut glyph_faces: Vec<GlyphBoundingBoxData> = Vec::with_capacity(count);
     let mut glyph_buffer: Vec<GlyphData> = Vec::with_capacity(count);
 
-    let clear: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
+    let clear = Rgb([0.0, 0.0, 0.0]);
 
     store_and_sort_by_area(&mut glyph_faces, &face, chars);
 
@@ -384,7 +390,7 @@ pub unsafe fn get_font_metrics(
 
     glyph_buffer.sort_unstable_by(|lhs, rhs| lhs.unicode.partial_cmp(&rhs.unicode).unwrap());
 
-    _ = DynamicImage::from(atlas).into_rgb8().save(atlas_path);
+    _ = DynamicImage::from(atlas).into_rgba16().save(atlas_path);
     debug!("Generated atlas to {}", atlas_path.to_str().unwrap());
 
     let byte_buffer = ByteBuffer::from_vec_struct(glyph_buffer);

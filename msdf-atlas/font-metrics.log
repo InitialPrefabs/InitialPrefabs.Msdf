@@ -1,126 +1,14 @@
-[00:00:00.000] (60c8) DEBUG  Resized the atlas width from: 512 -> 1024
-[00:00:00.000] (60c8) DEBUG  Resized the atlas width from: 512 -> 2048
-[00:00:00.001] (60c8) DEBUG  Pushed new height: 1562
-[00:00:00.001] (6068) DEBUG  Pushed new height: 52
-[00:00:00.001] (60c8) DEBUG  Calculation: Chars for line 0: jQ, Line Width: 1684
-[00:00:00.001] (60c8) DEBUG  Pushed new height: 1561
-[00:00:00.001] (60c8) DEBUG  Calculation: Chars for line 1: fb, Line Width: 1641
-[00:00:00.001] (60c8) DEBUG  Pushed new height: 1541
-[00:00:00.001] (60c8) DEBUG  Calculation: Chars for line 2: dk, Line Width: 1911
-[00:00:00.001] (60c8) DEBUG  Pushed new height: 1533
-[00:00:00.001] (60c8) DEBUG  Calculation: Chars for line 3: hl, Line Width: 1148
-[00:00:00.001] (6068) DEBUG  Calculation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
-[00:00:00.001] (6068) DEBUG  Pushed new height: 51
-[00:00:00.001] (6068) DEBUG  Calculation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
-[00:00:00.001] (6068) DEBUG  Pushed new height: 40
-[00:00:00.002] (6068) DEBUG  Calculation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
-[00:00:00.002] (6068) DEBUG  Pushed last height: 6
-[00:00:00.002] (6068) DEBUG  Original Height: 174
-[00:00:00.002] (6068) DEBUG  New Height: 256
-[00:00:00.002] (6068) DEBUG  Max Width: 512, Max_Height: 256, Total Lines: 4
-[00:00:00.002] (60c8) DEBUG  Pushed new height: 1523
-[00:00:00.002] (60c8) DEBUG  Calculation: Chars for line 4: gy, Line Width: 1934
-[00:00:00.002] (60c8) DEBUG  Pushed new height: 1501
-[00:00:00.002] (60c8) DEBUG  Calculation: Chars for line 5: pq, Line Width: 1905
-[00:00:00.002] (60c8) DEBUG  Pushed new height: 1501
-[00:00:00.002] (60c8) DEBUG  Calculation: Chars for line 6: O, Line Width: 1213
-[00:00:00.002] (60c8) DEBUG  Pushed new height: 1501
-[00:00:00.002] (60c8) DEBUG  Calculation: Chars for line 7: G, Line Width: 1163
-[00:00:00.003] (60c8) DEBUG  Pushed new height: 1501
-[00:00:00.003] (60c8) DEBUG  Calculation: Chars for line 8: C, Line Width: 1162
-[00:00:00.003] (60c8) DEBUG  Pushed new height: 1481
-[00:00:00.003] (60c8) DEBUG  Calculation: Chars for line 9: Si, Line Width: 1373
-[00:00:00.003] (60c8) DEBUG  Pushed new height: 1481
-[00:00:00.003] (60c8) DEBUG  Calculation: Chars for line 10: U, Line Width: 1093
-[00:00:00.003] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.003] (60c8) DEBUG  Calculation: Chars for line 11: J, Line Width: 956
-[00:00:00.003] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.003] (60c8) DEBUG  Calculation: Chars for line 12: W, Line Width: 1722
-[00:00:00.003] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.003] (60c8) DEBUG  Calculation: Chars for line 13: M, Line Width: 1499
-[00:00:00.003] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.003] (60c8) DEBUG  Calculation: Chars for line 14: A, Line Width: 1333
-[00:00:00.003] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.004] (60c8) DEBUG  Calculation: Chars for line 15: V, Line Width: 1296
-[00:00:00.004] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.004] (60c8) DEBUG  Calculation: Chars for line 16: Y, Line Width: 1236
-[00:00:00.004] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.004] (60c8) DEBUG  Calculation: Chars for line 17: X, Line Width: 1221
-[00:00:00.004] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.004] (60c8) DEBUG  Calculation: Chars for line 18: H, Line Width: 1161
-[00:00:00.004] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.004] (60c8) DEBUG  Calculation: Chars for line 19: K, Line Width: 1161
-[00:00:00.004] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.004] (60c8) DEBUG  Calculation: Chars for line 20: N, Line Width: 1160
-[00:00:00.004] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.004] (60c8) DEBUG  Calculation: Chars for line 21: T, Line Width: 1160
-[00:00:00.004] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.004] (60c8) DEBUG  Calculation: Chars for line 22: R, Line Width: 1103
-[00:00:00.005] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.005] (60c8) DEBUG  Calculation: Chars for line 23: P, Line Width: 1093
-[00:00:00.005] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.005] (60c8) DEBUG  Calculation: Chars for line 24: D, Line Width: 1091
-[00:00:00.005] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.005] (60c8) DEBUG  Calculation: Chars for line 25: Z, Line Width: 1089
-[00:00:00.005] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.005] (60c8) DEBUG  Calculation: Chars for line 26: BE, Line Width: 2001
-[00:00:00.005] (60c8) DEBUG  Pushed new height: 1461
-[00:00:00.005] (60c8) DEBUG  Calculation: Chars for line 27: FL, Line Width: 1849
-[00:00:00.005] (60c8) DEBUG  Pushed new height: 1127
-[00:00:00.005] (60c8) DEBUG  Calculation: Chars for line 28: Ito, Line Width: 1891
-[00:00:00.005] (60c8) DEBUG  Pushed new height: 1127
-[00:00:00.005] (60c8) DEBUG  Calculation: Chars for line 29: ec, Line Width: 1896
-[00:00:00.005] (60c8) DEBUG  Pushed new height: 1107
-[00:00:00.006] (60c8) DEBUG  Calculation: Chars for line 30: as, Line Width: 1834
-[00:00:00.006] (60c8) DEBUG  Pushed new height: 1107
-[00:00:00.006] (60c8) DEBUG  Calculation: Chars for line 31: m, Line Width: 1538
-[00:00:00.006] (60c8) DEBUG  Pushed new height: 1107
-[00:00:00.006] (60c8) DEBUG  Calculation: Chars for line 32: un, Line Width: 1801
-[00:00:00.006] (60c8) DEBUG  Pushed new height: 1087
-[00:00:00.006] (60c8) DEBUG  Calculation: Chars for line 33: rw, Line Width: 2029
-[00:00:00.006] (60c8) DEBUG  Pushed new height: 1087
-[00:00:00.006] (60c8) DEBUG  Calculation: Chars for line 34: xv, Line Width: 1943
-[00:00:00.006] (60c8) DEBUG  Pushed last height: 1092
-[00:00:00.006] (60c8) DEBUG  Original Height: 51212
-[00:00:00.006] (60c8) DEBUG  New Height: 65536
-[00:00:00.006] (60c8) DEBUG  Max Width: 2048, Max_Height: 65536, Total Lines: 36
-[00:00:00.075] (6068) DEBUG  Generation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
-[00:00:00.109] (6068) DEBUG  Generation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
-[00:00:00.152] (6068) DEBUG  Generation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
-[00:00:00.287] (6068) DEBUG  Generated atlas to atlas.png
-[00:00:09.848] (60c8) DEBUG  Generation: Chars for line 0: jQ, Line Width: 1684
-[00:00:15.803] (60c8) DEBUG  Generation: Chars for line 1: fb, Line Width: 1641
-[00:00:19.277] (60c8) DEBUG  Generation: Chars for line 2: dk, Line Width: 1911
-[00:00:23.005] (60c8) DEBUG  Generation: Chars for line 3: hl, Line Width: 1148
-[00:00:27.781] (60c8) DEBUG  Generation: Chars for line 4: gy, Line Width: 1934
-[00:00:34.236] (60c8) DEBUG  Generation: Chars for line 5: pq, Line Width: 1905
-[00:00:37.068] (60c8) DEBUG  Generation: Chars for line 6: O, Line Width: 1213
-[00:00:40.003] (60c8) DEBUG  Generation: Chars for line 7: G, Line Width: 1163
-[00:00:42.878] (60c8) DEBUG  Generation: Chars for line 8: C, Line Width: 1162
-[00:00:45.619] (60c8) DEBUG  Generation: Chars for line 9: Si, Line Width: 1373
-[00:00:47.388] (60c8) DEBUG  Generation: Chars for line 10: U, Line Width: 1093
-[00:00:50.260] (60c8) DEBUG  Generation: Chars for line 11: J, Line Width: 956
-[00:00:52.924] (60c8) DEBUG  Generation: Chars for line 12: W, Line Width: 1722
-[00:00:55.777] (60c8) DEBUG  Generation: Chars for line 13: M, Line Width: 1499
-[00:00:57.733] (60c8) DEBUG  Generation: Chars for line 14: A, Line Width: 1333
-[00:00:59.682] (60c8) DEBUG  Generation: Chars for line 15: V, Line Width: 1296
-[00:01:01.960] (60c8) DEBUG  Generation: Chars for line 16: Y, Line Width: 1236
-[00:01:03.973] (60c8) DEBUG  Generation: Chars for line 17: X, Line Width: 1221
-[00:01:06.087] (60c8) DEBUG  Generation: Chars for line 18: H, Line Width: 1161
-[00:01:07.971] (60c8) DEBUG  Generation: Chars for line 19: K, Line Width: 1161
-[00:01:09.658] (60c8) DEBUG  Generation: Chars for line 20: N, Line Width: 1160
-[00:01:12.785] (60c8) DEBUG  Generation: Chars for line 21: T, Line Width: 1160
-[00:01:15.561] (60c8) DEBUG  Generation: Chars for line 22: R, Line Width: 1103
-[00:01:18.535] (60c8) DEBUG  Generation: Chars for line 23: P, Line Width: 1093
-[00:01:20.212] (60c8) DEBUG  Generation: Chars for line 24: D, Line Width: 1091
-[00:01:24.237] (60c8) DEBUG  Generation: Chars for line 25: Z, Line Width: 1089
-[00:01:27.216] (60c8) DEBUG  Generation: Chars for line 26: BE, Line Width: 2001
-[00:01:28.933] (60c8) DEBUG  Generation: Chars for line 27: FL, Line Width: 1849
-[00:01:34.531] (60c8) DEBUG  Generation: Chars for line 28: Ito, Line Width: 1891
-[00:01:38.869] (60c8) DEBUG  Generation: Chars for line 29: ec, Line Width: 1896
-[00:01:43.330] (60c8) DEBUG  Generation: Chars for line 30: as, Line Width: 1834
-[00:01:44.659] (60c8) DEBUG  Generation: Chars for line 31: m, Line Width: 1538
-[00:01:46.726] (60c8) DEBUG  Generation: Chars for line 32: un, Line Width: 1801
-[00:01:49.833] (60c8) DEBUG  Generation: Chars for line 33: rw, Line Width: 2029
-[00:01:52.024] (60c8) DEBUG  Generation: Chars for line 34: xv, Line Width: 1943
-[00:03:40.097] (60c8) DEBUG  Generated atlas to atlas.png
+[00:00:00.001] (23f4) DEBUG  Pushed new height: 52
+[00:00:00.001] (23f4) DEBUG  Calculation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
+[00:00:00.001] (23f4) DEBUG  Pushed new height: 51
+[00:00:00.001] (23f4) DEBUG  Calculation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
+[00:00:00.001] (23f4) DEBUG  Pushed new height: 40
+[00:00:00.001] (23f4) DEBUG  Calculation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
+[00:00:00.001] (23f4) DEBUG  Pushed last height: 6
+[00:00:00.001] (23f4) DEBUG  Original Height: 174
+[00:00:00.001] (23f4) DEBUG  New Height: 256
+[00:00:00.001] (23f4) DEBUG  Max Width: 512, Max_Height: 256, Total Lines: 4
+[00:00:00.075] (23f4) DEBUG  Generation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
+[00:00:00.108] (23f4) DEBUG  Generation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
+[00:00:00.151] (23f4) DEBUG  Generation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
+[00:00:00.511] (23f4) DEBUG  Generated atlas to atlas.png
