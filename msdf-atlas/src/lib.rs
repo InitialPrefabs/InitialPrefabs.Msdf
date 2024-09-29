@@ -75,14 +75,12 @@ pub unsafe extern "C" fn reinterpret_as_glyph_data(byte_buffer: &ByteBuffer, i: 
 #[cfg(test)]
 mod tests {
     use image::DynamicImage;
-    use msdf::GlyphLoader;
-    use ttf_parser::Face;
 
     use crate::msdf_impl::{
         args::Args, enums::UVSpace, font_data::FontData, get_font_metrics, get_next_power_of_2,
         get_raw_font, glyph_data::GlyphData,
     };
-    use core::{panic, task};
+    use core::panic;
     use std::{fs::remove_file, path::Path};
 
     #[test]

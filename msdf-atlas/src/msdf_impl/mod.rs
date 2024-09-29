@@ -26,6 +26,58 @@ pub mod font_data;
 pub mod glyph_data;
 pub mod utils;
 
+#[cfg(test)]
+use once_cell::sync::Lazy;
+#[cfg(test)]
+use std::sync::Mutex;
+
+#[cfg(test)]
+#[allow(dead_code)]
+static CHAR_BUFFER: Lazy<Mutex<Vec<char>>> = Lazy::new(|| {
+    let char_buffer: Vec<char> = Vec::with_capacity(10);
+    Mutex::new(char_buffer)
+});
+
+#[cfg(test)]
+#[allow(dead_code)]
+fn track_char(c: char) {
+    use log::error;
+
+    let lock = CHAR_BUFFER.lock();
+    match lock {
+        Ok(mut char_buffer) => {
+            char_buffer.push(c)
+        },
+        Err(_) => {
+            error!("Cannot unlock the static CHAR_BUFFER!");
+        },
+    }
+}
+
+#[cfg(not(test))]
+fn track_char(_: char) { }
+
+#[cfg(test)]
+#[allow(dead_code)]
+fn flush_chars() {
+    use log::error;
+
+    let lock = CHAR_BUFFER.lock();
+    match lock {
+        Ok(mut char_buffer) => {
+            let s: String = char_buffer.iter().collect();
+            debug!("Chars in buffer so far: {}", s);
+            char_buffer.clear();
+        },
+        Err(_) => {
+            error!("Cannot unlock the static CHAR_BUFFER!");
+        },
+    }
+}
+
+#[cfg(not(test))]
+fn flush_chars() { }
+
 /**
  * We know that font_size / fonts.units_per_em() will give us the scale.
  */
@@ -148,7 +200,6 @@ fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, ch
             values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
             e.insert(values);
             unique_keys.push(height);
-            debug!("Added new char: {} with height: {}", c, height);
         } else {
             let values = row_map.get_mut(&height).unwrap();
             values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
@@ -233,8 +284,6 @@ fn calculate_minimum_atlas_dimensions(
     line_heights.push(first_height);
     debug!("Pushed new height: {}", first_height);
 
-    let mut chars: Vec<char> = Vec::with_capacity(10);
-
     for glyph in glyph_data {
         let (current_scaled_width, current_scaled_height) =
             glyph.get_scaled_glyph_dimensions_with_padding(args);
@@ -246,30 +295,27 @@ fn calculate_minimum_atlas_dimensions(
             line_heights.push(current_scaled_height);
             debug!("Pushed new height: {}", current_scaled_height);
             line_count += 1;
-            // We have to use the scaled width because it is added to the next line.
-            let s: String = chars.iter().collect();
+
+            flush_chars();
             debug!(
-                "Calculation: Chars for line {}: {}, Line Width: {}",
+                "Line Number: {} | Line Width: {}",
                 line_count - 1,
-                s,
                 atlas_width
             );
             atlas_width = current_scaled_width;
-            chars.clear();
         } else {
             atlas_width = next_width;
         }
 
-        chars.push(glyph.unicode);
+        track_char(glyph.unicode);
     }
 
     // If we haven't finished the end of the line, we need to add the height from the last glyph.
     if atlas_width < max_width {
         // Do not scale the last height because it is already scaled
         let last_height = line_heights[line_count];
-        let s: String = chars.iter().collect();
-        debug!("Pushed last height: {} with chars: {}", last_height, s);
-        chars.clear();
+        debug!("Pushed last height: {}", last_height);
+        flush_chars();
         atlas_height += last_height;
     }
 
@@ -366,6 +412,7 @@ pub unsafe fn get_font_metrics(
         let opt_shape = face.load_shape(glyph_index);
         if opt_shape.is_none() {
             // Skip glyph generation because there is nothing to copy.
+            debug!("Skipped {} due to no shape being generated for msdf.", char::from_u32(glyph_data.unicode as u32).unwrap());
             continue;
         }
 
@@ -404,8 +451,6 @@ pub unsafe fn get_font_metrics(
             // We reset the x_offset because we have to go the next row in the atlas.
             x_offset = 0;
         }
-
-        debug!("Processing: {}", glyph_bounding_box.unicode);
 
         // Now we have to copy the glyph image to a giant data buffer which is our atlas.
         for (x, y, pixel) in glyph_image.enumerate_pixels() {

@@ -1,306 +1,68 @@
-[00:00:00.000] (5acc) DEBUG  Added new char: a with height: 1122
-[00:00:00.000] (283c) DEBUG  Added new char: a with height: 1122
-[00:00:00.000] (cc4) DEBUG  Added new char: a with height: 1122
-[00:00:00.000] (5acc) DEBUG  Added new char: b with height: 1556
-[00:00:00.001] (283c) DEBUG  Added new char: b with height: 1556
-[00:00:00.001] (cc4) DEBUG  Added new char: b with height: 1556
-[00:00:00.001] (5acc) DEBUG  Added new char: f with height: 1557
-[00:00:00.001] (283c) DEBUG  Added new char: f with height: 1557
-[00:00:00.002] (cc4) DEBUG  Added new char: f with height: 1557
-[00:00:00.002] (5acc) DEBUG  Added new char: g with height: 1528
-[00:00:00.002] (283c) DEBUG  Added new char: g with height: 1528
-[00:00:00.002] (cc4) DEBUG  Added new char: g with height: 1528
-[00:00:00.002] (5acc) DEBUG  Added new char: h with height: 1536
-[00:00:00.003] (283c) DEBUG  Added new char: h with height: 1536
-[00:00:00.003] (cc4) DEBUG  Added new char: h with height: 1536
-[00:00:00.003] (5acc) DEBUG  Added new char: i with height: 1493
-[00:00:00.003] (283c) DEBUG  Added new char: i with height: 1493
-[00:00:00.004] (cc4) DEBUG  Added new char: i with height: 1493
-[00:00:00.004] (5acc) DEBUG  Added new char: j with height: 1930
-[00:00:00.004] (283c) DEBUG  Added new char: j with height: 1930
-[00:00:00.004] (cc4) DEBUG  Added new char: j with height: 1930
-[00:00:00.005] (5acc) DEBUG  Added new char: m with height: 1102
-[00:00:00.005] (283c) DEBUG  Added new char: m with height: 1102
-[00:00:00.005] (cc4) DEBUG  Added new char: m with height: 1102
-[00:00:00.005] (5acc) DEBUG  Added new char: p with height: 1518
-[00:00:00.006] (283c) DEBUG  Added new char: p with height: 1518
-[00:00:00.006] (cc4) DEBUG  Added new char: p with height: 1518
-[00:00:00.006] (5acc) DEBUG  Added new char: t with height: 1365
-[00:00:00.007] (283c) DEBUG  Added new char: t with height: 1365
-[00:00:00.007] (cc4) DEBUG  Added new char: t with height: 1365
-[00:00:00.007] (5acc) DEBUG  Added new char: v with height: 1082
-[00:00:00.008] (283c) DEBUG  Added new char: v with height: 1082
-[00:00:00.008] (cc4) DEBUG  Added new char: v with height: 1082
-[00:00:00.008] (5acc) DEBUG  Added new char: y with height: 1519
-[00:00:00.008] (283c) DEBUG  Added new char: y with height: 1519
-[00:00:00.009] (cc4) DEBUG  Added new char: y with height: 1519
-[00:00:00.009] (5acc) DEBUG  Added new char: A with height: 1456
-[00:00:00.009] (283c) DEBUG  Added new char: A with height: 1456
-[00:00:00.010] (cc4) DEBUG  Added new char: A with height: 1456
-[00:00:00.010] (5acc) DEBUG  Added new char: C with height: 1496
-[00:00:00.010] (283c) DEBUG  Added new char: C with height: 1496
-[00:00:00.010] (cc4) DEBUG  Added new char: C with height: 1496
-[00:00:00.011] (5acc) DEBUG  Added new char: J with height: 1476
-[00:00:00.011] (283c) DEBUG  Added new char: J with height: 1476
-[00:00:00.011] (cc4) DEBUG  Added new char: J with height: 1476
-[00:00:00.012] (5acc) DEBUG  Added new char: Q with height: 1728
-[00:00:00.012] (283c) DEBUG  Added new char: Q with height: 1728
-[00:00:00.012] (cc4) DEBUG  Added new char: Q with height: 1728
-[00:00:00.012] (5acc) DEBUG  Added new char:   with height: 0
-[00:00:00.013] (283c) DEBUG  total glyphs stored: 52
-[00:00:00.013] (cc4) DEBUG  total glyphs stored: 52
-[00:00:00.013] (5acc) DEBUG  total glyphs stored: 53
-[00:00:00.014] (283c) DEBUG  Pushed new height: 65
-[00:00:00.014] (cc4) DEBUG  Resized the atlas width from: 512 -> 1024
-[00:00:00.014] (cc4) DEBUG  Resized the atlas width from: 512 -> 2048
-[00:00:00.014] (cc4) DEBUG  Pushed new height: 1935
-[00:00:00.014] (cc4) DEBUG  Pushed new height: 1562
-[00:00:00.015] (283c) DEBUG  Pushed new height: 52
-[00:00:00.015] (283c) DEBUG  Calculation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
-[00:00:00.015] (283c) DEBUG  Pushed new height: 51
-[00:00:00.015] (5acc) DEBUG  Pushed new height: 65
-[00:00:00.015] (cc4) DEBUG  Calculation: Chars for line 0: jQ, Line Width: 1684
-[00:00:00.016] (cc4) DEBUG  Pushed new height: 1561
-[00:00:00.016] (5acc) DEBUG  Pushed new height: 52
-[00:00:00.016] (283c) DEBUG  Calculation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
-[00:00:00.017] (cc4) DEBUG  Calculation: Chars for line 1: fb, Line Width: 1641
-[00:00:00.017] (cc4) DEBUG  Pushed new height: 1541
-[00:00:00.017] (cc4) DEBUG  Calculation: Chars for line 2: dk, Line Width: 1911
-[00:00:00.017] (cc4) DEBUG  Pushed new height: 1533
-[00:00:00.018] (cc4) DEBUG  Calculation: Chars for line 3: hl, Line Width: 1148
-[00:00:00.018] (5acc) DEBUG  Calculation: Chars for line 0: jQfbdkhlgypqOGC, Line Width: 505
-[00:00:00.018] (283c) DEBUG  Pushed new height: 40
-[00:00:00.018] (cc4) DEBUG  Pushed new height: 1523
-[00:00:00.019] (cc4) DEBUG  Calculation: Chars for line 4: gy, Line Width: 1934
-[00:00:00.019] (cc4) DEBUG  Pushed new height: 1501
-[00:00:00.019] (cc4) DEBUG  Calculation: Chars for line 5: pq, Line Width: 1905
-[00:00:00.019] (cc4) DEBUG  Pushed new height: 1501
-[00:00:00.020] (cc4) DEBUG  Calculation: Chars for line 6: O, Line Width: 1213
-[00:00:00.020] (cc4) DEBUG  Pushed new height: 1501
-[00:00:00.020] (5acc) DEBUG  Pushed new height: 51
-[00:00:00.020] (5acc) DEBUG  Calculation: Chars for line 1: SiUJWMAVYXHK, Line Width: 498
-[00:00:00.021] (cc4) DEBUG  Calculation: Chars for line 7: G, Line Width: 1163
-[00:00:00.021] (cc4) DEBUG  Pushed new height: 1501
-[00:00:00.021] (cc4) DEBUG  Calculation: Chars for line 8: C, Line Width: 1162
-[00:00:00.022] (283c) DEBUG  Calculation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
-[00:00:00.022] (5acc) DEBUG  Pushed new height: 40
-[00:00:00.022] (5acc) DEBUG  Calculation: Chars for line 2: NTRPDZBEFLItoe, Line Width: 486
-[00:00:00.022] (283c) DEBUG  Pushed last height: 40 with chars: casmunrwxvz
-[00:00:00.023] (cc4) DEBUG  Pushed new height: 1481
-[00:00:00.023] (cc4) DEBUG  Calculation: Chars for line 9: Si, Line Width: 1373
-[00:00:00.023] (cc4) DEBUG  Pushed new height: 1481
-[00:00:00.023] (cc4) DEBUG  Calculation: Chars for line 10: U, Line Width: 1093
-[00:00:00.024] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.024] (cc4) DEBUG  Calculation: Chars for line 11: J, Line Width: 956
-[00:00:00.024] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.024] (5acc) DEBUG  Pushed last height: 40 with chars: casmunrwxvz 
-[00:00:00.025] (5acc) DEBUG  Max Width: 512, Max_Height: 208, Total Lines: 4
-[00:00:00.025] (cc4) DEBUG  Calculation: Chars for line 12: W, Line Width: 1722
-[00:00:00.025] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.025] (283c) DEBUG  Original Height: 208
-[00:00:00.026] (283c) DEBUG  New Height: 256
-[00:00:00.026] (283c) DEBUG  Max Width: 512, Max_Height: 256, Total Lines: 4
-[00:00:00.026] (cc4) DEBUG  Calculation: Chars for line 13: M, Line Width: 1499
-[00:00:00.026] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.027] (cc4) DEBUG  Calculation: Chars for line 14: A, Line Width: 1333
-[00:00:00.027] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.027] (cc4) DEBUG  Calculation: Chars for line 15: V, Line Width: 1296
-[00:00:00.027] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.028] (cc4) DEBUG  Calculation: Chars for line 16: Y, Line Width: 1236
-[00:00:00.028] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.028] (cc4) DEBUG  Calculation: Chars for line 17: X, Line Width: 1221
-[00:00:00.028] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.029] (cc4) DEBUG  Calculation: Chars for line 18: H, Line Width: 1161
-[00:00:00.029] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.029] (cc4) DEBUG  Calculation: Chars for line 19: K, Line Width: 1161
-[00:00:00.029] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.030] (cc4) DEBUG  Calculation: Chars for line 20: N, Line Width: 1160
-[00:00:00.030] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.030] (cc4) DEBUG  Calculation: Chars for line 21: T, Line Width: 1160
-[00:00:00.030] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.031] (cc4) DEBUG  Calculation: Chars for line 22: R, Line Width: 1103
-[00:00:00.031] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.031] (cc4) DEBUG  Calculation: Chars for line 23: P, Line Width: 1093
-[00:00:00.031] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.031] (cc4) DEBUG  Calculation: Chars for line 24: D, Line Width: 1091
-[00:00:00.032] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.032] (cc4) DEBUG  Calculation: Chars for line 25: Z, Line Width: 1089
-[00:00:00.032] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.032] (cc4) DEBUG  Calculation: Chars for line 26: BE, Line Width: 2001
-[00:00:00.033] (cc4) DEBUG  Pushed new height: 1461
-[00:00:00.033] (cc4) DEBUG  Calculation: Chars for line 27: FL, Line Width: 1849
-[00:00:00.033] (cc4) DEBUG  Pushed new height: 1127
-[00:00:00.033] (cc4) DEBUG  Calculation: Chars for line 28: Ito, Line Width: 1891
-[00:00:00.034] (cc4) DEBUG  Pushed new height: 1127
-[00:00:00.034] (cc4) DEBUG  Calculation: Chars for line 29: ec, Line Width: 1896
-[00:00:00.034] (cc4) DEBUG  Pushed new height: 1107
-[00:00:00.034] (cc4) DEBUG  Calculation: Chars for line 30: as, Line Width: 1834
-[00:00:00.035] (cc4) DEBUG  Pushed new height: 1107
-[00:00:00.035] (cc4) DEBUG  Calculation: Chars for line 31: m, Line Width: 1538
-[00:00:00.035] (cc4) DEBUG  Pushed new height: 1107
-[00:00:00.035] (cc4) DEBUG  Calculation: Chars for line 32: un, Line Width: 1801
-[00:00:00.036] (cc4) DEBUG  Pushed new height: 1087
-[00:00:00.036] (cc4) DEBUG  Calculation: Chars for line 33: rw, Line Width: 2029
-[00:00:00.036] (cc4) DEBUG  Pushed new height: 1087
-[00:00:00.036] (283c) DEBUG  Processing: j
-[00:00:00.037] (5acc) DEBUG  Processing: j
-[00:00:00.037] (cc4) DEBUG  Calculation: Chars for line 34: xv, Line Width: 1943
-[00:00:00.037] (cc4) DEBUG  Pushed last height: 1087 with chars: z
-[00:00:00.038] (cc4) DEBUG  Max Width: 2048, Max_Height: 51207, Total Lines: 36
-[00:00:00.044] (283c) DEBUG  Processing: Q
-[00:00:00.046] (5acc) DEBUG  Processing: Q
-[00:00:00.047] (283c) DEBUG  Processing: f
-[00:00:00.049] (5acc) DEBUG  Processing: f
-[00:00:00.053] (283c) DEBUG  Processing: b
-[00:00:00.055] (5acc) DEBUG  Processing: b
-[00:00:00.060] (5acc) DEBUG  Processing: d
-[00:00:00.061] (283c) DEBUG  Processing: d
-[00:00:00.062] (5acc) DEBUG  Processing: k
-[00:00:00.063] (283c) DEBUG  Processing: k
-[00:00:00.066] (5acc) DEBUG  Processing: h
-[00:00:00.066] (5acc) DEBUG  Processing: l
-[00:00:00.067] (283c) DEBUG  Processing: h
-[00:00:00.068] (283c) DEBUG  Processing: l
-[00:00:00.072] (5acc) DEBUG  Processing: g
-[00:00:00.076] (283c) DEBUG  Processing: g
-[00:00:00.076] (5acc) DEBUG  Processing: y
-[00:00:00.078] (283c) DEBUG  Processing: y
-[00:00:00.081] (5acc) DEBUG  Processing: p
-[00:00:00.083] (283c) DEBUG  Processing: p
-[00:00:00.085] (5acc) DEBUG  Processing: q
-[00:00:00.088] (283c) DEBUG  Processing: q
-[00:00:00.091] (5acc) DEBUG  Processing: O
-[00:00:00.094] (283c) DEBUG  Processing: O
-[00:00:00.097] (5acc) DEBUG  Processing: G
-[00:00:00.100] (283c) DEBUG  Processing: G
-[00:00:00.102] (5acc) DEBUG  Processing: C
-[00:00:00.105] (283c) DEBUG  Processing: C
-[00:00:00.109] (5acc) DEBUG  Processing: S
-[00:00:00.110] (5acc) DEBUG  Processing: i
-[00:00:00.112] (283c) DEBUG  Processing: S
-[00:00:00.113] (5acc) DEBUG  Processing: U
-[00:00:00.113] (283c) DEBUG  Processing: i
-[00:00:00.116] (5acc) DEBUG  Processing: J
-[00:00:00.117] (283c) DEBUG  Processing: U
-[00:00:00.120] (283c) DEBUG  Processing: J
-[00:00:00.121] (5acc) DEBUG  Processing: W
-[00:00:00.124] (283c) DEBUG  Processing: W
-[00:00:00.125] (5acc) DEBUG  Processing: M
-[00:00:00.128] (283c) DEBUG  Processing: M
-[00:00:00.128] (5acc) DEBUG  Processing: A
-[00:00:00.131] (5acc) DEBUG  Processing: V
-[00:00:00.132] (283c) DEBUG  Processing: A
-[00:00:00.133] (5acc) DEBUG  Processing: Y
-[00:00:00.134] (283c) DEBUG  Processing: V
-[00:00:00.136] (5acc) DEBUG  Processing: X
-[00:00:00.137] (283c) DEBUG  Processing: Y
-[00:00:00.139] (5acc) DEBUG  Processing: H
-[00:00:00.140] (283c) DEBUG  Processing: X
-[00:00:00.142] (5acc) DEBUG  Processing: K
-[00:00:00.142] (283c) DEBUG  Processing: H
-[00:00:00.144] (5acc) DEBUG  Processing: N
-[00:00:00.145] (283c) DEBUG  Processing: K
-[00:00:00.147] (5acc) DEBUG  Processing: T
-[00:00:00.148] (283c) DEBUG  Processing: N
-[00:00:00.150] (283c) DEBUG  Processing: T
-[00:00:00.151] (5acc) DEBUG  Processing: R
-[00:00:00.155] (283c) DEBUG  Processing: R
-[00:00:00.156] (5acc) DEBUG  Processing: P
-[00:00:00.160] (283c) DEBUG  Processing: P
-[00:00:00.160] (5acc) DEBUG  Processing: D
-[00:00:00.163] (5acc) DEBUG  Processing: Z
-[00:00:00.165] (283c) DEBUG  Processing: D
-[00:00:00.167] (283c) DEBUG  Processing: Z
-[00:00:00.169] (5acc) DEBUG  Processing: B
-[00:00:00.172] (5acc) DEBUG  Processing: E
-[00:00:00.173] (283c) DEBUG  Processing: B
-[00:00:00.174] (5acc) DEBUG  Processing: F
-[00:00:00.176] (5acc) DEBUG  Processing: L
-[00:00:00.176] (283c) DEBUG  Processing: E
-[00:00:00.176] (5acc) DEBUG  Processing: I
-[00:00:00.178] (283c) DEBUG  Processing: F
-[00:00:00.178] (5acc) DEBUG  Processing: t
-[00:00:00.180] (283c) DEBUG  Processing: L
-[00:00:00.180] (283c) DEBUG  Processing: I
-[00:00:00.182] (5acc) DEBUG  Processing: o
-[00:00:00.182] (283c) DEBUG  Processing: t
-[00:00:00.186] (283c) DEBUG  Processing: o
-[00:00:00.186] (5acc) DEBUG  Processing: e
-[00:00:00.189] (5acc) DEBUG  Processing: c
-[00:00:00.190] (283c) DEBUG  Processing: e
-[00:00:00.193] (283c) DEBUG  Processing: c
-[00:00:00.194] (5acc) DEBUG  Processing: a
-[00:00:00.198] (283c) DEBUG  Processing: a
-[00:00:00.198] (5acc) DEBUG  Processing: s
-[00:00:00.202] (283c) DEBUG  Processing: s
-[00:00:00.203] (5acc) DEBUG  Processing: m
-[00:00:00.205] (5acc) DEBUG  Processing: u
-[00:00:00.207] (283c) DEBUG  Processing: m
-[00:00:00.207] (5acc) DEBUG  Processing: n
-[00:00:00.208] (5acc) DEBUG  Processing: r
-[00:00:00.209] (283c) DEBUG  Processing: u
-[00:00:00.211] (283c) DEBUG  Processing: n
-[00:00:00.211] (5acc) DEBUG  Processing: w
-[00:00:00.212] (283c) DEBUG  Processing: r
-[00:00:00.213] (5acc) DEBUG  Processing: x
-[00:00:00.214] (5acc) DEBUG  Processing: v
-[00:00:00.215] (283c) DEBUG  Processing: w
-[00:00:00.216] (5acc) DEBUG  Processing: z
-[00:00:00.217] (283c) DEBUG  Processing: x
-[00:00:00.218] (283c) DEBUG  Processing: v
-[00:00:00.220] (283c) DEBUG  Processing: z
-[00:00:00.506] (5acc) DEBUG  Generated atlas to atlas.png
-[00:00:00.572] (283c) DEBUG  Generated atlas to atlas.png
-[00:00:03.761] (cc4) DEBUG  Processing: j
-[00:00:08.876] (cc4) DEBUG  Processing: Q
-[00:00:10.355] (cc4) DEBUG  Processing: f
-[00:00:13.638] (cc4) DEBUG  Processing: b
-[00:00:16.955] (cc4) DEBUG  Processing: d
-[00:00:18.771] (cc4) DEBUG  Processing: k
-[00:00:20.802] (cc4) DEBUG  Processing: h
-[00:00:21.258] (cc4) DEBUG  Processing: l
-[00:00:24.909] (cc4) DEBUG  Processing: g
-[00:00:26.811] (cc4) DEBUG  Processing: y
-[00:00:30.137] (cc4) DEBUG  Processing: p
-[00:00:33.520] (cc4) DEBUG  Processing: q
-[00:00:38.105] (cc4) DEBUG  Processing: O
-[00:00:41.060] (cc4) DEBUG  Processing: G
-[00:00:44.104] (cc4) DEBUG  Processing: C
-[00:00:47.361] (cc4) DEBUG  Processing: S
-[00:00:48.245] (cc4) DEBUG  Processing: i
-[00:00:50.314] (cc4) DEBUG  Processing: U
-[00:00:52.232] (cc4) DEBUG  Processing: J
-[00:00:55.083] (cc4) DEBUG  Processing: W
-[00:00:57.801] (cc4) DEBUG  Processing: M
-[00:01:00.705] (cc4) DEBUG  Processing: A
-[00:01:02.673] (cc4) DEBUG  Processing: V
-[00:01:04.615] (cc4) DEBUG  Processing: Y
-[00:01:06.684] (cc4) DEBUG  Processing: X
-[00:01:08.642] (cc4) DEBUG  Processing: H
-[00:01:10.708] (cc4) DEBUG  Processing: K
-[00:01:12.623] (cc4) DEBUG  Processing: N
-[00:01:14.366] (cc4) DEBUG  Processing: T
-[00:01:17.575] (cc4) DEBUG  Processing: R
-[00:01:20.650] (cc4) DEBUG  Processing: P
-[00:01:23.867] (cc4) DEBUG  Processing: D
-[00:01:25.631] (cc4) DEBUG  Processing: Z
-[00:01:30.015] (cc4) DEBUG  Processing: B
-[00:01:31.725] (cc4) DEBUG  Processing: E
-[00:01:33.225] (cc4) DEBUG  Processing: F
-[00:01:34.548] (cc4) DEBUG  Processing: L
-[00:01:34.960] (cc4) DEBUG  Processing: I
-[00:01:36.105] (cc4) DEBUG  Processing: t
-[00:01:38.852] (cc4) DEBUG  Processing: o
-[00:01:41.245] (cc4) DEBUG  Processing: e
-[00:01:43.040] (cc4) DEBUG  Processing: c
-[00:01:45.640] (cc4) DEBUG  Processing: a
-[00:01:47.584] (cc4) DEBUG  Processing: s
-[00:01:50.079] (cc4) DEBUG  Processing: m
-[00:01:51.401] (cc4) DEBUG  Processing: u
-[00:01:52.676] (cc4) DEBUG  Processing: n
-[00:01:53.484] (cc4) DEBUG  Processing: r
-[00:01:55.207] (cc4) DEBUG  Processing: w
-[00:01:56.502] (cc4) DEBUG  Processing: x
-[00:01:57.591] (cc4) DEBUG  Processing: v
-[00:01:58.631] (cc4) DEBUG  Processing: z
-[00:06:25.267] (cc4) DEBUG  Generated atlas to atlas.png
+[00:00:00.001] (4738) DEBUG  total glyphs stored: 53
+[00:00:00.001] (4738) DEBUG  Pushed new height: 65
+[00:00:00.001] (4738) DEBUG  Pushed new height: 52
+[00:00:00.001] (4738) DEBUG  Chars in buffer so far: jQfbdkhlgypqOGC
+[00:00:00.001] (4738) DEBUG  Line Number: 0 | Line Width: 505
+[00:00:00.001] (4738) DEBUG  Pushed new height: 51
+[00:00:00.001] (4738) DEBUG  Chars in buffer so far: SiUJWMAVYXHK
+[00:00:00.001] (4738) DEBUG  Line Number: 1 | Line Width: 498
+[00:00:00.001] (4738) DEBUG  Pushed new height: 40
+[00:00:00.001] (4738) DEBUG  Chars in buffer so far: NTRPDZBEFLItoe
+[00:00:00.001] (4738) DEBUG  Line Number: 2 | Line Width: 486
+[00:00:00.001] (4738) DEBUG  Pushed last height: 40
+[00:00:00.001] (4738) DEBUG  Chars in buffer so far: casmunrwxvz 
+[00:00:00.002] (4738) DEBUG  Max Width: 512, Max_Height: 208, Total Lines: 4
+[00:00:00.007] (4738) DEBUG  Processing: j
+[00:00:00.014] (4738) DEBUG  Processing: Q
+[00:00:00.017] (4738) DEBUG  Processing: f
+[00:00:00.022] (4738) DEBUG  Processing: b
+[00:00:00.026] (4738) DEBUG  Processing: d
+[00:00:00.029] (4738) DEBUG  Processing: k
+[00:00:00.032] (4738) DEBUG  Processing: h
+[00:00:00.032] (4738) DEBUG  Processing: l
+[00:00:00.038] (4738) DEBUG  Processing: g
+[00:00:00.041] (4738) DEBUG  Processing: y
+[00:00:00.045] (4738) DEBUG  Processing: p
+[00:00:00.050] (4738) DEBUG  Processing: q
+[00:00:00.056] (4738) DEBUG  Processing: O
+[00:00:00.061] (4738) DEBUG  Processing: G
+[00:00:00.067] (4738) DEBUG  Processing: C
+[00:00:00.073] (4738) DEBUG  Processing: S
+[00:00:00.074] (4738) DEBUG  Processing: i
+[00:00:00.077] (4738) DEBUG  Processing: U
+[00:00:00.080] (4738) DEBUG  Processing: J
+[00:00:00.084] (4738) DEBUG  Processing: W
+[00:00:00.088] (4738) DEBUG  Processing: M
+[00:00:00.092] (4738) DEBUG  Processing: A
+[00:00:00.094] (4738) DEBUG  Processing: V
+[00:00:00.097] (4738) DEBUG  Processing: Y
+[00:00:00.100] (4738) DEBUG  Processing: X
+[00:00:00.102] (4738) DEBUG  Processing: H
+[00:00:00.105] (4738) DEBUG  Processing: K
+[00:00:00.108] (4738) DEBUG  Processing: N
+[00:00:00.110] (4738) DEBUG  Processing: T
+[00:00:00.114] (4738) DEBUG  Processing: R
+[00:00:00.119] (4738) DEBUG  Processing: P
+[00:00:00.123] (4738) DEBUG  Processing: D
+[00:00:00.126] (4738) DEBUG  Processing: Z
+[00:00:00.132] (4738) DEBUG  Processing: B
+[00:00:00.134] (4738) DEBUG  Processing: E
+[00:00:00.136] (4738) DEBUG  Processing: F
+[00:00:00.138] (4738) DEBUG  Processing: L
+[00:00:00.138] (4738) DEBUG  Processing: I
+[00:00:00.140] (4738) DEBUG  Processing: t
+[00:00:00.144] (4738) DEBUG  Processing: o
+[00:00:00.148] (4738) DEBUG  Processing: e
+[00:00:00.151] (4738) DEBUG  Processing: c
+[00:00:00.156] (4738) DEBUG  Processing: a
+[00:00:00.161] (4738) DEBUG  Processing: s
+[00:00:00.165] (4738) DEBUG  Processing: m
+[00:00:00.167] (4738) DEBUG  Processing: u
+[00:00:00.169] (4738) DEBUG  Processing: n
+[00:00:00.170] (4738) DEBUG  Processing: r
+[00:00:00.173] (4738) DEBUG  Processing: w
+[00:00:00.175] (4738) DEBUG  Processing: x
+[00:00:00.176] (4738) DEBUG  Processing: v
+[00:00:00.178] (4738) DEBUG  Processing: z
+[00:00:00.178] (4738) DEBUG  Skipped   due to no shape being generated for msdf.
+[00:00:00.458] (4738) DEBUG  Generated atlas to atlas.png
