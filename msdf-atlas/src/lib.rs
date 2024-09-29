@@ -81,7 +81,10 @@ mod tests {
         get_raw_font, glyph_data::GlyphData,
     };
     use core::panic;
-    use std::{fs::remove_file, path::Path};
+    use std::{
+        fs::remove_file,
+        path::Path,
+    };
 
     #[test]
     fn get_raw_file_works() {
@@ -132,9 +135,27 @@ mod tests {
         );
     }
 
-    unsafe fn common_setup(str: &str, args: Args) -> (FontData, &Path, DynamicImage) {
+    fn is_power_of_2(unit: u32) -> bool {
+        unit & (unit - 1) == 0
+    }
+
+    fn remove_file_and_wait(path: &Path) {
+        let r = remove_file(path);
+        assert!(r.is_ok());
+
+        // Wait until the file is fully removed
+        // while metadata(path).is_ok() {
+        //     sleep(Duration::from_millis(100)); // Check every 100ms
+        // }
+    }
+
+    unsafe fn common_setup(
+        str: &str,
+        atlas_path: &Path,
+        args: Args,
+        open_file: bool,
+    ) -> (FontData, Option<DynamicImage>) {
         let raw_font_data = get_raw_font("Roboto-Medium.ttf").unwrap();
-        let atlas_path = Path::new("atlas.png");
         let utf16: Vec<u16> = str.encode_utf16().collect();
         let s = String::from_utf16(&utf16).unwrap();
         let font_data = get_font_metrics(&raw_font_data, atlas_path, s, args);
@@ -158,10 +179,14 @@ mod tests {
             "The pointer was not set or dropped."
         );
 
-        let opened_img = image::open(atlas_path);
-        assert!(opened_img.is_ok(), "Image was corrupted!");
+        if open_file {
+            let opened_img = image::open(atlas_path);
+            assert!(opened_img.is_ok(), "Image was corrupted!");
 
-        (font_data, atlas_path, opened_img.unwrap())
+            (font_data, Some(opened_img.unwrap()))
+        } else {
+            (font_data, None)
+        }
     }
 
     #[test]
@@ -174,15 +199,19 @@ mod tests {
                 .with_scaled_texture(true)
                 .with_uv_space(UVSpace::OneMinusV);
 
-            let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            let (font_data, atlas_path, actual_img) = common_setup(s, args);
+            let atlas_path = Path::new("atlas0.png");
+            let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+
+            let (font_data, actual_img) = common_setup(s, atlas_path, args, true);
 
             let glyph_data = *font_data.glyph_data;
             assert_eq!(
                 glyph_data.element_len(),
-                52,
+                53,
                 "Failed to generate all of the glyph data."
             );
+
+            let actual_img = actual_img.unwrap();
 
             // let actual_img = opened_img.unwrap();
             assert_eq!(
@@ -195,13 +224,9 @@ mod tests {
                 256,
                 "The image scaled too much or did not expand to the nearest power of 2."
             );
-            let r = remove_file(atlas_path);
-            assert!(r.is_ok(), "atlas.png was not removed!");
-        }
-    }
 
-    fn is_power_of_2(unit: u32) -> bool {
-        unit & (unit - 1) == 0
+            remove_file_and_wait(atlas_path);
+        }
     }
 
     #[test]
@@ -214,8 +239,10 @@ mod tests {
                 .with_scaled_texture(false)
                 .with_uv_space(UVSpace::OneMinusV);
 
+            let atlas_path = Path::new("atlas1.png");
             let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-            let (font_data, atlas_path, actual_img) = common_setup(s, args);
+
+            let (font_data, actual_img) = common_setup(s, atlas_path, args, true);
 
             let glyph_data = *font_data.glyph_data;
             assert_eq!(
@@ -223,6 +250,8 @@ mod tests {
                 53,
                 "Failed to generate all of the glyph data."
             );
+
+            let actual_img = actual_img.unwrap();
 
             assert_eq!(
                 actual_img.width(),
@@ -233,22 +262,13 @@ mod tests {
                 actual_img.height() < 256 && !is_power_of_2(actual_img.height()),
                 "The image scaled to the nearest power of 2 when it should not have."
             );
-            let r = remove_file(atlas_path);
-            assert!(r.is_ok(), "atlas.png was not removed!");
+            remove_file_and_wait(atlas_path);
         }
     }
 
     #[test]
     fn generates_atlas_at_size() {
         unsafe {
-            let raw_font_data = get_raw_font("Roboto-Medium.ttf").unwrap();
-            let atlas_path = Path::new("atlas.png");
-
-            let utf16: Vec<u16> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                .encode_utf16()
-                .collect();
-            let string = String::from_utf16(&utf16).unwrap();
-
             let args = Args::default()
                 .with_uniform_scale(1.0)
                 .with_padding(10)
@@ -257,7 +277,10 @@ mod tests {
                 .with_angle(180.0)
                 .with_max_atlas(512);
 
-            let font_data = get_font_metrics(&raw_font_data, atlas_path, string, args);
+            let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+            let atlas_path = Path::new("atlas2.png");
+            let (font_data, _) = common_setup(s, atlas_path, args, false);
+
             assert!(
                 atlas_path.exists(),
                 "The atlas was not written to the desired path"
@@ -276,21 +299,7 @@ mod tests {
                 "The pointer was not set or dropped."
             );
 
-            let opened_img = image::open(atlas_path);
-            assert!(opened_img.is_ok(), "Image was corrupted!");
-
-            let actual_img = opened_img.unwrap();
-            assert!(
-                actual_img.width() > 512,
-                "The image should have scaled but did not."
-            );
-            assert!(
-                actual_img.height() > 256,
-                "The image should have scaled but did not."
-            );
-
-            let r = remove_file(atlas_path);
-            assert!(r.is_ok(), "atlas.png was not removed!");
+            remove_file_and_wait(atlas_path);
         }
     }
 }

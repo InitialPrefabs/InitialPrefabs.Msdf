@@ -45,17 +45,15 @@ fn track_char(c: char) {
 
     let lock = CHAR_BUFFER.lock();
     match lock {
-        Ok(mut char_buffer) => {
-            char_buffer.push(c)
-        },
+        Ok(mut char_buffer) => char_buffer.push(c),
         Err(_) => {
             error!("Cannot unlock the static CHAR_BUFFER!");
-        },
+        }
     }
 }
 
 #[cfg(not(test))]
-fn track_char(_: char) { }
+fn track_char(_: char) {}
 
 #[cfg(test)]
 #[allow(dead_code)]
@@ -68,15 +66,25 @@ fn flush_chars() {
             let s: String = char_buffer.iter().collect();
             debug!("Chars in buffer so far: {}", s);
             char_buffer.clear();
-        },
+        }
         Err(_) => {
             error!("Cannot unlock the static CHAR_BUFFER!");
-        },
+        }
     }
 }
 
 #[cfg(not(test))]
-fn flush_chars() { }
+fn flush_chars() {}
+
+#[cfg(test)]
+fn config_log_file() {
+    let _ = log_to_file("font-metrics.log", LevelFilter::Debug);
+}
+
+#[cfg(not(test))]
+fn config_log_file() {
+    let _ = log_to_file("font-metrics.log", LevelFilter::Error);
+}
 
 /**
  * We know that font_size / fonts.units_per_em() will give us the scale.
@@ -333,7 +341,7 @@ pub unsafe fn get_font_metrics(
     chars_to_generate: String,
     args: Args,
 ) -> FontData {
-    let _ = log_to_file("font-metrics.log", LevelFilter::Debug);
+    config_log_file();
     let face = Face::parse(raw_font_data, 0).unwrap();
     let count = chars_to_generate.len();
     let chars = chars_to_generate.chars();
@@ -412,7 +420,10 @@ pub unsafe fn get_font_metrics(
         let opt_shape = face.load_shape(glyph_index);
         if opt_shape.is_none() {
             // Skip glyph generation because there is nothing to copy.
-            debug!("Skipped {} due to no shape being generated for msdf.", char::from_u32(glyph_data.unicode as u32).unwrap());
+            debug!(
+                "Skipped {} due to no shape being generated for msdf.",
+                char::from_u32(glyph_data.unicode as u32).unwrap()
+            );
             continue;
         }
 
