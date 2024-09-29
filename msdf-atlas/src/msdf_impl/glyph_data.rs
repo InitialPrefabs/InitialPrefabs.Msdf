@@ -7,6 +7,7 @@ use super::enums::UVSpace;
 pub struct GlyphData {
     pub unicode: i32,
     pub advance: f32,
+    pub has_bitmap: bool,
     // The width of the rectangle for the font
     metrics_x: f32,
     // The height of the rectangle for the font
@@ -48,6 +49,7 @@ impl GlyphData {
             uv_y: 0.0,
             uv_z: 0.0,
             uv_w: 0.0,
+            has_bitmap: true
         }
     }
 
@@ -63,6 +65,7 @@ impl GlyphData {
             uv_y: 0.0,
             uv_z: 0.0,
             uv_w: 0.0,
+            has_bitmap: true
         }
     }
 
@@ -80,6 +83,11 @@ impl GlyphData {
     pub fn with_bearings(mut self, x: i16, y: i16) -> GlyphData {
         self.bearings_x = x as f32;
         self.bearings_y = y as f32;
+        self
+    }
+
+    pub fn with_bitmap(mut self, has_bitmap: bool) -> GlyphData {
+        self.has_bitmap = has_bitmap;
         self
     }
 
@@ -115,6 +123,7 @@ impl GlyphData {
     pub fn uvs(&self) -> (f32, f32, f32, f32) {
         (self.uv_x, self.uv_y, self.uv_z, self.uv_w)
     }
+
 }
 
 impl ToString for GlyphData {

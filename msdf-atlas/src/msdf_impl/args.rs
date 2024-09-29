@@ -12,6 +12,7 @@ pub struct Args {
     pub uv_space: UVSpace,
     pub color_type: ColorType,
     pub degrees: f32,
+    pub scale_texture_to_po2: bool,
 }
 
 impl Args {
@@ -27,7 +28,19 @@ impl Args {
             uv_space: UVSpace::Default,
             degrees: 3.0,
             color_type: ColorType::Simple,
+            scale_texture_to_po2: false
         }
+    }
+
+    /// Should the generator scale the atlas height to the next highest power of 2 if
+    /// the height is not a power of 2?
+    ///
+    /// # Arguments
+    ///
+    /// * `scale` - bool
+    pub fn with_scaled_texture(mut self, scale: bool) -> Args {
+        self.scale_texture_to_po2 = scale;
+        self
     }
 
     /// Defines the UV Space for the generate glyphs

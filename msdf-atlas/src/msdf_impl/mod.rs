@@ -2,7 +2,7 @@ use font_data::FontData;
 use image::{DynamicImage, ImageBuffer, Rgb};
 use log::{debug, LevelFilter};
 use mint::Vector2;
-use msdf::{DistanceCheckMode, ErrorCorrectionConfig, ErrorCorrectionMode, GlyphLoader, MSDFConfig, Projection, SDFTrait};
+use msdf::{ErrorCorrectionConfig, GlyphLoader, MSDFConfig, Projection, SDFTrait};
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::collections::HashMap;
@@ -97,8 +97,8 @@ impl GlyphBoundingBoxData {
 
     #[inline]
     pub fn get_scaled_glyph_dimensions_no_padding(&self, args: &Args) -> (i32, i32) {
-        let width =  (self.rect.width() as f32 * args.uniform_scale).round() as i32;
-        let height =  (self.rect.height() as f32 * args.uniform_scale).round() as i32;
+        let width = (self.rect.width() as f32 * args.uniform_scale).round() as i32;
+        let height = (self.rect.height() as f32 * args.uniform_scale).round() as i32;
         (width, height)
     }
 
@@ -118,17 +118,29 @@ fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, ch
     for c in chars {
         let opt_glyph = face.glyph_index(c);
         if opt_glyph.is_none() {
+            debug!(
+                "Skipped unicode, {}, because it does not exist in the font!",
+                c
+            );
             continue;
         }
 
         let glyph_index = opt_glyph.unwrap();
 
-        let opt_bounding_box = face.glyph_bounding_box(glyph_index);
-        if opt_bounding_box.is_none() {
+        // let opt_bounding_box = face.glyph_bounding_box(glyph_index);
+        let horizontal_advance = face.glyph_hor_advance(glyph_index);
+        if horizontal_advance.is_none() {
+            debug!("Skipped: {}", c);
             continue;
         }
 
-        let bounding_box = opt_bounding_box.unwrap();
+        let bounding_box = face.glyph_bounding_box(glyph_index).unwrap_or(Rect {
+            x_min: 0,
+            y_min: 0,
+            x_max: 0,
+            y_max: 0,
+        });
+
         let height = bounding_box.height();
 
         if let std::collections::hash_map::Entry::Vacant(e) = row_map.entry(height) {
@@ -136,6 +148,7 @@ fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, ch
             values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
             e.insert(values);
             unique_keys.push(height);
+            debug!("Added new char: {} with height: {}", c, height);
         } else {
             let values = row_map.get_mut(&height).unwrap();
             values.push(GlyphBoundingBoxData::new(c, glyph_index, bounding_box));
@@ -153,6 +166,8 @@ fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, ch
         // Now we add to our rects practically nuking the values
         rects.append(glyph_data);
     }
+
+    debug!("total glyphs stored: {}", rects.len());
 }
 
 #[inline]
@@ -185,7 +200,10 @@ fn find_best_fit_width(
 
         if scaled_width >= atlas_width {
             atlas_width = get_next_power_of_2(atlas_width);
-            debug!("Resized the atlas width from: {} -> {}", desired_width, atlas_width);
+            debug!(
+                "Resized the atlas width from: {} -> {}",
+                desired_width, atlas_width
+            );
         }
     }
     atlas_width
@@ -213,14 +231,13 @@ fn calculate_minimum_atlas_dimensions(
         args.scale_dimension_with_padding(glyph_data.first().unwrap().rect.height().into());
 
     line_heights.push(first_height);
+    debug!("Pushed new height: {}", first_height);
 
     let mut chars: Vec<char> = Vec::with_capacity(10);
 
     for glyph in glyph_data {
-        // let current_height = args.scale_dimension_with_padding(glyph.rect.height().into());
-        // let width = args.scale_dimension_with_padding(glyph.rect.width().into());
-
-        let (current_scaled_width, current_scaled_height) = glyph.get_scaled_glyph_dimensions_with_padding(&args);
+        let (current_scaled_width, current_scaled_height) =
+            glyph.get_scaled_glyph_dimensions_with_padding(args);
 
         let next_width = atlas_width + current_scaled_width;
         if next_width >= max_width {
@@ -231,7 +248,12 @@ fn calculate_minimum_atlas_dimensions(
             line_count += 1;
             // We have to use the scaled width because it is added to the next line.
             let s: String = chars.iter().collect();
-            debug!("Calculation: Chars for line {}: {}, Line Width: {}", line_count - 1, s, atlas_width);
+            debug!(
+                "Calculation: Chars for line {}: {}, Line Width: {}",
+                line_count - 1,
+                s,
+                atlas_width
+            );
             atlas_width = current_scaled_width;
             chars.clear();
         } else {
@@ -243,14 +265,19 @@ fn calculate_minimum_atlas_dimensions(
 
     // If we haven't finished the end of the line, we need to add the height from the last glyph.
     if atlas_width < max_width {
-        let last_height = args.scale_dimension_with_padding(line_heights[line_count]);
-        debug!("Pushed last height: {}", last_height);
+        // Do not scale the last height because it is already scaled
+        let last_height = line_heights[line_count];
+        let s: String = chars.iter().collect();
+        debug!("Pushed last height: {} with chars: {}", last_height, s);
+        chars.clear();
         atlas_height += last_height;
     }
 
-    debug!("Original Height: {}", atlas_height);
-    atlas_height = get_next_power_of_2(atlas_height);
-    debug!("New Height: {}", atlas_height);
+    if args.scale_texture_to_po2 {
+        debug!("Original Height: {}", atlas_height);
+        atlas_height = get_next_power_of_2(atlas_height);
+        debug!("New Height: {}", atlas_height);
+    }
     (max_width as u32, atlas_height as u32, line_heights)
 }
 
@@ -265,13 +292,10 @@ pub unsafe fn get_font_metrics(
     let count = chars_to_generate.len();
     let chars = chars_to_generate.chars();
 
-    let mut msdf_config: MSDFConfig = Default::default();
-    msdf_config.overlap_support = true;
-
-    let mut error_correction_config = ErrorCorrectionConfig::default();
-    error_correction_config.distance_check_mode = DistanceCheckMode::AlwaysCheckDistance;
-    error_correction_config.error_correction_mode = ErrorCorrectionMode::Indiscriminate;
-    msdf_config.error_correction_config = error_correction_config;
+    let msdf_config: MSDFConfig = MSDFConfig {
+        overlap_support: true,
+        error_correction_config: ErrorCorrectionConfig::default(),
+    };
 
     // Preallocated the glyph_faces and glyph data
     let mut glyph_faces: Vec<GlyphBoundingBoxData> = Vec::with_capacity(count);
@@ -296,20 +320,56 @@ pub unsafe fn get_font_metrics(
     // Create our dynamic atlas buffer
     let mut atlas = ImageBuffer::from_pixel(max_width, max_height, clear);
     let scale = args.get_scale();
-    // let scale = Vector2 { 
-    //     x: 0.1,
-    //     y: 0.1
-    // };
 
     let mut current_line_no = 0;
 
     let radians = args.get_radians();
 
-    let mut chars: Vec<char> = Vec::with_capacity(10);
+    for glyph_bounding_box in glyph_faces {
+        let glyph_index = glyph_bounding_box.glyph_index;
 
-    for glyph_face in glyph_faces {
-        let glyph_index = glyph_face.glyph_index;
-        let shape = face.load_shape(glyph_index).unwrap();
+        let (scaled_glyph_width_padding, _) =
+            glyph_bounding_box.get_scaled_glyph_dimensions_with_padding(&args);
+        let (scaled_glyph_width, scaled_glyph_height) =
+            glyph_bounding_box.get_scaled_glyph_dimensions_no_padding(&args);
+
+        // Calculate the face data
+        let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0);
+        let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
+        let bearing_y = glyph_bounding_box.calculate_bearings_y();
+
+        let (width, height) = glyph_bounding_box.calculate_metrics();
+
+        // Create the glyph and compute the uvs
+        let glyph_data = GlyphData::from_char(glyph_bounding_box.unicode)
+            .with_uvs(
+                Vector2 {
+                    x: x_offset,
+                    y: y_offset,
+                },
+                Vector2 {
+                    x: x_offset + scaled_glyph_width,
+                    y: y_offset + scaled_glyph_height,
+                },
+                Vector2 {
+                    x: max_width as i32,
+                    y: max_height as i32,
+                },
+                args.uv_space,
+            )
+            .with_advance(horizontal_advance)
+            .with_bearings(bearing_x, bearing_y)
+            .with_metrics(width, height);
+
+        glyph_buffer.push(glyph_data);
+
+        let opt_shape = face.load_shape(glyph_index);
+        if opt_shape.is_none() {
+            // Skip glyph generation because there is nothing to copy.
+            continue;
+        }
+
+        let shape = opt_shape.unwrap();
 
         let colored_shape = match args.color_type {
             enums::ColorType::Simple => shape.color_edges_simple(radians),
@@ -318,16 +378,13 @@ pub unsafe fn get_font_metrics(
         };
 
         let translation = {
-            let this = &glyph_face;
+            let this = &glyph_bounding_box;
             Vector2 {
                 x: (-1.0 * this.rect.x_min as f64),
                 y: (-1.0 * this.rect.y_min as f64),
             }
         };
         let projection = Projection { scale, translation };
-
-        let (scaled_glyph_width_padding, _) = glyph_face.get_scaled_glyph_dimensions_with_padding(&args);
-        let (scaled_glyph_width, scaled_glyph_height) = glyph_face.get_scaled_glyph_dimensions_no_padding(&args);
 
         let msdf_data = colored_shape.generate_msdf(
             scaled_glyph_width as u32,
@@ -345,42 +402,10 @@ pub unsafe fn get_font_metrics(
             y_offset += line_heights[current_line_no];
             current_line_no += 1;
             // We reset the x_offset because we have to go the next row in the atlas.
-            let s: String = chars.iter().collect();
-            debug!("Generation: Chars for line {}: {}, Line Width: {}", current_line_no - 1, s, x_offset);
             x_offset = 0;
-            chars.clear();
         }
-        chars.push(glyph_face.unicode);
 
-        // Calculate the face data
-        let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0);
-        let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
-        let bearing_y = glyph_face.calculate_bearings_y();
-
-        let (width, height) = glyph_face.calculate_metrics();
-
-        // Create the glyph and compute the uvs
-        let glyph_data = GlyphData::from_char(glyph_face.unicode)
-            .with_uvs(
-                Vector2 {
-                    x: x_offset,
-                    y: y_offset,
-                },
-                Vector2 {
-                    x: x_offset + scaled_glyph_width as i32,
-                    y: y_offset + scaled_glyph_height as i32,
-                },
-                Vector2 {
-                    x: max_width as i32,
-                    y: max_height as i32,
-                },
-                args.uv_space,
-            )
-            .with_advance(horizontal_advance)
-            .with_bearings(bearing_x, bearing_y)
-            .with_metrics(width, height);
-
-        glyph_buffer.push(glyph_data);
+        debug!("Processing: {}", glyph_bounding_box.unicode);
 
         // Now we have to copy the glyph image to a giant data buffer which is our atlas.
         for (x, y, pixel) in glyph_image.enumerate_pixels() {

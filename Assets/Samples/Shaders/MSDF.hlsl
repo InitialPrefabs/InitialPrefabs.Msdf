@@ -83,11 +83,11 @@ void UnlitPassFragment(
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
     // Custom AA
-    float3 sample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv).rgb;
-    float sigDist = median(sample.r, sample.g, sample.b) - 0.5;
-    sigDist = FilterSdfTextureExact(sigDist, input.uv, _BaseMap_TexelSize.zw);
+    // float3 sample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv).rgb;
+    // float sigDist = median(sample.r, sample.g, sample.b) - 0.5;
+    // sigDist = FilterSdfTextureExact(sigDist, input.uv, _BaseMap_TexelSize.zw);
     // half t = smoothstep(0, 0.5, sigDist);
-    outColor = sigDist;
+    // outColor = sigDist;
 
     // Simple for SDF not MSDF
     // float4 sample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
@@ -120,7 +120,7 @@ void UnlitPassFragment(
         outColor = color;
     #endif
 
-    #if A
+    // #if A
         half2 uv = input.uv;
 
         float2 jdx = ddx(uv);
@@ -140,6 +140,6 @@ void UnlitPassFragment(
         half a = pow(abs(input.color.a * t), 1.0 / 2.2);
         half3 rgb = half3(input.color.rgb * a);
         outColor = half4(rgb, a);
-    #endif
+    // #endif
 }
 #endif
