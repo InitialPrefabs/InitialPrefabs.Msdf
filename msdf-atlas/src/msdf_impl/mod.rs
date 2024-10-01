@@ -335,6 +335,7 @@ fn calculate_minimum_atlas_dimensions(
     (max_width as u32, atlas_height as u32, line_heights)
 }
 
+// TODO: Multithread this
 pub unsafe fn get_font_metrics(
     raw_font_data: &[u8],
     atlas_path: &Path,

@@ -117,24 +117,36 @@ impl Args {
         self
     }
 
+    /// Scales a unit and adds padding.
+    ///
+    /// # Arguments
+    ///
+    /// * `unit` - The unit to scale
     #[allow(dead_code)]
     #[inline(always)]
     pub fn scale_dimension_with_padding(&self, unit: i32) -> i32 {
         self.add_padding((unit as f32 * self.uniform_scale).round() as i32)
     }
 
+    /// Adds padding given the unit
+    ///
+    /// # Arguments
+    ///
+    /// * `scaled_unit` - The unit to add padding to
     #[allow(dead_code)]
     #[inline(always)]
     pub fn add_padding(&self, scaled_unit: i32) -> i32 {
         scaled_unit + (self.padding / 2) as i32
     }
 
+    /// Returns the scale as a Vector2
     #[allow(dead_code)]
     pub fn get_scale(&self) -> Vector2<f64> {
         let scale = self.uniform_scale as f64;
         Vector2 { x: scale, y: scale }
     }
 
+    /// Returns the corner angle as a radian.
     #[allow(dead_code)]
     pub fn get_radians(&self) -> f64 {
         self.degrees.to_radians() as f64

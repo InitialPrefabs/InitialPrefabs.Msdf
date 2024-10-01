@@ -1,3 +1,5 @@
+use std::fmt::{Display, Formatter, Result};
+
 use mint::Vector2;
 use ttf_parser::Face;
 use super::enums::UVSpace;
@@ -126,9 +128,9 @@ impl GlyphData {
 
 }
 
-impl ToString for GlyphData {
-    fn to_string(&self) -> String {
-        format!("Unicode: {}, Char: {} | Metrics: ({}, {}) | Bearings: ({}, {}) | Advance: {} | BoundingBox: ({}, {}), ({}, {})", 
+impl Display for GlyphData {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(f, "Unicode: {}, Char: {} | Metrics: ({}, {}) | Bearings: ({}, {}) | Advance: {} | BoundingBox: ({}, {}), ({}, {})", 
             self.unicode, 
             char::from_u32(self.unicode as u32).unwrap(),
             self.metrics_x, 

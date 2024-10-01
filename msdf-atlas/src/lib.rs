@@ -142,11 +142,6 @@ mod tests {
     fn remove_file_and_wait(path: &Path) {
         let r = remove_file(path);
         assert!(r.is_ok());
-
-        // Wait until the file is fully removed
-        // while metadata(path).is_ok() {
-        //     sleep(Duration::from_millis(100)); // Check every 100ms
-        // }
     }
 
     unsafe fn common_setup(
