@@ -75,39 +75,24 @@ pub unsafe extern "C" fn reinterpret_as_glyph_data(byte_buffer: &ByteBuffer, i: 
 #[cfg(test)]
 mod tests {
     use image::DynamicImage;
+    use ttf_parser::Face;
 
     use crate::msdf_impl::{
-        args::Args, enums::UVSpace, font_data::FontData, get_font_metrics, get_next_power_of_2,
-        get_raw_font, glyph_data::GlyphData,
+        args::Args, calculate_slices, enums::UVSpace, font_data::FontData, get_font_metrics, get_next_power_of_2, get_raw_font, glyph_data::GlyphData, store_and_sort_by_area, Builder, GlyphBoundingBoxData
     };
-    use core::panic;
-    use std::{
-        fs::remove_file,
-        path::Path,
-    };
+    use std::{ffi::OsStr, fs::remove_file, path::Path};
 
     #[test]
     fn get_raw_file_works() {
-        let result = get_raw_font("UbuntuMonoNerdFontPropo-Regular.ttf");
-
-        match result {
-            Ok(content) => assert_ne!(
-                content.len(),
-                0,
-                "Failed to load to UbuntuMonoNerdFontPropo-Regular.ttf"
-            ),
-            Err(_) => panic!("Failed to find UbuntuMonoNerdFontPropo-Regular.ttf"),
-        }
+        let p = OsStr::new("UbuntuMonoNerdFontPropo-Regular.ttf");
+        let b = Builder::from_font_path(p);
+        assert!(!b.raw_font_data.is_empty(), "The file path exists, but failed to load");
     }
 
     #[test]
-    #[should_panic]
     fn get_raw_file_fails() {
-        let result = get_raw_font("");
-        match result {
-            Ok(_) => panic!("Failed to load"),
-            Err(_) => println!("Successfully handled invalid file"),
-        }
+        let builder = Builder::from_font_path(OsStr::new(""));
+        assert!(builder.raw_font_data.is_empty(), "A font was loaded when it should not have been");
     }
 
     #[test]
@@ -295,6 +280,28 @@ mod tests {
             );
 
             remove_file_and_wait(atlas_path);
+        }
+    }
+
+    #[test]
+    fn thread_metadata_slices() {
+        let s = "abcdefghij";
+        let raw_font_data = get_raw_font("Roboto-Medium.ttf").unwrap();
+        let face = Face::parse(&raw_font_data, 0).unwrap();
+        let mut glyph_faces: Vec<GlyphBoundingBoxData> = Vec::with_capacity(10);
+
+        store_and_sort_by_area(&mut glyph_faces, &face, s.chars());
+        let thread_metadata = calculate_slices(3, &face, &glyph_faces);
+
+        assert_eq!(3, thread_metadata.len(), "Did not create the desired unit of work");
+
+        for (i, metadata) in thread_metadata.into_iter().enumerate() {
+            assert_eq!(metadata.start, i * 3, "Race condition will occur as the start overlaps the previous slice's unit of work.");
+            let expected = if i == 2 { 4 } else { 3 };
+            assert_eq!(
+                metadata.work_unit, expected,
+                "Race condition will occur as the slice overlaps with the next unit of work."
+            );
         }
     }
 }

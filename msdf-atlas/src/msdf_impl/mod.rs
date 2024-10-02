@@ -86,6 +86,33 @@ fn config_log_file() {
     let _ = log_to_file("font-metrics.log", LevelFilter::Error);
 }
 
+pub struct Builder {
+    pub raw_font_data: Vec<u8>,
+}
+
+impl Builder {
+    pub fn from_font_path(file_path: &OsStr) -> Self {
+        let lossy_string = file_path.to_string_lossy();
+        if !lossy_string.ends_with(".otf") && !lossy_string.ends_with(".ttf") {
+            Builder {
+                raw_font_data: Vec::new(),
+            }
+        } else {
+            let mut file = File::options()
+                .read(true)
+                .write(false)
+                .open(file_path)
+                .unwrap();
+            let mut buffer = Vec::new();
+            let _ = file.read_to_end(&mut buffer);
+
+            Builder {
+                raw_font_data: buffer,
+            }
+        }
+    }
+}
+
 /**
  * We know that font_size / fonts.units_per_em() will give us the scale.
  */
@@ -116,6 +143,7 @@ pub fn get_raw_font(file_path: &str) -> Result<Vec<u8>, Error> {
     Ok(buffer)
 }
 
+#[warn(deprecated)]
 pub fn get_raw_font_os_string(file_path: &OsStr) -> Result<Vec<u8>, Error> {
     let lossy_string = file_path.to_string_lossy();
 
@@ -129,7 +157,7 @@ pub fn get_raw_font_os_string(file_path: &OsStr) -> Result<Vec<u8>, Error> {
 }
 
 #[derive(Clone, Copy)]
-struct GlyphBoundingBoxData {
+pub struct GlyphBoundingBoxData {
     rect: Rect,
     unicode: char,
     glyph_index: GlyphId,
@@ -171,7 +199,7 @@ impl GlyphBoundingBoxData {
     }
 }
 
-fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars) {
+pub fn store_and_sort_by_area(rects: &mut Vec<GlyphBoundingBoxData>, face: &Face, chars: Chars) {
     let mut row_map: HashMap<i16, Vec<GlyphBoundingBoxData>> = HashMap::new();
     let mut unique_keys: Vec<i16> = Vec::with_capacity(5);
 
@@ -335,6 +363,39 @@ fn calculate_minimum_atlas_dimensions(
     (max_width as u32, atlas_height as u32, line_heights)
 }
 
+pub struct ThreadMetadata {
+    pub start: usize,
+    pub work_unit: usize,
+}
+
+// TODO: Finish multithreading
+pub fn calculate_slices(
+    thread_count: u32,
+    face: &Face,
+    glyph_bounding_box_data: &[GlyphBoundingBoxData],
+) -> Vec<ThreadMetadata> {
+    let minimum_slice_size = glyph_bounding_box_data.len() / thread_count as usize;
+    let mut metadata: Vec<ThreadMetadata> = Vec::with_capacity(minimum_slice_size);
+
+    let last = thread_count - 1;
+
+    for i in 0..last {
+        metadata.push(ThreadMetadata {
+            start: minimum_slice_size * i as usize,
+            work_unit: minimum_slice_size,
+        });
+    }
+
+    let last_thread = minimum_slice_size * last as usize;
+
+    metadata.push(ThreadMetadata {
+        start: last_thread,
+        work_unit: glyph_bounding_box_data.len() - last_thread,
+    });
+
+    metadata
+}
+
 // TODO: Multithread this
 pub unsafe fn get_font_metrics(
     raw_font_data: &[u8],
@@ -380,6 +441,8 @@ pub unsafe fn get_font_metrics(
 
     let radians = args.get_radians();
 
+    // If I want to split this into 2 threads doing the work concurrently, I need to calculate the
+    // minimum x offset for every subsequent thread.
     for glyph_bounding_box in glyph_faces {
         let glyph_index = glyph_bounding_box.glyph_index;
 
