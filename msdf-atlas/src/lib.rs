@@ -85,14 +85,30 @@ mod tests {
     #[test]
     fn get_raw_file_works() {
         let p = OsStr::new("UbuntuMonoNerdFontPropo-Regular.ttf");
-        let b = Builder::from_font_path(p);
-        assert!(!b.raw_font_data.is_empty(), "The file path exists, but failed to load");
+        let builder = Builder::from_font_path(p, "ABC".to_string());
+        assert!(!builder.glyph_bounding_boxes.is_empty());
+        assert!(builder.glyph_data.capacity() == 3);
+        assert!(builder.thread_metadata.capacity() == 8);
     }
 
     #[test]
     fn get_raw_file_fails() {
-        let builder = Builder::from_font_path(OsStr::new(""));
-        assert!(builder.raw_font_data.is_empty(), "A font was loaded when it should not have been");
+        let builder = Builder::from_font_path(OsStr::new(""), "ABC".to_string());
+        assert!(builder.glyph_bounding_boxes.is_empty());
+        assert!(builder.glyph_data.is_empty());
+        assert!(builder.thread_metadata.capacity() == 8);
+    }
+
+    #[test]
+    fn checking_workload() {
+        let p = OsStr::new("UbuntuMonoNerdFontPropo-Regular.ttf");
+        let mut builder = Builder::from_font_path(p, "ABCDEFGHIJ".to_string());
+        builder.with_workload(1);
+        assert!(builder.thread_metadata.len() == 1);
+        let metadata = builder.thread_metadata.first().unwrap();
+
+        assert_eq!(metadata.start, 0);
+        assert_eq!(metadata.work_unit, 10);
     }
 
     #[test]

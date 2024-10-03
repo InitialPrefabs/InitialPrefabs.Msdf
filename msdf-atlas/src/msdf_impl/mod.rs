@@ -87,29 +87,72 @@ fn config_log_file() {
 }
 
 pub struct Builder {
-    pub raw_font_data: Vec<u8>,
+    pub glyph_bounding_boxes: Vec<GlyphBoundingBoxData>,
+    pub glyph_data: Vec<GlyphData>,
+    pub thread_metadata: Vec<ThreadMetadata>,
 }
 
 impl Builder {
-    pub fn from_font_path(file_path: &OsStr) -> Self {
+    pub fn from_font_path(file_path: &OsStr, chars_to_generate: String) -> Self {
         let lossy_string = file_path.to_string_lossy();
-        if !lossy_string.ends_with(".otf") && !lossy_string.ends_with(".ttf") {
-            Builder {
-                raw_font_data: Vec::new(),
-            }
-        } else {
+        let chars = chars_to_generate.chars();
+        let thread_metadata = Vec::with_capacity(8);
+
+        if lossy_string.ends_with(".otf") || lossy_string.ends_with(".ttf") {
+            let mut buffer: Vec<u8> = Vec::new();
             let mut file = File::options()
                 .read(true)
                 .write(false)
                 .open(file_path)
                 .unwrap();
-            let mut buffer = Vec::new();
             let _ = file.read_to_end(&mut buffer);
+            let face = Face::parse(&buffer, 0).unwrap();
 
-            Builder {
-                raw_font_data: buffer,
-            }
+            let capacity = chars_to_generate.len();
+
+            let mut glyph_bounding_boxes: Vec<GlyphBoundingBoxData> = Vec::with_capacity(capacity);
+            let glyph_data: Vec<GlyphData> = Vec::with_capacity(capacity);
+
+            store_and_sort_by_area(&mut glyph_bounding_boxes, &face, chars);
+
+            return Builder {
+                glyph_bounding_boxes,
+                glyph_data,
+                thread_metadata,
+            };
         }
+
+        Builder {
+            glyph_bounding_boxes: Vec::new(),
+            glyph_data: Vec::new(),
+            thread_metadata,
+        }
+    }
+
+    pub fn with_workload(&mut self, thread_count: usize) -> &mut Builder {
+        // TODO: Add a check if the thread_count > than the total # of glyph bounding boxes.
+        let metadata = &mut self.thread_metadata;
+
+        metadata.clear();
+        let thread_count = thread_count.min(metadata.capacity());
+        println!("thread count: {}", thread_count);
+        let minimum_slice_size = self.glyph_bounding_boxes.len() / thread_count;
+
+        let last = thread_count - 1;
+        for i in 0..last {
+            metadata.push(ThreadMetadata {
+                start: minimum_slice_size * i,
+                work_unit: minimum_slice_size,
+            });
+        }
+
+        let last_thread = minimum_slice_size * last;
+        println!("last thread: {}, glyph: {}", last_thread, self.glyph_bounding_boxes.len());
+        metadata.push(ThreadMetadata {
+            start: last_thread,
+            work_unit: self.glyph_bounding_boxes.len() - last_thread
+        });
+        self
     }
 }
 
