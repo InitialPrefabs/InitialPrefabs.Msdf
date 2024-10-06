@@ -75,40 +75,114 @@ pub unsafe extern "C" fn reinterpret_as_glyph_data(byte_buffer: &ByteBuffer, i: 
 #[cfg(test)]
 mod tests {
     use image::DynamicImage;
-    use ttf_parser::Face;
 
     use crate::msdf_impl::{
-        args::Args, calculate_slices, enums::UVSpace, font_data::FontData, get_font_metrics, get_next_power_of_2, get_raw_font, glyph_data::GlyphData, store_and_sort_by_area, Builder, GlyphBoundingBoxData
+        args::Args, enums::UVSpace, font_data::FontData, get_font_metrics, get_next_power_of_2,
+        get_raw_font, glyph_data::GlyphData, Builder,
     };
     use std::{ffi::OsStr, fs::remove_file, path::Path};
 
     #[test]
     fn get_raw_file_works() {
+        let args = Args::default()
+            .with_uniform_scale(1.0 / 32.0)
+            .with_range(640.0)
+            .with_padding(10)
+            .with_scaled_texture(true)
+            .with_uv_space(UVSpace::OneMinusV);
+
         let p = OsStr::new("UbuntuMonoNerdFontPropo-Regular.ttf");
-        let builder = Builder::from_font_path(p, "ABC".to_string());
-        assert!(!builder.glyph_bounding_boxes.is_empty());
-        assert!(builder.glyph_data.capacity() == 3);
-        assert!(builder.thread_metadata.capacity() == 8);
+        let builder = Builder::from_font_path(p, "ABC".to_string(), &args);
+        assert_eq!(builder.glyph_bounding_boxes.len(), 3);
+        assert_eq!(builder.atlas_offsets.len(), 3);
+        assert_eq!(builder.glyph_data.capacity(), 3);
+        assert_eq!(builder.glyph_images.capacity(), 3);
+        assert_eq!(builder.thread_metadata.capacity(), 8);
     }
 
     #[test]
     fn get_raw_file_fails() {
-        let builder = Builder::from_font_path(OsStr::new(""), "ABC".to_string());
+        let args = Args::default()
+            .with_uniform_scale(1.0 / 32.0)
+            .with_range(640.0)
+            .with_padding(10)
+            .with_scaled_texture(true)
+            .with_uv_space(UVSpace::OneMinusV);
+
+        let builder = Builder::from_font_path(OsStr::new(""), "ABC".to_string(), &args);
         assert!(builder.glyph_bounding_boxes.is_empty());
         assert!(builder.glyph_data.is_empty());
-        assert!(builder.thread_metadata.capacity() == 8);
+        assert!(builder.atlas_offsets.is_empty());
+        assert_eq!(builder.thread_metadata.capacity(), 8);
+        assert!(builder.glyph_images.is_empty());
     }
 
     #[test]
     fn checking_workload() {
+        let args = Args::default()
+            .with_uniform_scale(1.0 / 32.0)
+            .with_range(640.0)
+            .with_padding(10)
+            .with_scaled_texture(true)
+            .with_uv_space(UVSpace::OneMinusV);
+
         let p = OsStr::new("UbuntuMonoNerdFontPropo-Regular.ttf");
-        let mut builder = Builder::from_font_path(p, "ABCDEFGHIJ".to_string());
-        builder.with_workload(1);
+        let mut builder = Builder::from_font_path(p, "ABCDEFGHIJ".to_string(), &args);
+
+        // Check if we only push 1 thread
+        builder.prepare_workload(1);
         assert!(builder.thread_metadata.len() == 1);
         let metadata = builder.thread_metadata.first().unwrap();
 
         assert_eq!(metadata.start, 0);
         assert_eq!(metadata.work_unit, 10);
+
+        // Check if we push 3 threads
+        builder.prepare_workload(3);
+        assert_eq!(
+            builder.thread_metadata.len(),
+            3,
+            "Should have prepared 3 metadata"
+        );
+        for i in 0..2 {
+            let metadata = &builder.thread_metadata[i];
+            assert_eq!(metadata.work_unit, 3, "The unit of work should only be 3");
+            let expected = i as u32 * 3;
+            assert_eq!(
+                metadata.start,
+                expected,
+                "This thread should start with element: {} / {}",
+                expected,
+                builder.thread_metadata.len()
+            );
+        }
+
+        let last = builder.thread_metadata.last().unwrap();
+        assert_eq!(last.work_unit, 4, "The last work unit should be 4");
+        assert_eq!(last.start, 6, "This thread should start with element 6");
+
+        // Check what happens if we push too many threads
+        builder.prepare_workload(10);
+        assert_eq!(builder.thread_metadata.len(), 8);
+
+        for i in 0..7 {
+            let metadata = &builder.thread_metadata[i];
+            assert_eq!(
+                metadata.work_unit, 1,
+                "Each thread should only process 1 element."
+            );
+            assert_eq!(
+                metadata.start, i as u32,
+                "Each thread is responsible for it's current element's index."
+            );
+        }
+
+        let last = builder.thread_metadata.last().unwrap();
+        assert_eq!(
+            last.work_unit, 3,
+            "The last thread should process the total amt of work - max_capacity."
+        );
+        assert_eq!(last.start, 7, "The last thread should at 7.");
     }
 
     #[test]
@@ -296,28 +370,6 @@ mod tests {
             );
 
             remove_file_and_wait(atlas_path);
-        }
-    }
-
-    #[test]
-    fn thread_metadata_slices() {
-        let s = "abcdefghij";
-        let raw_font_data = get_raw_font("Roboto-Medium.ttf").unwrap();
-        let face = Face::parse(&raw_font_data, 0).unwrap();
-        let mut glyph_faces: Vec<GlyphBoundingBoxData> = Vec::with_capacity(10);
-
-        store_and_sort_by_area(&mut glyph_faces, &face, s.chars());
-        let thread_metadata = calculate_slices(3, &face, &glyph_faces);
-
-        assert_eq!(3, thread_metadata.len(), "Did not create the desired unit of work");
-
-        for (i, metadata) in thread_metadata.into_iter().enumerate() {
-            assert_eq!(metadata.start, i * 3, "Race condition will occur as the start overlaps the previous slice's unit of work.");
-            let expected = if i == 2 { 4 } else { 3 };
-            assert_eq!(
-                metadata.work_unit, expected,
-                "Race condition will occur as the slice overlaps with the next unit of work."
-            );
         }
     }
 }

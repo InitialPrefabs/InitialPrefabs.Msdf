@@ -1,8 +1,10 @@
+use enums::ColorType;
 use font_data::FontData;
 use image::{DynamicImage, ImageBuffer, Rgb};
 use log::{debug, LevelFilter};
 use mint::Vector2;
 use msdf::{ErrorCorrectionConfig, GlyphLoader, MSDFConfig, Projection, SDFTrait};
+use rayon::prelude::*;
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::collections::HashMap;
@@ -24,12 +26,15 @@ pub mod byte_buffer;
 pub mod enums;
 pub mod font_data;
 pub mod glyph_data;
+pub mod raw_img;
 pub mod utils;
 
 #[cfg(test)]
 use once_cell::sync::Lazy;
 #[cfg(test)]
 use std::sync::Mutex;
+
+const THREAD_COUNT: usize = 8;
 
 #[cfg(test)]
 #[allow(dead_code)]
@@ -89,14 +94,21 @@ fn config_log_file() {
 pub struct Builder {
     pub glyph_bounding_boxes: Vec<GlyphBoundingBoxData>,
     pub glyph_data: Vec<GlyphData>,
+    // TODO: Figure out how to store the atlas offsets and shape data
+    pub atlas_offsets: Vec<(i32, i32)>,
+    pub glyph_images: Vec<ImageBuffer<Rgb<f32>, Vec<f32>>>,
     pub thread_metadata: Vec<ThreadMetadata>,
+    pub atlas_dimensions: (u32, u32),
 }
 
 impl Builder {
-    pub fn from_font_path(file_path: &OsStr, chars_to_generate: String) -> Self {
+    pub fn from_font_path(file_path: &OsStr, chars_to_generate: String, args: &Args) -> Self {
         let lossy_string = file_path.to_string_lossy();
         let chars = chars_to_generate.chars();
-        let thread_metadata = Vec::with_capacity(8);
+        let thread_metadata = Vec::with_capacity(THREAD_COUNT);
+        let mut glyph_metadata: Vec<(i32, i32)> = Vec::with_capacity(chars_to_generate.len());
+        let mut glyph_images: Vec<ImageBuffer<Rgb<f32>, Vec<f32>>> =
+            Vec::with_capacity(chars_to_generate.len());
 
         if lossy_string.ends_with(".otf") || lossy_string.ends_with(".ttf") {
             let mut buffer: Vec<u8> = Vec::new();
@@ -106,37 +118,147 @@ impl Builder {
                 .open(file_path)
                 .unwrap();
             let _ = file.read_to_end(&mut buffer);
-            let face = Face::parse(&buffer, 0).unwrap();
 
+            let face = Face::parse(&buffer, 0).unwrap();
             let capacity = chars_to_generate.len();
 
             let mut glyph_bounding_boxes: Vec<GlyphBoundingBoxData> = Vec::with_capacity(capacity);
-            let glyph_data: Vec<GlyphData> = Vec::with_capacity(capacity);
+            let mut glyph_buffer: Vec<GlyphData> = Vec::with_capacity(capacity);
 
             store_and_sort_by_area(&mut glyph_bounding_boxes, &face, chars);
 
+            let (max_width, max_height, line_heights) =
+                calculate_minimum_atlas_dimensions(&glyph_bounding_boxes, args);
+
+            let mut x_offset: i32 = 0;
+            let mut y_offset: i32 = 0;
+            let mut current_line_no = 0;
+
+            for glyph_bounding_box in &glyph_bounding_boxes {
+                let glyph_index = glyph_bounding_box.glyph_index;
+
+                let (scaled_glyph_width_padding, _) =
+                    glyph_bounding_box.get_scaled_glyph_dimensions_with_padding(args);
+                let (scaled_glyph_width, scaled_glyph_height) =
+                    glyph_bounding_box.get_scaled_glyph_dimensions_no_padding(args);
+
+                let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap();
+                let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
+                let bearing_y = glyph_bounding_box.calculate_bearings_y();
+
+                let (width, height) = glyph_bounding_box.get_metrics();
+
+                let uv_start = Vector2 {
+                    x: x_offset,
+                    y: y_offset,
+                };
+
+                let uv_end = Vector2 {
+                    x: x_offset + scaled_glyph_width,
+                    y: y_offset + scaled_glyph_height,
+                };
+
+                let glyph_data = GlyphData::from_char(glyph_bounding_box.unicode)
+                    .with_uvs(
+                        uv_start,
+                        uv_end,
+                        Vector2 {
+                            x: max_width as i32,
+                            y: max_height as i32,
+                        },
+                        args.uv_space,
+                    )
+                    .with_advance(horizontal_advance)
+                    .with_bearings(bearing_x, bearing_y)
+                    .with_metrics(width, height);
+                glyph_buffer.push(glyph_data);
+
+                let opt_shape = face.load_shape(glyph_index);
+                if opt_shape.is_none() {
+                    debug!(
+                        "Skipped {} due to no shape being generated for msdf.",
+                        char::from_u32(glyph_data.unicode as u32).unwrap()
+                    );
+                    continue;
+                }
+
+                let shape = opt_shape.unwrap();
+                let radians = args.get_radians();
+
+                let colored_shape = match args.color_type {
+                    ColorType::Simple => shape.color_edges_simple(radians),
+                    ColorType::InkTrap => shape.color_edges_ink_trap(radians),
+                    ColorType::Distance => shape.color_edges_by_distance(radians),
+                };
+
+                let translation = Vector2 {
+                    x: (-1.0 * glyph_bounding_box.rect.x_min as f64),
+                    y: (-1.0 * glyph_bounding_box.rect.y_min as f64),
+                };
+                let projection = Projection {
+                    scale: args.get_scale(),
+                    translation,
+                };
+
+                let msdf_config: MSDFConfig = Default::default();
+                let msdf_data = colored_shape.generate_msdf(
+                    scaled_glyph_width as u32,
+                    scaled_glyph_height as u32,
+                    args.range as f64,
+                    &projection,
+                    &msdf_config,
+                );
+
+                // TODO: Store this into a vec
+                let glyph_image: ImageBuffer<Rgb<f32>, Vec<f32>> = msdf_data.to_image();
+                glyph_images.push(glyph_image);
+
+                glyph_metadata.push((x_offset, y_offset));
+
+                let next_width = x_offset + scaled_glyph_width_padding;
+                if next_width >= max_width as i32 {
+                    y_offset += line_heights[current_line_no];
+                    current_line_no += 1;
+                    x_offset = 0;
+                }
+
+                x_offset += scaled_glyph_width_padding;
+            }
+
+            let dim = if args.scale_texture_to_po2 {
+                (max_width, get_next_power_of_2(max_height as i32) as u32)
+            } else {
+                (max_width, max_height)
+            };
+
             return Builder {
-                glyph_bounding_boxes,
-                glyph_data,
+                glyph_bounding_boxes: glyph_bounding_boxes,
+                glyph_data: glyph_buffer,
+                atlas_offsets: glyph_metadata,
+                glyph_images,
                 thread_metadata,
+                atlas_dimensions: dim,
             };
         }
 
         Builder {
             glyph_bounding_boxes: Vec::new(),
             glyph_data: Vec::new(),
+            atlas_offsets: glyph_metadata,
+            glyph_images,
             thread_metadata,
+            atlas_dimensions: (0, 0),
         }
     }
 
-    pub fn with_workload(&mut self, thread_count: usize) -> &mut Builder {
+    pub fn prepare_workload(&mut self, thread_count: usize) -> &mut Builder {
         // TODO: Add a check if the thread_count > than the total # of glyph bounding boxes.
         let metadata = &mut self.thread_metadata;
-
         metadata.clear();
-        let thread_count = thread_count.min(metadata.capacity());
+
+        let thread_count = thread_count.min(metadata.capacity()) as u32;
         println!("thread count: {}", thread_count);
-        let minimum_slice_size = self.glyph_bounding_boxes.len() / thread_count;
+        let minimum_slice_size = self.glyph_bounding_boxes.len() as u32 / thread_count;
 
         let last = thread_count - 1;
         for i in 0..last {
@@ -147,12 +269,45 @@ impl Builder {
         }
 
         let last_thread = minimum_slice_size * last;
-        println!("last thread: {}, glyph: {}", last_thread, self.glyph_bounding_boxes.len());
+        println!(
+            "last thread: {}, glyph: {}",
+            last_thread,
+            self.glyph_bounding_boxes.len()
+        );
         metadata.push(ThreadMetadata {
             start: last_thread,
-            work_unit: self.glyph_bounding_boxes.len() - last_thread
+            work_unit: self.glyph_bounding_boxes.len() as u32 - last_thread,
         });
+
         self
+    }
+
+    pub fn build_atlas(&self, args: &Args) {
+        unsafe {
+            // let (max_width, max_height) = self.atlas_dimensions;
+            // let clear: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
+
+            // let mut atlas = ImageBuffer::from_pixel(max_width, max_height, clear);
+
+            // for (_, metadata) in self.thread_metadata.iter().enumerate() {
+            //     let start = metadata.start as usize;
+            //     let end = start + metadata.work_unit as usize;
+
+            //     let sliced_glyph_images = &self.glyph_images[start..end];
+            //     let sliced_atlas_offsets = &self.atlas_offsets[start..end];
+
+            //     sliced_glyph_images
+            //         .par_iter()
+            //         .enumerate()
+            //         .for_each(|(unit, img)| {
+            //             let (x_offset, y_offset) = sliced_atlas_offsets[unit];
+            //             img.par_enumerate_pixels().for_each(|(x, y, pixel)| {
+            //                 let (new_x, new_y) = (x + x_offset as u32, y + y_offset as u32);
+            //                 atlas.put_pixel(new_x, new_y, *pixel);
+            //             });
+            //         });
+            // }
+        }
     }
 }
 
@@ -237,7 +392,7 @@ impl GlyphBoundingBoxData {
         self.rect.y_max + self.rect.y_min
     }
 
-    pub fn calculate_metrics(&self) -> (i16, i16) {
+    pub fn get_metrics(&self) -> (i16, i16) {
         (self.rect.width(), self.rect.height())
     }
 }
@@ -406,37 +561,10 @@ fn calculate_minimum_atlas_dimensions(
     (max_width as u32, atlas_height as u32, line_heights)
 }
 
+#[derive(Copy, Clone)]
 pub struct ThreadMetadata {
-    pub start: usize,
-    pub work_unit: usize,
-}
-
-// TODO: Finish multithreading
-pub fn calculate_slices(
-    thread_count: u32,
-    face: &Face,
-    glyph_bounding_box_data: &[GlyphBoundingBoxData],
-) -> Vec<ThreadMetadata> {
-    let minimum_slice_size = glyph_bounding_box_data.len() / thread_count as usize;
-    let mut metadata: Vec<ThreadMetadata> = Vec::with_capacity(minimum_slice_size);
-
-    let last = thread_count - 1;
-
-    for i in 0..last {
-        metadata.push(ThreadMetadata {
-            start: minimum_slice_size * i as usize,
-            work_unit: minimum_slice_size,
-        });
-    }
-
-    let last_thread = minimum_slice_size * last as usize;
-
-    metadata.push(ThreadMetadata {
-        start: last_thread,
-        work_unit: glyph_bounding_box_data.len() - last_thread,
-    });
-
-    metadata
+    pub start: u32,
+    pub work_unit: u32,
 }
 
 // TODO: Multithread this
@@ -499,7 +627,7 @@ pub unsafe fn get_font_metrics(
         let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
         let bearing_y = glyph_bounding_box.calculate_bearings_y();
 
-        let (width, height) = glyph_bounding_box.calculate_metrics();
+        let (width, height) = glyph_bounding_box.get_metrics();
 
         // Create the glyph and compute the uvs
         let glyph_data = GlyphData::from_char(glyph_bounding_box.unicode)

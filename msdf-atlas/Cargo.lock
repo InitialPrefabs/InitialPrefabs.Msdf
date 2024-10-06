@@ -619,6 +619,7 @@ dependencies = [
  "mint",
  "msdf",
  "once_cell",
+ "rayon",
  "regex",
  "simple-logging",
  "ttf-parser",
