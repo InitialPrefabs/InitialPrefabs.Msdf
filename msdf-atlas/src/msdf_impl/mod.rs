@@ -139,8 +139,6 @@ impl Builder {
             let mut y_offset: i32 = 0;
             let mut current_line_no = 0;
 
-            let mut index = 0;
-
             for glyph_bounding_box in &glyph_bounding_boxes {
                 let glyph_index = glyph_bounding_box.glyph_index;
 
@@ -230,7 +228,6 @@ impl Builder {
                 }
 
                 x_offset += scaled_glyph_width_padding;
-                index += 1;
             }
 
             let dim = if args.scale_texture_to_po2 {
@@ -246,7 +243,6 @@ impl Builder {
                 glyph_images,
                 thread_metadata,
                 atlas_dimensions: dim,
-                // glyph_indices,
             };
         }
 
@@ -256,7 +252,6 @@ impl Builder {
             atlas_offsets: glyph_metadata,
             glyph_images,
             thread_metadata,
-            // glyph_indices,
             atlas_dimensions: (0, 0),
         }
     }
@@ -291,7 +286,7 @@ impl Builder {
         let _ = log_to_file("font-metrics.log", LevelFilter::Debug);
         let (max_width, max_height) = self.atlas_dimensions;
 
-        let mut pixels: Vec<[f32; 3]> = vec![[0.0, 0.0, 0.0]];
+        let mut pixels: Vec<[u8; 3]> = vec![[0, 0, 0]];
         let raw_img = RawImage::new(&mut pixels, max_width, max_height);
 
         let mut raw_image_views: Vec<Arc<Mutex<RawImageView>>> =
@@ -314,7 +309,6 @@ impl Builder {
                     glyph_img.height()
                 );
             }
-            // Should build a vec of glyph images
             for (local_idx, (offset_x, offset_y)) in atlas_offsets.iter().enumerate() {
                 let glyph_img = &glyph_images[local_idx];
                 let raw_img_view = RawImageView::new(
@@ -330,79 +324,29 @@ impl Builder {
             }
         }
 
-        let len = self.thread_metadata.len();
-        let pool = ThreadPoolBuilder::new().num_threads(len).build().unwrap();
+        // let len = self.thread_metadata.len();
+        let pool = ThreadPoolBuilder::new().num_threads(1).build().unwrap();
 
         let shared_target_views: Arc<Vec<Arc<Mutex<RawImageView<'_>>>>> = Arc::new(raw_image_views);
-        let shared_src_images: Arc<&Vec<ImageBuffer<Rgb<f32>, Vec<f32>>>> =
-            Arc::new(&self.glyph_images);
-        // pool.scope(|s| {
-        //     for metadata in &self.thread_metadata {
-        //         let thread_target_view = shared_target_views.clone();
-        //         let thread_src_images = shared_src_images.clone();
-        //         s.spawn(move |_| {
-        //             let (start, end) = metadata.get_slice_offsets();
-
-        //             for it in start..end {
-        //                 let mut target_view = thread_target_view[it].lock().unwrap();
-        //                 let src_img = &thread_src_images[it];
-        //                 info!(
-        //                     "Width: {}, Height: {}, Src Width: {}, Src Height: {}",
-        //                     target_view.width,
-        //                     target_view.height,
-        //                     src_img.width(),
-        //                     src_img.height()
-        //                 );
-
-        //                 // for y in 0..src_img.height() {
-        //                 //     for x in 0..src_img.width() {
-        //                 //         target_view.set_pixel_unchecked(x, y, [1.0, 1.0, 1.0]);
-        //                 //     }
-        //                 // }
-        //                 target_view.for_each_mut(&|x, y, p| {
-        //                     *p = [1.0, 0.0, 0.0];
-        //                 });
-        //             }
-        //         });
-        //         break;
-        //     }
-        // });
+        // let shared_src_images: Arc<&Vec<ImageBuffer<Rgb<f32>, Vec<f32>>>> =
+        //     Arc::new(&self.glyph_images);
 
         pool.scope(|s| {
             let metadata = &self.thread_metadata[0];
             let thread_target_view = shared_target_views.clone();
-            let thread_src_images = shared_src_images.clone();
+            // let thread_src_images = shared_src_images.clone();
             s.spawn(move |_| {
                 let (start, end) = metadata.get_slice_offsets();
 
                 for it in start..end {
                     let mut target_view = thread_target_view[it].lock().unwrap();
-                    let src_img = &thread_src_images[it];
-                    info!(
-                        "Width: {}, Height: {}, Src Width: {}, Src Height: {}",
-                        target_view.width,
-                        target_view.height,
-                        src_img.width(),
-                        src_img.height()
-                    );
-
-                    // for y in 0..src_img.height() {
-                    //     for x in 0..src_img.width() {
-                    //         target_view.set_pixel_unchecked(x, y, [1.0, 1.0, 1.0]);
-                    //     }
-                    // }
                     target_view.for_each_mut(&|x, y, p| {
-                        *p = [1.0, 0.0, 0.0];
+                        *p = [255, 0, 0];
                     });
+                    info!("Finished writing a glyph");
                 }
+                info!("Finished writing for 1 thread");
             });
-        });
-
-        raw_img.treat_as_float_array(&|floats| {
-            let atlas: ImageBuffer<Rgb<f32>, &[f32]> =
-                ImageBuffer::from_raw(max_width, max_height, floats)
-                    .expect("Failed to create the image");
-            atlas.save(path).expect("Failed to save the image.");
         });
     }
 }

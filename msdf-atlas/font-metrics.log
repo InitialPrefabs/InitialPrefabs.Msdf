@@ -1,57 +1,60 @@
-[00:00:00.000] (3f5c) INFO   Offset for thread: 0, x: 0, y: 0, src width: 15, src height: 60
-[00:00:00.000] (3f5c) INFO   Offset for thread: 0, x: 20, y: 0, src width: 38, src height: 54
-[00:00:00.001] (3f5c) INFO   Offset for thread: 0, x: 63, y: 0, src width: 21, src height: 49
-[00:00:00.002] (3f5c) INFO   Offset for thread: 0, x: 89, y: 0, src width: 30, src height: 49
-[00:00:00.003] (3f5c) INFO   Offset for thread: 0, x: 124, y: 0, src width: 30, src height: 49
-[00:00:00.003] (3f5c) INFO   Offset for thread: 0, x: 159, y: 0, src width: 30, src height: 48
-[00:00:00.004] (3f5c) INFO   Offset for thread: 1, x: 194, y: 0, src width: 28, src height: 48
-[00:00:00.004] (3f5c) INFO   Offset for thread: 1, x: 227, y: 0, src width: 8, src height: 48
-[00:00:00.005] (3f5c) INFO   Offset for thread: 1, x: 240, y: 0, src width: 30, src height: 48
-[00:00:00.006] (3f5c) INFO   Offset for thread: 1, x: 275, y: 0, src width: 30, src height: 47
-[00:00:00.006] (3f5c) INFO   Offset for thread: 1, x: 310, y: 0, src width: 30, src height: 47
-[00:00:00.007] (3f5c) INFO   Offset for thread: 1, x: 345, y: 0, src width: 30, src height: 47
-[00:00:00.007] (3f5c) INFO   Offset for thread: 2, x: 380, y: 0, src width: 38, src height: 47
-[00:00:00.008] (3f5c) INFO   Offset for thread: 2, x: 423, y: 0, src width: 36, src height: 47
-[00:00:00.008] (3f5c) INFO   Offset for thread: 2, x: 464, y: 0, src width: 36, src height: 47
-[00:00:00.009] (3f5c) INFO   Offset for thread: 2, x: 505, y: 0, src width: 34, src height: 47
-[00:00:00.009] (3f5c) INFO   Offset for thread: 2, x: 39, y: 65, src width: 9, src height: 47
-[00:00:00.010] (3f5c) INFO   Offset for thread: 2, x: 53, y: 65, src width: 34, src height: 46
-[00:00:00.011] (3f5c) INFO   Offset for thread: 3, x: 92, y: 65, src width: 30, src height: 46
-[00:00:00.011] (3f5c) INFO   Offset for thread: 3, x: 127, y: 65, src width: 54, src height: 46
-[00:00:00.012] (3f5c) INFO   Offset for thread: 3, x: 186, y: 65, src width: 47, src height: 46
-[00:00:00.013] (3f5c) INFO   Offset for thread: 3, x: 238, y: 65, src width: 42, src height: 46
-[00:00:00.013] (3f5c) INFO   Offset for thread: 3, x: 285, y: 65, src width: 40, src height: 46
-[00:00:00.014] (3f5c) INFO   Offset for thread: 3, x: 330, y: 65, src width: 38, src height: 46
-[00:00:00.014] (3f5c) INFO   Offset for thread: 4, x: 373, y: 65, src width: 38, src height: 46
-[00:00:00.015] (3f5c) INFO   Offset for thread: 4, x: 416, y: 65, src width: 36, src height: 46
-[00:00:00.015] (3f5c) INFO   Offset for thread: 4, x: 457, y: 65, src width: 36, src height: 46
-[00:00:00.016] (3f5c) INFO   Offset for thread: 4, x: 498, y: 65, src width: 36, src height: 46
-[00:00:00.017] (3f5c) INFO   Offset for thread: 4, x: 41, y: 117, src width: 36, src height: 46
-[00:00:00.017] (3f5c) INFO   Offset for thread: 4, x: 82, y: 117, src width: 34, src height: 46
-[00:00:00.018] (3f5c) INFO   Offset for thread: 5, x: 121, y: 117, src width: 34, src height: 46
-[00:00:00.019] (3f5c) INFO   Offset for thread: 5, x: 160, y: 117, src width: 34, src height: 46
-[00:00:00.019] (3f5c) INFO   Offset for thread: 5, x: 199, y: 117, src width: 34, src height: 46
-[00:00:00.020] (3f5c) INFO   Offset for thread: 5, x: 238, y: 117, src width: 32, src height: 46
-[00:00:00.021] (3f5c) INFO   Offset for thread: 5, x: 275, y: 117, src width: 30, src height: 46
-[00:00:00.021] (3f5c) INFO   Offset for thread: 5, x: 310, y: 117, src width: 29, src height: 46
-[00:00:00.022] (3f5c) INFO   Offset for thread: 6, x: 344, y: 117, src width: 29, src height: 46
-[00:00:00.023] (3f5c) INFO   Offset for thread: 6, x: 378, y: 117, src width: 8, src height: 46
-[00:00:00.024] (3f5c) INFO   Offset for thread: 6, x: 391, y: 117, src width: 19, src height: 43
-[00:00:00.024] (3f5c) INFO   Offset for thread: 6, x: 415, y: 117, src width: 31, src height: 35
-[00:00:00.024] (3f5c) INFO   Offset for thread: 6, x: 451, y: 117, src width: 30, src height: 35
-[00:00:00.025] (3f5c) INFO   Offset for thread: 6, x: 486, y: 117, src width: 29, src height: 35
-[00:00:00.026] (3f5c) INFO   Offset for thread: 7, x: 34, y: 168, src width: 29, src height: 35
-[00:00:00.026] (3f5c) INFO   Offset for thread: 7, x: 68, y: 168, src width: 28, src height: 35
-[00:00:00.027] (3f5c) INFO   Offset for thread: 7, x: 101, y: 168, src width: 48, src height: 34
-[00:00:00.027] (3f5c) INFO   Offset for thread: 7, x: 154, y: 168, src width: 28, src height: 34
-[00:00:00.028] (3f5c) INFO   Offset for thread: 7, x: 187, y: 168, src width: 28, src height: 34
-[00:00:00.029] (3f5c) INFO   Offset for thread: 7, x: 220, y: 168, src width: 18, src height: 34
-[00:00:00.030] (3f5c) INFO   Offset for thread: 7, x: 243, y: 168, src width: 45, src height: 34
-[00:00:00.030] (3f5c) INFO   Offset for thread: 7, x: 293, y: 168, src width: 30, src height: 34
-[00:00:00.031] (3f5c) INFO   Offset for thread: 7, x: 328, y: 168, src width: 30, src height: 34
-[00:00:00.032] (3f5c) INFO   Offset for thread: 7, x: 363, y: 168, src width: 27, src height: 34
-[00:00:00.032] (1ce8) INFO   Width: 15, Height: 60, Src Width: 15, Src Height: 60
-[00:00:00.033] (1ce8) INFO   Width: 38, Height: 54, Src Width: 38, Src Height: 54
-[00:00:00.034] (1ce8) INFO   Width: 21, Height: 49, Src Width: 21, Src Height: 49
-[00:00:00.034] (1ce8) INFO   Width: 30, Height: 49, Src Width: 30, Src Height: 49
-[00:00:00.035] (1ce8) INFO   Width: 30, Height: 49, Src Width: 30, Src Height: 49
+[00:00:00.000] (6fd4) INFO   Offset for thread: 0, x: 0, y: 0, src width: 15, src height: 60
+[00:00:00.000] (6fd4) INFO   Offset for thread: 0, x: 20, y: 0, src width: 38, src height: 54
+[00:00:00.000] (6fd4) INFO   Offset for thread: 0, x: 63, y: 0, src width: 21, src height: 49
+[00:00:00.000] (6fd4) INFO   Offset for thread: 0, x: 89, y: 0, src width: 30, src height: 49
+[00:00:00.000] (6fd4) INFO   Offset for thread: 0, x: 124, y: 0, src width: 30, src height: 49
+[00:00:00.000] (6fd4) INFO   Offset for thread: 0, x: 159, y: 0, src width: 30, src height: 48
+[00:00:00.000] (6fd4) INFO   Offset for thread: 1, x: 194, y: 0, src width: 28, src height: 48
+[00:00:00.000] (6fd4) INFO   Offset for thread: 1, x: 227, y: 0, src width: 8, src height: 48
+[00:00:00.001] (6fd4) INFO   Offset for thread: 1, x: 240, y: 0, src width: 30, src height: 48
+[00:00:00.001] (6fd4) INFO   Offset for thread: 1, x: 275, y: 0, src width: 30, src height: 47
+[00:00:00.001] (6fd4) INFO   Offset for thread: 1, x: 310, y: 0, src width: 30, src height: 47
+[00:00:00.001] (6fd4) INFO   Offset for thread: 1, x: 345, y: 0, src width: 30, src height: 47
+[00:00:00.001] (6fd4) INFO   Offset for thread: 2, x: 380, y: 0, src width: 38, src height: 47
+[00:00:00.001] (6fd4) INFO   Offset for thread: 2, x: 423, y: 0, src width: 36, src height: 47
+[00:00:00.001] (6fd4) INFO   Offset for thread: 2, x: 464, y: 0, src width: 36, src height: 47
+[00:00:00.001] (6fd4) INFO   Offset for thread: 2, x: 505, y: 0, src width: 34, src height: 47
+[00:00:00.002] (6fd4) INFO   Offset for thread: 2, x: 39, y: 65, src width: 9, src height: 47
+[00:00:00.002] (6fd4) INFO   Offset for thread: 2, x: 53, y: 65, src width: 34, src height: 46
+[00:00:00.002] (6fd4) INFO   Offset for thread: 3, x: 92, y: 65, src width: 30, src height: 46
+[00:00:00.002] (6fd4) INFO   Offset for thread: 3, x: 127, y: 65, src width: 54, src height: 46
+[00:00:00.002] (6fd4) INFO   Offset for thread: 3, x: 186, y: 65, src width: 47, src height: 46
+[00:00:00.002] (6fd4) INFO   Offset for thread: 3, x: 238, y: 65, src width: 42, src height: 46
+[00:00:00.002] (6fd4) INFO   Offset for thread: 3, x: 285, y: 65, src width: 40, src height: 46
+[00:00:00.002] (6fd4) INFO   Offset for thread: 3, x: 330, y: 65, src width: 38, src height: 46
+[00:00:00.002] (6fd4) INFO   Offset for thread: 4, x: 373, y: 65, src width: 38, src height: 46
+[00:00:00.003] (6fd4) INFO   Offset for thread: 4, x: 416, y: 65, src width: 36, src height: 46
+[00:00:00.003] (6fd4) INFO   Offset for thread: 4, x: 457, y: 65, src width: 36, src height: 46
+[00:00:00.003] (6fd4) INFO   Offset for thread: 4, x: 498, y: 65, src width: 36, src height: 46
+[00:00:00.003] (6fd4) INFO   Offset for thread: 4, x: 41, y: 117, src width: 36, src height: 46
+[00:00:00.003] (6fd4) INFO   Offset for thread: 4, x: 82, y: 117, src width: 34, src height: 46
+[00:00:00.003] (6fd4) INFO   Offset for thread: 5, x: 121, y: 117, src width: 34, src height: 46
+[00:00:00.003] (6fd4) INFO   Offset for thread: 5, x: 160, y: 117, src width: 34, src height: 46
+[00:00:00.003] (6fd4) INFO   Offset for thread: 5, x: 199, y: 117, src width: 34, src height: 46
+[00:00:00.003] (6fd4) INFO   Offset for thread: 5, x: 238, y: 117, src width: 32, src height: 46
+[00:00:00.004] (6fd4) INFO   Offset for thread: 5, x: 275, y: 117, src width: 30, src height: 46
+[00:00:00.004] (6fd4) INFO   Offset for thread: 5, x: 310, y: 117, src width: 29, src height: 46
+[00:00:00.004] (6fd4) INFO   Offset for thread: 6, x: 344, y: 117, src width: 29, src height: 46
+[00:00:00.004] (6fd4) INFO   Offset for thread: 6, x: 378, y: 117, src width: 8, src height: 46
+[00:00:00.004] (6fd4) INFO   Offset for thread: 6, x: 391, y: 117, src width: 19, src height: 43
+[00:00:00.004] (6fd4) INFO   Offset for thread: 6, x: 415, y: 117, src width: 31, src height: 35
+[00:00:00.004] (6fd4) INFO   Offset for thread: 6, x: 451, y: 117, src width: 30, src height: 35
+[00:00:00.004] (6fd4) INFO   Offset for thread: 6, x: 486, y: 117, src width: 29, src height: 35
+[00:00:00.004] (6fd4) INFO   Offset for thread: 7, x: 34, y: 168, src width: 29, src height: 35
+[00:00:00.005] (6fd4) INFO   Offset for thread: 7, x: 68, y: 168, src width: 28, src height: 35
+[00:00:00.005] (6fd4) INFO   Offset for thread: 7, x: 101, y: 168, src width: 48, src height: 34
+[00:00:00.005] (6fd4) INFO   Offset for thread: 7, x: 154, y: 168, src width: 28, src height: 34
+[00:00:00.005] (6fd4) INFO   Offset for thread: 7, x: 187, y: 168, src width: 28, src height: 34
+[00:00:00.005] (6fd4) INFO   Offset for thread: 7, x: 220, y: 168, src width: 18, src height: 34
+[00:00:00.005] (6fd4) INFO   Offset for thread: 7, x: 243, y: 168, src width: 45, src height: 34
+[00:00:00.005] (6fd4) INFO   Offset for thread: 7, x: 293, y: 168, src width: 30, src height: 34
+[00:00:00.005] (6fd4) INFO   Offset for thread: 7, x: 328, y: 168, src width: 30, src height: 34
+[00:00:00.006] (6fd4) INFO   Offset for thread: 7, x: 363, y: 168, src width: 27, src height: 34
+[00:00:00.006] (6544) INFO   Finished writing a glyph
+[00:00:00.006] (6544) INFO   Finished writing a glyph
+[00:00:00.006] (6544) INFO   Finished writing a glyph
+[00:00:00.007] (6544) INFO   Finished writing a glyph
+[00:00:00.007] (6544) INFO   Finished writing a glyph
+[00:00:00.007] (6544) INFO   Finished writing a glyph
+[00:00:00.007] (6544) INFO   Finished writing for 1 thread
+[00:00:00.007] (6fd4) INFO   Dropped raw img view
