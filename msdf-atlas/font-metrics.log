@@ -1,148 +1,57 @@
-[00:00:00.000] (550c) DEBUG  total glyphs stored: 53
-[00:00:00.000] (6f24) DEBUG  total glyphs stored: 53
-[00:00:00.001] (96d0) DEBUG  total glyphs stored: 53
-[00:00:00.001] (550c) DEBUG  Pushed new height: 65
-[00:00:00.002] (6f24) DEBUG  Pushed new height: 65
-[00:00:00.002] (96d0) DEBUG  Resized the atlas width from: 512 -> 1024
-[00:00:00.002] (96d0) DEBUG  Resized the atlas width from: 512 -> 2048
-[00:00:00.003] (6f24) DEBUG  Pushed new height: 52
-[00:00:00.003] (550c) DEBUG  Pushed new height: 52
-[00:00:00.003] (96d0) DEBUG  Pushed new height: 1935
-[00:00:00.003] (6f24) DEBUG  Chars in buffer so far: jQfbdkhlgypqOGCjQfbdkhlgypqOGC
-[00:00:00.003] (6f24) DEBUG  Line Number: 0 | Line Width: 505
-[00:00:00.004] (550c) DEBUG  Chars in buffer so far: 
-[00:00:00.004] (550c) DEBUG  Line Number: 0 | Line Width: 505
-[00:00:00.004] (550c) DEBUG  Pushed new height: 51
-[00:00:00.004] (550c) DEBUG  Chars in buffer so far: jQSiUJWMAVYXHKSiUJWMAVYXHK
-[00:00:00.005] (550c) DEBUG  Line Number: 1 | Line Width: 498
-[00:00:00.005] (6f24) DEBUG  Pushed new height: 51
-[00:00:00.005] (6f24) DEBUG  Chars in buffer so far: NTRPDZBEFLItoe
-[00:00:00.006] (6f24) DEBUG  Line Number: 1 | Line Width: 498
-[00:00:00.006] (96d0) DEBUG  Pushed new height: 1562
-[00:00:00.006] (550c) DEBUG  Pushed new height: 40
-[00:00:00.007] (6f24) DEBUG  Pushed new height: 40
-[00:00:00.007] (96d0) DEBUG  Chars in buffer so far: NTRPDZBEFLItoe
-[00:00:00.007] (96d0) DEBUG  Line Number: 0 | Line Width: 1684
-[00:00:00.008] (550c) DEBUG  Chars in buffer so far: 
-[00:00:00.008] (550c) DEBUG  Line Number: 2 | Line Width: 486
-[00:00:00.008] (6f24) DEBUG  Chars in buffer so far: 
-[00:00:00.008] (6f24) DEBUG  Line Number: 2 | Line Width: 486
-[00:00:00.008] (96d0) DEBUG  Pushed new height: 1561
-[00:00:00.009] (550c) DEBUG  Pushed last height: 40
-[00:00:00.009] (6f24) DEBUG  Pushed last height: 40
-[00:00:00.009] (96d0) DEBUG  Chars in buffer so far: fbcasmunrwxvz casmunrwxvz 
-[00:00:00.009] (96d0) DEBUG  Line Number: 1 | Line Width: 1641
-[00:00:00.009] (550c) DEBUG  Chars in buffer so far: 
-[00:00:00.010] (6f24) DEBUG  Chars in buffer so far: 
-[00:00:00.010] (6f24) DEBUG  Original Height: 208
-[00:00:00.010] (6f24) DEBUG  New Height: 256
-[00:00:00.010] (6f24) DEBUG  Max Width: 512, Max_Height: 256, Total Lines: 4
-[00:00:00.010] (550c) DEBUG  Max Width: 512, Max_Height: 208, Total Lines: 4
-[00:00:00.011] (96d0) DEBUG  Pushed new height: 1541
-[00:00:00.011] (96d0) DEBUG  Chars in buffer so far: dk
-[00:00:00.011] (96d0) DEBUG  Line Number: 2 | Line Width: 1911
-[00:00:00.011] (96d0) DEBUG  Pushed new height: 1533
-[00:00:00.012] (96d0) DEBUG  Chars in buffer so far: hl
-[00:00:00.012] (96d0) DEBUG  Line Number: 3 | Line Width: 1148
-[00:00:00.012] (96d0) DEBUG  Pushed new height: 1523
-[00:00:00.012] (96d0) DEBUG  Chars in buffer so far: gy
-[00:00:00.013] (96d0) DEBUG  Line Number: 4 | Line Width: 1934
-[00:00:00.013] (96d0) DEBUG  Pushed new height: 1501
-[00:00:00.013] (96d0) DEBUG  Chars in buffer so far: pq
-[00:00:00.013] (96d0) DEBUG  Line Number: 5 | Line Width: 1905
-[00:00:00.014] (96d0) DEBUG  Pushed new height: 1501
-[00:00:00.014] (96d0) DEBUG  Chars in buffer so far: O
-[00:00:00.014] (96d0) DEBUG  Line Number: 6 | Line Width: 1213
-[00:00:00.014] (96d0) DEBUG  Pushed new height: 1501
-[00:00:00.015] (96d0) DEBUG  Chars in buffer so far: G
-[00:00:00.015] (96d0) DEBUG  Line Number: 7 | Line Width: 1163
-[00:00:00.015] (96d0) DEBUG  Pushed new height: 1501
-[00:00:00.016] (96d0) DEBUG  Chars in buffer so far: C
-[00:00:00.016] (96d0) DEBUG  Line Number: 8 | Line Width: 1162
-[00:00:00.016] (96d0) DEBUG  Pushed new height: 1481
-[00:00:00.016] (96d0) DEBUG  Chars in buffer so far: Si
-[00:00:00.016] (96d0) DEBUG  Line Number: 9 | Line Width: 1373
-[00:00:00.016] (96d0) DEBUG  Pushed new height: 1481
-[00:00:00.017] (96d0) DEBUG  Chars in buffer so far: U
-[00:00:00.017] (96d0) DEBUG  Line Number: 10 | Line Width: 1093
-[00:00:00.017] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.017] (96d0) DEBUG  Chars in buffer so far: J
-[00:00:00.018] (96d0) DEBUG  Line Number: 11 | Line Width: 956
-[00:00:00.018] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.018] (96d0) DEBUG  Chars in buffer so far: W
-[00:00:00.018] (96d0) DEBUG  Line Number: 12 | Line Width: 1722
-[00:00:00.019] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.019] (96d0) DEBUG  Chars in buffer so far: M
-[00:00:00.019] (96d0) DEBUG  Line Number: 13 | Line Width: 1499
-[00:00:00.020] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.020] (96d0) DEBUG  Chars in buffer so far: A
-[00:00:00.020] (96d0) DEBUG  Line Number: 14 | Line Width: 1333
-[00:00:00.020] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.020] (96d0) DEBUG  Chars in buffer so far: V
-[00:00:00.021] (96d0) DEBUG  Line Number: 15 | Line Width: 1296
-[00:00:00.021] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.021] (96d0) DEBUG  Chars in buffer so far: Y
-[00:00:00.021] (96d0) DEBUG  Line Number: 16 | Line Width: 1236
-[00:00:00.022] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.022] (96d0) DEBUG  Chars in buffer so far: X
-[00:00:00.022] (96d0) DEBUG  Line Number: 17 | Line Width: 1221
-[00:00:00.022] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.023] (96d0) DEBUG  Chars in buffer so far: H
-[00:00:00.023] (96d0) DEBUG  Line Number: 18 | Line Width: 1161
-[00:00:00.023] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.023] (96d0) DEBUG  Chars in buffer so far: K
-[00:00:00.023] (96d0) DEBUG  Line Number: 19 | Line Width: 1161
-[00:00:00.024] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.024] (96d0) DEBUG  Chars in buffer so far: N
-[00:00:00.024] (96d0) DEBUG  Line Number: 20 | Line Width: 1160
-[00:00:00.024] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.025] (96d0) DEBUG  Chars in buffer so far: T
-[00:00:00.025] (96d0) DEBUG  Line Number: 21 | Line Width: 1160
-[00:00:00.025] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.026] (96d0) DEBUG  Chars in buffer so far: R
-[00:00:00.026] (96d0) DEBUG  Line Number: 22 | Line Width: 1103
-[00:00:00.026] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.026] (96d0) DEBUG  Chars in buffer so far: P
-[00:00:00.027] (96d0) DEBUG  Line Number: 23 | Line Width: 1093
-[00:00:00.027] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.027] (96d0) DEBUG  Chars in buffer so far: D
-[00:00:00.028] (96d0) DEBUG  Line Number: 24 | Line Width: 1091
-[00:00:00.028] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.028] (96d0) DEBUG  Chars in buffer so far: Z
-[00:00:00.029] (96d0) DEBUG  Line Number: 25 | Line Width: 1089
-[00:00:00.029] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.029] (96d0) DEBUG  Chars in buffer so far: BE
-[00:00:00.029] (96d0) DEBUG  Line Number: 26 | Line Width: 2001
-[00:00:00.030] (96d0) DEBUG  Pushed new height: 1461
-[00:00:00.030] (96d0) DEBUG  Chars in buffer so far: FL
-[00:00:00.030] (96d0) DEBUG  Line Number: 27 | Line Width: 1849
-[00:00:00.030] (96d0) DEBUG  Pushed new height: 1127
-[00:00:00.031] (96d0) DEBUG  Chars in buffer so far: Ito
-[00:00:00.031] (96d0) DEBUG  Line Number: 28 | Line Width: 1891
-[00:00:00.031] (96d0) DEBUG  Pushed new height: 1127
-[00:00:00.031] (96d0) DEBUG  Chars in buffer so far: ec
-[00:00:00.032] (96d0) DEBUG  Line Number: 29 | Line Width: 1896
-[00:00:00.032] (96d0) DEBUG  Pushed new height: 1107
-[00:00:00.032] (96d0) DEBUG  Chars in buffer so far: as
-[00:00:00.032] (96d0) DEBUG  Line Number: 30 | Line Width: 1834
-[00:00:00.033] (96d0) DEBUG  Pushed new height: 1107
-[00:00:00.033] (96d0) DEBUG  Chars in buffer so far: m
-[00:00:00.033] (96d0) DEBUG  Line Number: 31 | Line Width: 1538
-[00:00:00.033] (96d0) DEBUG  Pushed new height: 1107
-[00:00:00.034] (96d0) DEBUG  Chars in buffer so far: un
-[00:00:00.034] (96d0) DEBUG  Line Number: 32 | Line Width: 1801
-[00:00:00.034] (96d0) DEBUG  Pushed new height: 1087
-[00:00:00.034] (96d0) DEBUG  Chars in buffer so far: rw
-[00:00:00.035] (96d0) DEBUG  Line Number: 33 | Line Width: 2029
-[00:00:00.035] (96d0) DEBUG  Pushed new height: 1087
-[00:00:00.035] (96d0) DEBUG  Chars in buffer so far: xv
-[00:00:00.035] (96d0) DEBUG  Line Number: 34 | Line Width: 1943
-[00:00:00.036] (96d0) DEBUG  Pushed last height: 1087
-[00:00:00.036] (96d0) DEBUG  Chars in buffer so far: z 
-[00:00:00.036] (96d0) DEBUG  Max Width: 2048, Max_Height: 51207, Total Lines: 36
-[00:00:00.184] (550c) DEBUG  Skipped   due to no shape being generated for msdf.
-[00:00:00.185] (6f24) DEBUG  Skipped   due to no shape being generated for msdf.
-[00:00:00.467] (550c) DEBUG  Generated atlas to atlas1.png
-[00:00:00.517] (6f24) DEBUG  Generated atlas to atlas0.png
-[00:01:56.645] (96d0) DEBUG  Skipped   due to no shape being generated for msdf.
-[00:06:19.263] (96d0) DEBUG  Generated atlas to atlas2.png
+[00:00:00.000] (3f5c) INFO   Offset for thread: 0, x: 0, y: 0, src width: 15, src height: 60
+[00:00:00.000] (3f5c) INFO   Offset for thread: 0, x: 20, y: 0, src width: 38, src height: 54
+[00:00:00.001] (3f5c) INFO   Offset for thread: 0, x: 63, y: 0, src width: 21, src height: 49
+[00:00:00.002] (3f5c) INFO   Offset for thread: 0, x: 89, y: 0, src width: 30, src height: 49
+[00:00:00.003] (3f5c) INFO   Offset for thread: 0, x: 124, y: 0, src width: 30, src height: 49
+[00:00:00.003] (3f5c) INFO   Offset for thread: 0, x: 159, y: 0, src width: 30, src height: 48
+[00:00:00.004] (3f5c) INFO   Offset for thread: 1, x: 194, y: 0, src width: 28, src height: 48
+[00:00:00.004] (3f5c) INFO   Offset for thread: 1, x: 227, y: 0, src width: 8, src height: 48
+[00:00:00.005] (3f5c) INFO   Offset for thread: 1, x: 240, y: 0, src width: 30, src height: 48
+[00:00:00.006] (3f5c) INFO   Offset for thread: 1, x: 275, y: 0, src width: 30, src height: 47
+[00:00:00.006] (3f5c) INFO   Offset for thread: 1, x: 310, y: 0, src width: 30, src height: 47
+[00:00:00.007] (3f5c) INFO   Offset for thread: 1, x: 345, y: 0, src width: 30, src height: 47
+[00:00:00.007] (3f5c) INFO   Offset for thread: 2, x: 380, y: 0, src width: 38, src height: 47
+[00:00:00.008] (3f5c) INFO   Offset for thread: 2, x: 423, y: 0, src width: 36, src height: 47
+[00:00:00.008] (3f5c) INFO   Offset for thread: 2, x: 464, y: 0, src width: 36, src height: 47
+[00:00:00.009] (3f5c) INFO   Offset for thread: 2, x: 505, y: 0, src width: 34, src height: 47
+[00:00:00.009] (3f5c) INFO   Offset for thread: 2, x: 39, y: 65, src width: 9, src height: 47
+[00:00:00.010] (3f5c) INFO   Offset for thread: 2, x: 53, y: 65, src width: 34, src height: 46
+[00:00:00.011] (3f5c) INFO   Offset for thread: 3, x: 92, y: 65, src width: 30, src height: 46
+[00:00:00.011] (3f5c) INFO   Offset for thread: 3, x: 127, y: 65, src width: 54, src height: 46
+[00:00:00.012] (3f5c) INFO   Offset for thread: 3, x: 186, y: 65, src width: 47, src height: 46
+[00:00:00.013] (3f5c) INFO   Offset for thread: 3, x: 238, y: 65, src width: 42, src height: 46
+[00:00:00.013] (3f5c) INFO   Offset for thread: 3, x: 285, y: 65, src width: 40, src height: 46
+[00:00:00.014] (3f5c) INFO   Offset for thread: 3, x: 330, y: 65, src width: 38, src height: 46
+[00:00:00.014] (3f5c) INFO   Offset for thread: 4, x: 373, y: 65, src width: 38, src height: 46
+[00:00:00.015] (3f5c) INFO   Offset for thread: 4, x: 416, y: 65, src width: 36, src height: 46
+[00:00:00.015] (3f5c) INFO   Offset for thread: 4, x: 457, y: 65, src width: 36, src height: 46
+[00:00:00.016] (3f5c) INFO   Offset for thread: 4, x: 498, y: 65, src width: 36, src height: 46
+[00:00:00.017] (3f5c) INFO   Offset for thread: 4, x: 41, y: 117, src width: 36, src height: 46
+[00:00:00.017] (3f5c) INFO   Offset for thread: 4, x: 82, y: 117, src width: 34, src height: 46
+[00:00:00.018] (3f5c) INFO   Offset for thread: 5, x: 121, y: 117, src width: 34, src height: 46
+[00:00:00.019] (3f5c) INFO   Offset for thread: 5, x: 160, y: 117, src width: 34, src height: 46
+[00:00:00.019] (3f5c) INFO   Offset for thread: 5, x: 199, y: 117, src width: 34, src height: 46
+[00:00:00.020] (3f5c) INFO   Offset for thread: 5, x: 238, y: 117, src width: 32, src height: 46
+[00:00:00.021] (3f5c) INFO   Offset for thread: 5, x: 275, y: 117, src width: 30, src height: 46
+[00:00:00.021] (3f5c) INFO   Offset for thread: 5, x: 310, y: 117, src width: 29, src height: 46
+[00:00:00.022] (3f5c) INFO   Offset for thread: 6, x: 344, y: 117, src width: 29, src height: 46
+[00:00:00.023] (3f5c) INFO   Offset for thread: 6, x: 378, y: 117, src width: 8, src height: 46
+[00:00:00.024] (3f5c) INFO   Offset for thread: 6, x: 391, y: 117, src width: 19, src height: 43
+[00:00:00.024] (3f5c) INFO   Offset for thread: 6, x: 415, y: 117, src width: 31, src height: 35
+[00:00:00.024] (3f5c) INFO   Offset for thread: 6, x: 451, y: 117, src width: 30, src height: 35
+[00:00:00.025] (3f5c) INFO   Offset for thread: 6, x: 486, y: 117, src width: 29, src height: 35
+[00:00:00.026] (3f5c) INFO   Offset for thread: 7, x: 34, y: 168, src width: 29, src height: 35
+[00:00:00.026] (3f5c) INFO   Offset for thread: 7, x: 68, y: 168, src width: 28, src height: 35
+[00:00:00.027] (3f5c) INFO   Offset for thread: 7, x: 101, y: 168, src width: 48, src height: 34
+[00:00:00.027] (3f5c) INFO   Offset for thread: 7, x: 154, y: 168, src width: 28, src height: 34
+[00:00:00.028] (3f5c) INFO   Offset for thread: 7, x: 187, y: 168, src width: 28, src height: 34
+[00:00:00.029] (3f5c) INFO   Offset for thread: 7, x: 220, y: 168, src width: 18, src height: 34
+[00:00:00.030] (3f5c) INFO   Offset for thread: 7, x: 243, y: 168, src width: 45, src height: 34
+[00:00:00.030] (3f5c) INFO   Offset for thread: 7, x: 293, y: 168, src width: 30, src height: 34
+[00:00:00.031] (3f5c) INFO   Offset for thread: 7, x: 328, y: 168, src width: 30, src height: 34
+[00:00:00.032] (3f5c) INFO   Offset for thread: 7, x: 363, y: 168, src width: 27, src height: 34
+[00:00:00.032] (1ce8) INFO   Width: 15, Height: 60, Src Width: 15, Src Height: 60
+[00:00:00.033] (1ce8) INFO   Width: 38, Height: 54, Src Width: 38, Src Height: 54
+[00:00:00.034] (1ce8) INFO   Width: 21, Height: 49, Src Width: 21, Src Height: 49
+[00:00:00.034] (1ce8) INFO   Width: 30, Height: 49, Src Width: 30, Src Height: 49
+[00:00:00.035] (1ce8) INFO   Width: 30, Height: 49, Src Width: 30, Src Height: 49

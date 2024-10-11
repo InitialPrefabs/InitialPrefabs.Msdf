@@ -11,8 +11,8 @@ const RGB_CHANNELS: u32 = 3;
 pub struct RawImage<'a> {
     _phantom_data: PhantomData<&'a mut Rgb>,
     data: *mut Rgb,
-    width: u32,
-    height: u32,
+    pub width: u32,
+    pub height: u32,
 }
 
 #[allow(dead_code)]
@@ -71,8 +71,8 @@ pub struct RawImageView<'a> {
     img: &'a RawImage<'a>,
     offset_x: u32,
     offset_y: u32,
-    width: u32,
-    height: u32,
+    pub width: u32,
+    pub height: u32,
 }
 
 unsafe impl Send for RawImageView<'_> {}
