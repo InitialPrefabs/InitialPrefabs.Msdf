@@ -337,6 +337,24 @@ mod tests {
     }
 
     #[test]
+    fn generates_with_builder() {
+        let args = Args::default()
+            .with_uniform_scale(1.0 / 32.0)
+            .with_range(640.0)
+            .with_padding(10)
+            .with_scaled_texture(false)
+            .with_uv_space(UVSpace::OneMinusV);
+
+        let atlas_path = Path::new("atlas_via_builder.png");
+        let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+        let font_path =  "Roboto-Medium.ttf".to_string();
+        let os_font_path = OsStr::new(&font_path);
+        Builder::from_font_path(os_font_path, s.to_string(), &args)
+            .prepare_workload(8)
+            .build_atlas(atlas_path);
+    }
+
+    #[test]
     fn generates_atlas_at_size() {
         unsafe {
             let args = Args::default()

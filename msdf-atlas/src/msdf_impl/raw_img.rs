@@ -1,8 +1,11 @@
 use std::marker::PhantomData;
-use std::slice;
+use std::mem;
+use std::slice::{self, from_raw_parts};
 
 #[allow(dead_code)]
 type Rgb = [f32; 3];
+
+const RGB_CHANNELS: u32 = 3;
 
 #[allow(dead_code)]
 pub struct RawImage<'a> {
@@ -23,15 +26,42 @@ impl<'a> RawImage<'a> {
         }
     }
 
+    pub fn treat_as_byte_array(&self, f: &dyn Fn(&[u8])) {
+        unsafe {
+            let total_size = 
+                (self.width * self.height * RGB_CHANNELS) as usize * mem::size_of::<f32>();
+
+            let base_ptr = self.data as *mut u8;
+            let raw_parts = from_raw_parts(
+                base_ptr,
+                total_size,
+            );
+            f(raw_parts);
+        }
+    }
+
+    pub fn treat_as_float_array(&self, f: &dyn Fn(&[f32])) {
+        unsafe {
+            let total_size = 
+                (self.width * self.height * RGB_CHANNELS) as usize;
+
+            let base_ptr = self.data as *mut f32;
+            let raw_parts = from_raw_parts(
+                base_ptr,
+                total_size,
+            );
+            f(raw_parts);
+        }
+    }
+
     fn convert_xy_to_index(&self, x: u32, y: u32) -> usize {
         (y * self.width + x) as usize
     }
 
     fn convert_to_u8(&self) -> &[u8] {
         unsafe {
-            const CHANNELS: u32 = 3;
             let byte_ptr = self.data as *mut u8;
-            let len = (self.width * self.height * CHANNELS) as usize;
+            let len = (self.width * self.height * RGB_CHANNELS) as usize;
             slice::from_raw_parts(byte_ptr, len)
         }
     }
@@ -46,6 +76,7 @@ pub struct RawImageView<'a> {
 }
 
 unsafe impl Send for RawImageView<'_> {}
+unsafe impl Sync for RawImageView<'_> {}
 
 #[allow(dead_code)]
 impl<'a> RawImageView<'a> {
@@ -105,6 +136,8 @@ impl<'a> RawImageView<'a> {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::{Arc, Mutex};
+
     use rayon::ThreadPoolBuilder;
 
     use super::{RawImage, RawImageView};
@@ -115,24 +148,30 @@ mod tests {
         let img = RawImage::new(&mut pixels, 10, 10);
         let pool = ThreadPoolBuilder::new().num_threads(2).build().unwrap();
 
-        let mut v1 = RawImageView::new(&img, 0, 0, 5, 10);
-        let mut v2 = RawImageView::new(&img, 5, 0, 5, 10);
+        let v1 = Arc::new(Mutex::new(RawImageView::new(&img, 0, 0, 5, 10)));
+        let v2 = Arc::new(Mutex::new(RawImageView::new(&img, 5, 0, 5, 10)));
+        let group = Arc::new([Arc::clone(&v1), Arc::clone(&v2)]);
 
         let red = [1.0_f32, 0.0_f32, 0.0_f32];
         let blue = [0.0_f32, 1.0_f32, 0.0_f32];
         pool.scope(|s| {
             s.spawn(|_| {
+                let mut v1 = group[0].lock().unwrap();
                 let _ = &v1.for_each_mut(&|_, _, p| {
                     *p = red;
                 });
             });
 
             s.spawn(|_| {
+                let mut v2 = group[1].lock().unwrap();
                 let _ = &v2.for_each_mut(&|_, _, p| {
                     *p = blue;
                 });
             });
         });
+
+        let mut v1 = RawImageView::new(&img, 0, 0, 5, 10);
+        let mut v2 = RawImageView::new(&img, 5, 0, 5, 10);
 
         v1.for_each(&|_, _, p| {
             for (i, c) in p.iter().enumerate() {

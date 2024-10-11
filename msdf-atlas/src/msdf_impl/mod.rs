@@ -1,9 +1,12 @@
 use enums::ColorType;
 use font_data::FontData;
 use image::{DynamicImage, ImageBuffer, Rgb};
+use log::{info, log};
 use log::{debug, LevelFilter};
 use mint::Vector2;
 use msdf::{ErrorCorrectionConfig, GlyphLoader, MSDFConfig, Projection, SDFTrait};
+use raw_img::{RawImage, RawImageView};
+use rayon::ThreadPoolBuilder;
 use rayon::prelude::*;
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
@@ -13,6 +16,7 @@ use std::io::Error;
 use std::path::Path;
 use std::result::Result;
 use std::str::Chars;
+use std::sync::{Arc, Mutex};
 use std::{fs::File, io::Read};
 use ttf_parser::{Face, GlyphId, Rect};
 
@@ -32,9 +36,6 @@ pub mod utils;
 #[cfg(test)]
 use once_cell::sync::Lazy;
 #[cfg(test)]
-use std::sync::Mutex;
-
-const THREAD_COUNT: usize = 8;
 
 #[cfg(test)]
 #[allow(dead_code)]
@@ -102,10 +103,10 @@ pub struct Builder {
 }
 
 impl Builder {
-    pub fn from_font_path(file_path: &OsStr, chars_to_generate: String, args: &Args) -> Self {
-        let lossy_string = file_path.to_string_lossy();
+    pub fn from_font_path(font_path: &OsStr, chars_to_generate: String, args: &Args) -> Self {
+        let lossy_string = font_path.to_string_lossy();
         let chars = chars_to_generate.chars();
-        let thread_metadata = Vec::with_capacity(THREAD_COUNT);
+        let thread_metadata = Vec::with_capacity(8);
         let mut glyph_metadata: Vec<(i32, i32)> = Vec::with_capacity(chars_to_generate.len());
         let mut glyph_images: Vec<ImageBuffer<Rgb<f32>, Vec<f32>>> =
             Vec::with_capacity(chars_to_generate.len());
@@ -115,7 +116,7 @@ impl Builder {
             let mut file = File::options()
                 .read(true)
                 .write(false)
-                .open(file_path)
+                .open(font_path)
                 .unwrap();
             let _ = file.read_to_end(&mut buffer);
 
@@ -232,7 +233,7 @@ impl Builder {
             };
 
             return Builder {
-                glyph_bounding_boxes: glyph_bounding_boxes,
+                glyph_bounding_boxes,
                 glyph_data: glyph_buffer,
                 atlas_offsets: glyph_metadata,
                 glyph_images,
@@ -282,32 +283,78 @@ impl Builder {
         self
     }
 
-    pub fn build_atlas(&self, args: &Args) {
-        unsafe {
-            // let (max_width, max_height) = self.atlas_dimensions;
-            // let clear: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
+    pub fn build_atlas(&self, path: &Path) {
+        let (max_width, max_height) = self.atlas_dimensions;
 
-            // let mut atlas = ImageBuffer::from_pixel(max_width, max_height, clear);
+        let mut pixels: Vec<[f32; 3]> = vec![[0.0, 0.0, 0.0]];
+        let raw_img = RawImage::new(&mut pixels, max_width, max_height);
 
-            // for (_, metadata) in self.thread_metadata.iter().enumerate() {
-            //     let start = metadata.start as usize;
-            //     let end = start + metadata.work_unit as usize;
+        let mut raw_image_views: Vec<Vec<Arc<Mutex<RawImageView>>>> =
+            Vec::with_capacity(self.thread_metadata.len());
+        let mut src_images: Vec<Arc<&[ImageBuffer<Rgb<f32>, Vec<f32>>]>> =
+            Vec::with_capacity(self.thread_metadata.len());
 
-            //     let sliced_glyph_images = &self.glyph_images[start..end];
-            //     let sliced_atlas_offsets = &self.atlas_offsets[start..end];
+        for (idx, metadata) in self.thread_metadata.iter().enumerate() {
+            let (start, end) = metadata.get_slice_offsets();
 
-            //     sliced_glyph_images
-            //         .par_iter()
-            //         .enumerate()
-            //         .for_each(|(unit, img)| {
-            //             let (x_offset, y_offset) = sliced_atlas_offsets[unit];
-            //             img.par_enumerate_pixels().for_each(|(x, y, pixel)| {
-            //                 let (new_x, new_y) = (x + x_offset as u32, y + y_offset as u32);
-            //                 atlas.put_pixel(new_x, new_y, *pixel);
-            //             });
-            //         });
-            // }
+            let glyph_images: &[ImageBuffer<Rgb<f32>, Vec<f32>>] = &self.glyph_images[start..end];
+            // Todo: check and ensure that the offsets are within the proper range for the glyph
+            // images. We may have metrics for all characters, but not all metrics map to a glyph.
+            let atlas_offsets = &self.atlas_offsets[start..end];
+
+            for (local_idx, (x, y)) in atlas_offsets.iter().enumerate() {
+                let glyph_img = &glyph_images[local_idx];
+                info!("Offset for thread: {}, x: {}, y: {}, src width: {}, src height: {}", idx, x, y, glyph_img.width(), glyph_img.height());
+            }
+            // Should build a vec of glyph images
+            let mut target_views: Vec<Arc<Mutex<RawImageView>>> =
+                Vec::with_capacity(metadata.work_unit as usize);
+
+            for (local_idx, (offset_x, offset_y)) in atlas_offsets.iter().enumerate() {
+                let glyph_img = &glyph_images[local_idx];
+                let raw_img_view = RawImageView::new(
+                    &raw_img,
+                    *offset_x as u32,
+                    *offset_y as u32,
+                    glyph_img.width(),
+                    glyph_img.height(),
+                );
+
+                let arc_img_view = Arc::new(Mutex::new(raw_img_view));
+                target_views.push(arc_img_view);
+            }
+            raw_image_views.push(target_views);
+            src_images.push(Arc::new(glyph_images));
         }
+
+        // let len = self.thread_metadata.len();
+        // let pool = ThreadPoolBuilder::new().num_threads(len).build().unwrap();
+        // pool.scope(|s| {
+        //     for i in 0..len {
+        //         let raw_img_views = &raw_image_views[i];
+        //         let src_imgs = &src_images[i];
+
+        //         s.spawn(|_| {
+        //             for j in 0..raw_img_views.len() {
+        //                 let raw_img_view = &raw_img_views[j];
+        //                 let src_img = &src_imgs[j];
+
+        //                 let mut target = raw_img_view.lock().unwrap();
+        //                 target.for_each_mut(&|x, y, p| {
+        //                     let src_pixel: &Rgb<f32> = src_img.get_pixel(x, y);
+        //                     *p = [src_pixel[0], src_pixel[1], src_pixel[2]];
+        //                 });
+        //             }
+        //         });
+        //     }
+        // });
+
+        // raw_img.treat_as_float_array(&|floats| {
+        //     let atlas: ImageBuffer<Rgb<f32>, &[f32]> =
+        //         ImageBuffer::from_raw(max_width, max_height, floats)
+        //             .expect("Failed to create the image");
+        //     atlas.save(path).expect("Failed to save the image.");
+        // });
     }
 }
 
@@ -565,6 +612,13 @@ fn calculate_minimum_atlas_dimensions(
 pub struct ThreadMetadata {
     pub start: u32,
     pub work_unit: u32,
+}
+
+impl ThreadMetadata {
+    #[inline(always)]
+    fn get_slice_offsets(&self) -> (usize, usize) {
+        (self.start as usize, (self.start + self.work_unit) as usize)
+    }
 }
 
 // TODO: Multithread this
