@@ -283,13 +283,14 @@ impl Builder {
     }
 
     pub fn build_atlas(&self, path: &Path) {
+        let thread_count = self.thread_metadata.len();
         let (max_width, max_height) = self.atlas_dimensions;
 
         let mut pixels: Vec<[u8; 3]> = vec![[0, 0, 0]; (max_width * max_height) as usize];
         let raw_img = RawImage::new(&mut pixels, max_width, max_height);
 
         let mut raw_image_views: Vec<Arc<Mutex<RawImageView>>> =
-            Vec::with_capacity(self.thread_metadata.len());
+            Vec::with_capacity(self.glyph_images.len());
 
         for metadata in &self.thread_metadata {
             let (start, end) = metadata.get_slice_offsets();
@@ -312,7 +313,6 @@ impl Builder {
             }
         }
 
-        let thread_count = self.thread_metadata.len();
         let pool = ThreadPoolBuilder::new()
             .num_threads(thread_count)
             .build()
@@ -346,7 +346,7 @@ impl Builder {
             }
         });
 
-        raw_img.treat_as_byte_array(&|bytes| {
+        raw_img.process_as_byte_array(&|bytes| {
             let atlas: ImageBuffer<Rgb<u8>, &[u8]> =
                 ImageBuffer::from_raw(max_width, max_height, bytes)
                     .expect("Failed to create the image");

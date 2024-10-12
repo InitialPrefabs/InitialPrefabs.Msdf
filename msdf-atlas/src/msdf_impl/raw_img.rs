@@ -28,7 +28,7 @@ impl<'a> RawImage<'a> {
         }
     }
 
-    pub fn treat_as_byte_array(&self, f: &dyn Fn(&[u8])) {
+    pub fn process_as_byte_array(&self, f: &dyn Fn(&[u8])) {
         unsafe {
             let total_size =
                 (self.width * self.height * RGB_CHANNELS) as usize * mem::size_of::<u8>();
@@ -172,7 +172,7 @@ mod tests {
             });
         }
 
-        img.treat_as_byte_array(&|bytes| {
+        img.process_as_byte_array(&|bytes| {
             let atlas: ImageBuffer<Rgb<u8>, &[u8]> =
                 ImageBuffer::from_raw(10, 10, bytes)
                     .expect("Failed to create the image");

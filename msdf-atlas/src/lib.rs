@@ -294,8 +294,7 @@ mod tests {
                 256,
                 "The image scaled too much or did not expand to the nearest power of 2."
             );
-
-            remove_file_and_wait(atlas_path);
+            // remove_file_and_wait(atlas_path);
         }
     }
 

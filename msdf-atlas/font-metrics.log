@@ -1,60 +1,18 @@
-[00:00:00.000] (78ac) INFO   Offset for thread: 0, x: 0, y: 0, src width: 15, src height: 60
-[00:00:00.000] (78ac) INFO   Offset for thread: 0, x: 20, y: 0, src width: 38, src height: 54
-[00:00:00.000] (78ac) INFO   Offset for thread: 0, x: 63, y: 0, src width: 21, src height: 49
-[00:00:00.000] (78ac) INFO   Offset for thread: 0, x: 89, y: 0, src width: 30, src height: 49
-[00:00:00.000] (78ac) INFO   Offset for thread: 0, x: 124, y: 0, src width: 30, src height: 49
-[00:00:00.000] (78ac) INFO   Offset for thread: 0, x: 159, y: 0, src width: 30, src height: 48
-[00:00:00.000] (78ac) INFO   Offset for thread: 1, x: 194, y: 0, src width: 28, src height: 48
-[00:00:00.000] (78ac) INFO   Offset for thread: 1, x: 227, y: 0, src width: 8, src height: 48
-[00:00:00.000] (78ac) INFO   Offset for thread: 1, x: 240, y: 0, src width: 30, src height: 48
-[00:00:00.000] (78ac) INFO   Offset for thread: 1, x: 275, y: 0, src width: 30, src height: 47
-[00:00:00.001] (78ac) INFO   Offset for thread: 1, x: 310, y: 0, src width: 30, src height: 47
-[00:00:00.001] (78ac) INFO   Offset for thread: 1, x: 345, y: 0, src width: 30, src height: 47
-[00:00:00.001] (78ac) INFO   Offset for thread: 2, x: 380, y: 0, src width: 38, src height: 47
-[00:00:00.001] (78ac) INFO   Offset for thread: 2, x: 423, y: 0, src width: 36, src height: 47
-[00:00:00.001] (78ac) INFO   Offset for thread: 2, x: 464, y: 0, src width: 36, src height: 47
-[00:00:00.001] (78ac) INFO   Offset for thread: 2, x: 505, y: 0, src width: 34, src height: 47
-[00:00:00.001] (78ac) INFO   Offset for thread: 2, x: 39, y: 65, src width: 9, src height: 47
-[00:00:00.001] (78ac) INFO   Offset for thread: 2, x: 53, y: 65, src width: 34, src height: 46
-[00:00:00.001] (78ac) INFO   Offset for thread: 3, x: 92, y: 65, src width: 30, src height: 46
-[00:00:00.001] (78ac) INFO   Offset for thread: 3, x: 127, y: 65, src width: 54, src height: 46
-[00:00:00.001] (78ac) INFO   Offset for thread: 3, x: 186, y: 65, src width: 47, src height: 46
-[00:00:00.001] (78ac) INFO   Offset for thread: 3, x: 238, y: 65, src width: 42, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 3, x: 285, y: 65, src width: 40, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 3, x: 330, y: 65, src width: 38, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 4, x: 373, y: 65, src width: 38, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 4, x: 416, y: 65, src width: 36, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 4, x: 457, y: 65, src width: 36, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 4, x: 498, y: 65, src width: 36, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 4, x: 41, y: 117, src width: 36, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 4, x: 82, y: 117, src width: 34, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 5, x: 121, y: 117, src width: 34, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 5, x: 160, y: 117, src width: 34, src height: 46
-[00:00:00.002] (78ac) INFO   Offset for thread: 5, x: 199, y: 117, src width: 34, src height: 46
-[00:00:00.003] (78ac) INFO   Offset for thread: 5, x: 238, y: 117, src width: 32, src height: 46
-[00:00:00.003] (78ac) INFO   Offset for thread: 5, x: 275, y: 117, src width: 30, src height: 46
-[00:00:00.003] (78ac) INFO   Offset for thread: 5, x: 310, y: 117, src width: 29, src height: 46
-[00:00:00.003] (78ac) INFO   Offset for thread: 6, x: 344, y: 117, src width: 29, src height: 46
-[00:00:00.003] (78ac) INFO   Offset for thread: 6, x: 378, y: 117, src width: 8, src height: 46
-[00:00:00.003] (78ac) INFO   Offset for thread: 6, x: 391, y: 117, src width: 19, src height: 43
-[00:00:00.003] (78ac) INFO   Offset for thread: 6, x: 415, y: 117, src width: 31, src height: 35
-[00:00:00.003] (78ac) INFO   Offset for thread: 6, x: 451, y: 117, src width: 30, src height: 35
-[00:00:00.003] (78ac) INFO   Offset for thread: 6, x: 486, y: 117, src width: 29, src height: 35
-[00:00:00.003] (78ac) INFO   Offset for thread: 7, x: 34, y: 168, src width: 29, src height: 35
-[00:00:00.003] (78ac) INFO   Offset for thread: 7, x: 68, y: 168, src width: 28, src height: 35
-[00:00:00.003] (78ac) INFO   Offset for thread: 7, x: 101, y: 168, src width: 48, src height: 34
-[00:00:00.004] (78ac) INFO   Offset for thread: 7, x: 154, y: 168, src width: 28, src height: 34
-[00:00:00.004] (78ac) INFO   Offset for thread: 7, x: 187, y: 168, src width: 28, src height: 34
-[00:00:00.004] (78ac) INFO   Offset for thread: 7, x: 220, y: 168, src width: 18, src height: 34
-[00:00:00.004] (78ac) INFO   Offset for thread: 7, x: 243, y: 168, src width: 45, src height: 34
-[00:00:00.004] (78ac) INFO   Offset for thread: 7, x: 293, y: 168, src width: 30, src height: 34
-[00:00:00.004] (78ac) INFO   Offset for thread: 7, x: 328, y: 168, src width: 30, src height: 34
-[00:00:00.004] (78ac) INFO   Offset for thread: 7, x: 363, y: 168, src width: 27, src height: 34
-[00:00:00.005] (392c) INFO   Finished writing for 1 thread
-[00:00:00.006] (f9c) INFO   Finished writing for 1 thread
-[00:00:00.006] (33c8) INFO   Finished writing for 1 thread
-[00:00:00.006] (6b08) INFO   Finished writing for 1 thread
-[00:00:00.006] (60fc) INFO   Finished writing for 1 thread
-[00:00:00.006] (34c8) INFO   Finished writing for 1 thread
-[00:00:00.006] (7074) INFO   Finished writing for 1 thread
-[00:00:00.006] (5ea4) INFO   Finished writing for 1 thread
+[00:00:00.001] (4ad0) DEBUG  total glyphs stored: 53
+[00:00:00.001] (4ad0) DEBUG  Pushed new height: 65
+[00:00:00.001] (4ad0) DEBUG  Pushed new height: 52
+[00:00:00.001] (4ad0) DEBUG  Chars in buffer so far: jQfbdkhlgypqOGC
+[00:00:00.001] (4ad0) DEBUG  Line Number: 0 | Line Width: 505
+[00:00:00.001] (4ad0) DEBUG  Pushed new height: 51
+[00:00:00.001] (4ad0) DEBUG  Chars in buffer so far: SiUJWMAVYXHK
+[00:00:00.001] (4ad0) DEBUG  Line Number: 1 | Line Width: 498
+[00:00:00.001] (4ad0) DEBUG  Pushed new height: 40
+[00:00:00.001] (4ad0) DEBUG  Chars in buffer so far: NTRPDZBEFLItoe
+[00:00:00.001] (4ad0) DEBUG  Line Number: 2 | Line Width: 486
+[00:00:00.002] (4ad0) DEBUG  Pushed last height: 40
+[00:00:00.002] (4ad0) DEBUG  Chars in buffer so far: casmunrwxvz 
+[00:00:00.002] (4ad0) DEBUG  Original Height: 208
+[00:00:00.002] (4ad0) DEBUG  New Height: 256
+[00:00:00.002] (4ad0) DEBUG  Max Width: 512, Max_Height: 256, Total Lines: 4
+[00:00:00.538] (4ad0) DEBUG  Skipped   due to no shape being generated for msdf.
+[00:00:00.885] (4ad0) DEBUG  Generated atlas to atlas0.png
