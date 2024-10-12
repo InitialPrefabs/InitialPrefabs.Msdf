@@ -1,18 +1,15 @@
 use enums::ColorType;
 use font_data::FontData;
-use image::{DynamicImage, ImageBuffer, Rgb};
+use image::{ImageBuffer, Rgb};
 use log::{debug, LevelFilter};
 use mint::Vector2;
-use msdf::{ErrorCorrectionConfig, GlyphLoader, MSDFConfig, Projection, SDFTrait};
+use msdf::{GlyphLoader, MSDFConfig, Projection, SDFTrait};
 use raw_img::{RawImage, RawImageView};
 use rayon::ThreadPoolBuilder;
-use regex::bytes::Regex;
 use simple_logging::log_to_file;
 use std::collections::HashMap;
 use std::ffi::OsStr;
-use std::io::Error;
 use std::path::Path;
-use std::result::Result;
 use std::str::Chars;
 use std::sync::{Arc, Mutex};
 use std::{fs::File, io::Read};
@@ -90,12 +87,16 @@ fn config_log_file() {
 }
 
 pub struct Builder {
-    pub glyph_bounding_boxes: Vec<GlyphBoundingBoxData>,
-    pub glyph_data: Vec<GlyphData>,
+    pub glyph_buffer: Vec<GlyphData>,
     pub atlas_offsets: Vec<(i32, i32)>,
     pub glyph_images: Vec<ImageBuffer<Rgb<f32>, Vec<f32>>>,
     pub thread_metadata: Vec<ThreadMetadata>,
     pub atlas_dimensions: (u32, u32),
+
+    ascender: i32,
+    descender: i32,
+    line_height: i32,
+    units_per_em: u32,
 }
 
 impl Builder {
@@ -110,7 +111,6 @@ impl Builder {
         let mut atlas_offsets: Vec<(i32, i32)> = Vec::with_capacity(glyph_capacity);
         let mut glyph_images: Vec<ImageBuffer<Rgb<f32>, Vec<f32>>> =
             Vec::with_capacity(glyph_capacity);
-        // let mut glyph_indices: Vec<u32> = Vec::with_capacity(glyph_capacity);
 
         if lossy_string.ends_with(".otf") || lossy_string.ends_with(".ttf") {
             let mut buffer: Vec<u8> = Vec::new();
@@ -122,6 +122,11 @@ impl Builder {
             let _ = file.read_to_end(&mut buffer);
 
             let face = Face::parse(&buffer, 0).unwrap();
+            let ascender = face.ascender() as i32;
+            let descender = face.descender() as i32;
+            let line_height = ascender + descender;
+            let units_per_em = face.units_per_em() as u32;
+
             let capacity = chars_to_generate.len();
 
             let mut glyph_bounding_boxes: Vec<GlyphBoundingBoxData> = Vec::with_capacity(capacity);
@@ -136,6 +141,7 @@ impl Builder {
             let mut y_offset: i32 = 0;
             let mut current_line_no = 0;
 
+            // TODO: It's very possible to mutlthread this
             for glyph_bounding_box in &glyph_bounding_boxes {
                 let glyph_index = glyph_bounding_box.glyph_index;
 
@@ -235,22 +241,28 @@ impl Builder {
             };
 
             return Builder {
-                glyph_bounding_boxes,
-                glyph_data: glyph_buffer,
+                glyph_buffer,
                 atlas_offsets,
                 glyph_images,
                 thread_metadata,
                 atlas_dimensions: dim,
+                ascender,
+                descender,
+                line_height,
+                units_per_em,
             };
         }
 
         Builder {
-            glyph_bounding_boxes: Vec::new(),
-            glyph_data: Vec::new(),
+            glyph_buffer: Vec::new(),
             atlas_offsets,
             glyph_images,
             thread_metadata,
             atlas_dimensions: (0, 0),
+            ascender: 0,
+            descender: 0,
+            line_height: 0,
+            units_per_em: 0,
         }
     }
 
@@ -280,7 +292,7 @@ impl Builder {
         self
     }
 
-    pub fn build_atlas(&self, path: &Path) {
+    pub fn build_atlas(&mut self, path: &Path) -> &mut Builder {
         let thread_count = self.thread_metadata.len();
         let (max_width, max_height) = self.atlas_dimensions;
 
@@ -309,7 +321,6 @@ impl Builder {
                 let arc_img_view = Arc::new(Mutex::new(raw_img_view));
                 raw_image_views.push(arc_img_view);
             }
-            thread_index += 1;
         }
 
         let pool = ThreadPoolBuilder::new()
@@ -351,6 +362,22 @@ impl Builder {
                     .expect("Failed to create the image");
             atlas.save(path).expect("Failed to save img");
         });
+
+        self
+    }
+
+    /// Constructs a new font data to send through an FFI.
+    pub fn package_font_data(&self) -> FontData {
+        let new_glyph_data = self.glyph_buffer.to_vec();
+        let glyph_data = ByteBuffer::from_vec_struct(new_glyph_data);
+
+        FontData {
+            line_height: self.line_height,
+            units_per_em: self.units_per_em,
+            ascender: self.ascender,
+            descender: self.descender,
+            glyph_data: Box::into_raw(Box::new(glyph_data)),
+        }
     }
 }
 
@@ -358,45 +385,7 @@ impl Builder {
  * We know that font_size / fonts.units_per_em() will give us the scale.
  */
 
-/// Loads an otf or ttf file.
-///
-/// # Arguments
-///
-/// * `file_path` - The absolute path to an otf or ttf file.
-///
-/// # Panics
-///
-/// If the file is not an otf or ttf font, then the method will early out and exit.
-///
-/// # Errors
-///
-/// If the file is corrupted, the file will not run.
-#[allow(unused)]
-#[warn(deprecated)]
-pub fn get_raw_font(file_path: &str) -> Result<Vec<u8>, Error> {
-    let r = Regex::new(r"\.(otf|ttf)$").unwrap();
-    if !r.is_match(file_path.as_bytes()) {
-        panic!("The file, {} is not an otf or ttf file!", file_path);
-    }
-    let mut file = File::options().read(true).write(false).open(file_path)?;
-    let mut buffer = Vec::new();
-    file.read_to_end(&mut buffer)?;
-    Ok(buffer)
-}
-
-#[warn(deprecated)]
-pub fn get_raw_font_os_string(file_path: &OsStr) -> Result<Vec<u8>, Error> {
-    let lossy_string = file_path.to_string_lossy();
-
-    if !lossy_string.ends_with(".otf") && !lossy_string.ends_with(".ttf") {
-        panic!("The file, {} is not an otf or ttf file!", lossy_string);
-    }
-    let mut file = File::options().read(true).write(false).open(file_path)?;
-    let mut buffer = Vec::new();
-    file.read_to_end(&mut buffer)?;
-    Ok(buffer)
-}
-
+/// Stores the Glyph's bounding box, the associated unicode, and its ID.
 #[derive(Clone, Copy)]
 pub struct GlyphBoundingBoxData {
     rect: Rect,
@@ -413,6 +402,7 @@ impl GlyphBoundingBoxData {
         }
     }
 
+    #[inline]
     pub fn area(&self) -> i32 {
         self.rect.width() as i32 * self.rect.height() as i32
     }
@@ -614,163 +604,5 @@ impl ThreadMetadata {
     #[inline(always)]
     fn get_slice_offsets(&self) -> (usize, usize) {
         (self.start as usize, (self.start + self.work_unit) as usize)
-    }
-}
-
-// TODO: Multithread this
-pub unsafe fn get_font_metrics(
-    raw_font_data: &[u8],
-    atlas_path: &Path,
-    chars_to_generate: String,
-    args: Args,
-) -> FontData {
-    config_log_file();
-    let face = Face::parse(raw_font_data, 0).unwrap();
-    let count = chars_to_generate.len();
-    let chars = chars_to_generate.chars();
-
-    let msdf_config: MSDFConfig = MSDFConfig {
-        overlap_support: true,
-        error_correction_config: ErrorCorrectionConfig::default(),
-    };
-
-    // Preallocated the glyph_faces and glyph data
-    let mut glyph_faces: Vec<GlyphBoundingBoxData> = Vec::with_capacity(count);
-    let mut glyph_buffer: Vec<GlyphData> = Vec::with_capacity(count);
-
-    let clear = Rgb([0.0, 0.0, 0.0]);
-
-    store_and_sort_by_area(&mut glyph_faces, &face, chars);
-
-    let (max_width, max_height, line_heights) =
-        calculate_minimum_atlas_dimensions(&glyph_faces, &args);
-    debug!(
-        "Max Width: {}, Max_Height: {}, Total Lines: {}",
-        max_width,
-        max_height,
-        line_heights.len()
-    );
-
-    let mut x_offset: i32 = 0;
-    let mut y_offset: i32 = 0;
-
-    // Create our dynamic atlas buffer
-    let mut atlas = ImageBuffer::from_pixel(max_width, max_height, clear);
-    let scale = args.get_scale();
-
-    let mut current_line_no = 0;
-
-    let radians = args.get_radians();
-
-    // If I want to split this into 2 threads doing the work concurrently, I need to calculate the
-    // minimum x offset for every subsequent thread.
-    for glyph_bounding_box in glyph_faces {
-        let glyph_index = glyph_bounding_box.glyph_index;
-
-        let (scaled_glyph_width_padding, _) =
-            glyph_bounding_box.get_scaled_glyph_dimensions_with_padding(&args);
-        let (scaled_glyph_width, scaled_glyph_height) =
-            glyph_bounding_box.get_scaled_glyph_dimensions_no_padding(&args);
-
-        // Calculate the face data
-        let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0);
-        let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
-        let bearing_y = glyph_bounding_box.calculate_bearings_y();
-
-        let (width, height) = glyph_bounding_box.get_metrics();
-
-        // Create the glyph and compute the uvs
-        let glyph_data = GlyphData::from_char(glyph_bounding_box.unicode)
-            .with_uvs(
-                Vector2 {
-                    x: x_offset,
-                    y: y_offset,
-                },
-                Vector2 {
-                    x: x_offset + scaled_glyph_width,
-                    y: y_offset + scaled_glyph_height,
-                },
-                Vector2 {
-                    x: max_width as i32,
-                    y: max_height as i32,
-                },
-                args.uv_space,
-            )
-            .with_advance(horizontal_advance)
-            .with_bearings(bearing_x, bearing_y)
-            .with_metrics(width, height);
-
-        glyph_buffer.push(glyph_data);
-
-        let opt_shape = face.load_shape(glyph_index);
-        if opt_shape.is_none() {
-            // Skip glyph generation because there is nothing to copy.
-            debug!(
-                "Skipped {} due to no shape being generated for msdf.",
-                char::from_u32(glyph_data.unicode as u32).unwrap()
-            );
-            continue;
-        }
-
-        let shape = opt_shape.unwrap();
-
-        let colored_shape = match args.color_type {
-            enums::ColorType::Simple => shape.color_edges_simple(radians),
-            enums::ColorType::InkTrap => shape.color_edges_ink_trap(radians),
-            enums::ColorType::Distance => shape.color_edges_by_distance(radians),
-        };
-
-        let translation = {
-            let this = &glyph_bounding_box;
-            Vector2 {
-                x: (-1.0 * this.rect.x_min as f64),
-                y: (-1.0 * this.rect.y_min as f64),
-            }
-        };
-        let projection = Projection { scale, translation };
-
-        let msdf_data = colored_shape.generate_msdf(
-            scaled_glyph_width as u32,
-            scaled_glyph_height as u32,
-            args.range as f64,
-            &projection,
-            &msdf_config,
-        );
-
-        let glyph_image = msdf_data.to_image();
-        let next_width = x_offset + scaled_glyph_width_padding;
-
-        if next_width >= max_width as i32 {
-            // Increment the y offset by just adding the current line's height
-            y_offset += line_heights[current_line_no];
-            current_line_no += 1;
-            // We reset the x_offset because we have to go the next row in the atlas.
-            x_offset = 0;
-        }
-
-        // Now we have to copy the glyph image to a giant data buffer which is our atlas.
-        for (x, y, pixel) in glyph_image.enumerate_pixels() {
-            let (new_x, new_y) = (x + x_offset as u32, y + y_offset as u32);
-            // We need to copy the pixel given the offset
-            atlas.put_pixel(new_x, new_y, *pixel);
-        }
-        x_offset += scaled_glyph_width_padding;
-    }
-
-    glyph_buffer.sort_unstable_by(|lhs, rhs| lhs.unicode.partial_cmp(&rhs.unicode).unwrap());
-
-    _ = DynamicImage::from(atlas).into_rgba16().save(atlas_path);
-    debug!("Generated atlas to {}", atlas_path.to_str().unwrap());
-
-    let byte_buffer = ByteBuffer::from_vec_struct(glyph_buffer);
-    let ascender = face.ascender() as i32;
-    let descender = face.descender() as i32;
-    let line_height = ascender + descender;
-    FontData {
-        line_height,
-        ascender,
-        descender,
-        units_per_em: face.units_per_em() as u32,
-        glyph_data: Box::into_raw(Box::new(byte_buffer)),
     }
 }

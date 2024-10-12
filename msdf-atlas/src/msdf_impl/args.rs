@@ -13,6 +13,7 @@ pub struct Args {
     pub color_type: ColorType,
     pub degrees: f32,
     pub scale_texture_to_po2: bool,
+    pub thread_count: u32
 }
 
 impl Args {
@@ -28,7 +29,8 @@ impl Args {
             uv_space: UVSpace::Default,
             degrees: 3.0,
             color_type: ColorType::Simple,
-            scale_texture_to_po2: false
+            scale_texture_to_po2: false,
+            thread_count: 8
         }
     }
 

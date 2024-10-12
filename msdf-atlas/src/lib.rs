@@ -2,9 +2,9 @@ use msdf_impl::{
     args::Args,
     byte_buffer::ByteBuffer,
     font_data::FontData,
-    get_font_metrics, get_raw_font_os_string,
     glyph_data::GlyphData,
     utils::{convert_u16_to_os_string, convert_u16_to_string},
+    Builder,
 };
 use std::path::Path;
 
@@ -35,8 +35,11 @@ pub unsafe extern "C" fn get_glyph_data_utf16(
     let chars = convert_u16_to_string(chars_to_generate);
 
     let atlas_path_buffer = Path::new(&atlas_path);
-    let raw_font_data = get_raw_font_os_string(font_path.as_os_str()).unwrap();
-    get_font_metrics(&raw_font_data, atlas_path_buffer, chars, args)
+
+    Builder::from_font_path(&font_path, chars, &args)
+        .prepare_workload(args.thread_count as usize)
+        .build_atlas(atlas_path_buffer)
+        .package_font_data()
 }
 
 /// Drops the byte_buffer safely from C#.
@@ -77,8 +80,8 @@ mod tests {
     use image::DynamicImage;
 
     use crate::msdf_impl::{
-        args::Args, enums::UVSpace, font_data::FontData, get_font_metrics, get_next_power_of_2,
-        get_raw_font, glyph_data::GlyphData, Builder,
+        args::Args, enums::UVSpace, font_data::FontData, get_next_power_of_2,
+        glyph_data::GlyphData, Builder,
     };
     use std::{ffi::OsStr, fs::remove_file, path::Path};
 
@@ -93,9 +96,8 @@ mod tests {
 
         let p = OsStr::new("UbuntuMonoNerdFontPropo-Regular.ttf");
         let builder = Builder::from_font_path(p, "ABC".to_string(), &args);
-        assert_eq!(builder.glyph_bounding_boxes.len(), 3);
         assert_eq!(builder.atlas_offsets.len(), 3);
-        assert_eq!(builder.glyph_data.capacity(), 3);
+        assert_eq!(builder.glyph_buffer.capacity(), 3);
         assert_eq!(builder.glyph_images.capacity(), 3);
         assert_eq!(builder.thread_metadata.capacity(), 8);
     }
@@ -110,8 +112,7 @@ mod tests {
             .with_uv_space(UVSpace::OneMinusV);
 
         let builder = Builder::from_font_path(OsStr::new(""), "ABC".to_string(), &args);
-        assert!(builder.glyph_bounding_boxes.is_empty());
-        assert!(builder.glyph_data.is_empty());
+        assert!(builder.glyph_buffer.is_empty());
         assert!(builder.atlas_offsets.is_empty());
         assert_eq!(builder.thread_metadata.capacity(), 8);
         assert!(builder.glyph_images.is_empty());
@@ -220,15 +221,19 @@ mod tests {
     }
 
     unsafe fn common_setup(
-        str: &str,
+        chars_to_generate: &str,
         atlas_path: &Path,
         args: Args,
         open_file: bool,
     ) -> (FontData, Option<DynamicImage>) {
-        let raw_font_data = get_raw_font("Roboto-Medium.ttf").unwrap();
-        let utf16: Vec<u16> = str.encode_utf16().collect();
+        let utf16: Vec<u16> = chars_to_generate.encode_utf16().collect();
         let s = String::from_utf16(&utf16).unwrap();
-        let font_data = get_font_metrics(&raw_font_data, atlas_path, s, args);
+        let font_path = OsStr::new("Roboto-Medium.ttf");
+
+        let font_data = Builder::from_font_path(font_path, s.to_string(), &args)
+            .prepare_workload(args.thread_count as usize)
+            .build_atlas(atlas_path)
+            .package_font_data();
 
         assert!(
             atlas_path.try_exists().unwrap(),
@@ -294,7 +299,7 @@ mod tests {
                 256,
                 "The image scaled too much or did not expand to the nearest power of 2."
             );
-            // remove_file_and_wait(atlas_path);
+            remove_file_and_wait(atlas_path);
         }
     }
 
@@ -314,6 +319,7 @@ mod tests {
             let (font_data, actual_img) = common_setup(s, atlas_path, args, true);
 
             let glyph_data = *font_data.glyph_data;
+
             assert_eq!(
                 glyph_data.element_len(),
                 53,
@@ -346,7 +352,7 @@ mod tests {
 
         let atlas_path = Path::new("atlas_via_builder.png");
         let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-        let font_path =  "Roboto-Medium.ttf".to_string();
+        let font_path = "Roboto-Medium.ttf".to_string();
         let os_font_path = OsStr::new(&font_path);
         Builder::from_font_path(os_font_path, s.to_string(), &args)
             .prepare_workload(1)

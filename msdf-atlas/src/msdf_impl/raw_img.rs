@@ -17,6 +17,13 @@ pub struct RawImage<'a> {
 
 #[allow(dead_code)]
 impl<'a> RawImage<'a> {
+    /// Constructs a new raw image from a Vec<u8>.
+    ///
+    /// # Arguments
+    ///
+    /// * `data` - The data to convert to an image
+    /// * `width` - The width of the image
+    /// * `height` - The height of the image
     pub fn new(data: &'a mut [Rgbu8], width: u32, height: u32) -> Self {
         Self {
             _phantom_data: PhantomData,
@@ -26,6 +33,11 @@ impl<'a> RawImage<'a> {
         }
     }
 
+    /// Post processes an array given a closure.
+    ///
+    /// # Arguments
+    ///
+    /// * `f` - A function taking an array of u8s.
     pub fn process_as_byte_array(&self, f: &dyn Fn(&[u8])) {
         unsafe {
             let total_size =
@@ -37,11 +49,18 @@ impl<'a> RawImage<'a> {
         }
     }
 
+    /// Converts an x, y coordinate to oan index
+    ///
+    /// # Arguments
+    ///
+    /// * `x` - The x position along the width
+    /// * `y` - The y position along the width
     #[inline(always)]
     fn convert_xy_to_index(&self, x: u32, y: u32) -> usize {
         (y * self.width + x) as usize
     }
 
+    /// Converts the pointer to an array of u8.
     fn convert_to_u8(&self) -> &[u8] {
         unsafe {
             let byte_ptr = self.data as *mut u8;
@@ -51,6 +70,8 @@ impl<'a> RawImage<'a> {
     }
 }
 
+/// A RawImageView provides a slice within the RawImage that we can safely write to from
+/// multiple threads.
 pub struct RawImageView<'a> {
     img: &'a RawImage<'a>,
     offset_x: u32,
@@ -64,6 +85,22 @@ unsafe impl Send for RawImageView<'_> {}
 
 #[allow(dead_code)]
 impl<'a> RawImageView<'a> {
+    /// Constructs a RawImageView as a slice from the entire RawImage
+    ///
+    /// # Arguments
+    ///
+    /// * `img` - a reference to the RawImage
+    /// * `offset_x` - The offset within the RawImage that marks the x start of this RawImageView
+    /// * `offset_y` - The offset within the Rawimage that marks the y start of this RawImageView
+    /// * `width` - The total width of this sliced image
+    /// * `height` - The total height of this sliced image
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let mut pixels: Vec<[u8; 3]> = vec![[255, 255, 255]; 100];
+    /// let img = RawImage::new(&mut pixels, 10, 10);
+    /// ```
     pub fn new(
         img: &'a RawImage<'a>,
         offset_x: u32,
