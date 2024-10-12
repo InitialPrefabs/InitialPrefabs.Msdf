@@ -39,6 +39,7 @@ impl<'a> RawImage<'a> {
         }
     }
 
+    #[inline(always)]
     fn convert_xy_to_index(&self, x: u32, y: u32) -> usize {
         (y * self.width + x) as usize
     }
@@ -61,13 +62,7 @@ pub struct RawImageView<'a> {
 }
 
 unsafe impl Send for RawImageView<'_> {}
-unsafe impl Sync for RawImageView<'_> {}
-
-impl Drop for RawImageView<'_> {
-    fn drop(&mut self) {
-        info!("Dropped raw img view");
-    }
-}
+// unsafe impl Sync for RawImageView<'_> {}
 
 #[allow(dead_code)]
 impl<'a> RawImageView<'a> {
@@ -112,6 +107,9 @@ impl<'a> RawImageView<'a> {
             .convert_xy_to_index(x + self.offset_x, y + self.offset_y);
         unsafe {
             let p = self.img.data.add(index);
+            if p.is_null() {
+                panic!("The coordinates: {}, {} does not point to a valid memory address", x, y);
+            }
             &mut *p
         }
     }

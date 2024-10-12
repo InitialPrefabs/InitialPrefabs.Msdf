@@ -283,32 +283,20 @@ impl Builder {
     }
 
     pub fn build_atlas(&self, path: &Path) {
-        let _ = log_to_file("font-metrics.log", LevelFilter::Debug);
         let (max_width, max_height) = self.atlas_dimensions;
 
-        let mut pixels: Vec<[u8; 3]> = vec![[0, 0, 0]];
+        let mut pixels: Vec<[u8; 3]> = vec![[0, 0, 0]; (max_width * max_height) as usize];
         let raw_img = RawImage::new(&mut pixels, max_width, max_height);
 
         let mut raw_image_views: Vec<Arc<Mutex<RawImageView>>> =
             Vec::with_capacity(self.thread_metadata.len());
 
-        for (idx, metadata) in self.thread_metadata.iter().enumerate() {
+        for metadata in &self.thread_metadata {
             let (start, end) = metadata.get_slice_offsets();
 
             let glyph_images: &[ImageBuffer<Rgb<f32>, Vec<f32>>] = &self.glyph_images[start..end];
             let atlas_offsets = &self.atlas_offsets[start..end];
 
-            for (local_idx, (x, y)) in atlas_offsets.iter().enumerate() {
-                let glyph_img = &glyph_images[local_idx];
-                info!(
-                    "Offset for thread: {}, x: {}, y: {}, src width: {}, src height: {}",
-                    idx,
-                    x,
-                    y,
-                    glyph_img.width(),
-                    glyph_img.height()
-                );
-            }
             for (local_idx, (offset_x, offset_y)) in atlas_offsets.iter().enumerate() {
                 let glyph_img = &glyph_images[local_idx];
                 let raw_img_view = RawImageView::new(
@@ -324,29 +312,45 @@ impl Builder {
             }
         }
 
-        // let len = self.thread_metadata.len();
-        let pool = ThreadPoolBuilder::new().num_threads(1).build().unwrap();
+        let thread_count = self.thread_metadata.len();
+        let pool = ThreadPoolBuilder::new()
+            .num_threads(thread_count)
+            .build()
+            .unwrap();
 
         let shared_target_views: Arc<Vec<Arc<Mutex<RawImageView<'_>>>>> = Arc::new(raw_image_views);
-        // let shared_src_images: Arc<&Vec<ImageBuffer<Rgb<f32>, Vec<f32>>>> =
-        //     Arc::new(&self.glyph_images);
+        let shared_src_images: Arc<&Vec<ImageBuffer<Rgb<f32>, Vec<f32>>>> =
+            Arc::new(&self.glyph_images);
 
         pool.scope(|s| {
-            let metadata = &self.thread_metadata[0];
-            let thread_target_view = shared_target_views.clone();
-            // let thread_src_images = shared_src_images.clone();
-            s.spawn(move |_| {
-                let (start, end) = metadata.get_slice_offsets();
+            for thread_id in 0..thread_count {
+                let metadata = &self.thread_metadata[thread_id];
+                let thread_target_view = shared_target_views.clone();
+                let thread_src_images = shared_src_images.clone();
+                s.spawn(move |_| {
+                    let (start, end) = metadata.get_slice_offsets();
 
-                for it in start..end {
-                    let mut target_view = thread_target_view[it].lock().unwrap();
-                    target_view.for_each_mut(&|x, y, p| {
-                        *p = [255, 0, 0];
-                    });
-                    info!("Finished writing a glyph");
-                }
-                info!("Finished writing for 1 thread");
-            });
+                    for it in start..end {
+                        let mut target_view = thread_target_view[it].lock().unwrap();
+                        let src_image = &thread_src_images[it];
+                        target_view.for_each_mut(&|x, y, p| {
+                            let pixel = src_image.get_pixel(x, y);
+                            *p = [
+                                (pixel[0].clamp(0.0, 1.0) * 255.0) as u8,
+                                (pixel[1].clamp(0.0, 1.0) * 255.0) as u8,
+                                (pixel[2].clamp(0.0, 1.0) * 255.0) as u8,
+                            ];
+                        });
+                    }
+                });
+            }
+        });
+
+        raw_img.treat_as_byte_array(&|bytes| {
+            let atlas: ImageBuffer<Rgb<u8>, &[u8]> =
+                ImageBuffer::from_raw(max_width, max_height, bytes)
+                    .expect("Failed to create the image");
+            atlas.save(path).expect("Failed to save img");
         });
     }
 }
