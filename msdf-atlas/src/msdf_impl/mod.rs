@@ -1,12 +1,10 @@
 use enums::ColorType;
 use font_data::FontData;
 use image::{DynamicImage, ImageBuffer, Rgb};
-use log::info;
 use log::{debug, LevelFilter};
 use mint::Vector2;
 use msdf::{ErrorCorrectionConfig, GlyphLoader, MSDFConfig, Projection, SDFTrait};
 use raw_img::{RawImage, RawImageView};
-use rayon::prelude::*;
 use rayon::ThreadPoolBuilder;
 use regex::bytes::Regex;
 use simple_logging::log_to_file;
@@ -94,9 +92,7 @@ fn config_log_file() {
 pub struct Builder {
     pub glyph_bounding_boxes: Vec<GlyphBoundingBoxData>,
     pub glyph_data: Vec<GlyphData>,
-    // TODO: Figure out how to store the atlas offsets and shape data
     pub atlas_offsets: Vec<(i32, i32)>,
-    // pub glyph_indices: Vec<u32>,
     pub glyph_images: Vec<ImageBuffer<Rgb<f32>, Vec<f32>>>,
     pub thread_metadata: Vec<ThreadMetadata>,
     pub atlas_dimensions: (u32, u32),
@@ -104,13 +100,14 @@ pub struct Builder {
 
 impl Builder {
     pub fn from_font_path(font_path: &OsStr, chars_to_generate: String, args: &Args) -> Self {
+        config_log_file();
         let lossy_string = font_path.to_string_lossy();
         let chars = chars_to_generate.chars();
         let thread_metadata = Vec::with_capacity(8);
 
         let glyph_capacity = chars_to_generate.len();
 
-        let mut glyph_metadata: Vec<(i32, i32)> = Vec::with_capacity(glyph_capacity);
+        let mut atlas_offsets: Vec<(i32, i32)> = Vec::with_capacity(glyph_capacity);
         let mut glyph_images: Vec<ImageBuffer<Rgb<f32>, Vec<f32>>> =
             Vec::with_capacity(glyph_capacity);
         // let mut glyph_indices: Vec<u32> = Vec::with_capacity(glyph_capacity);
@@ -147,7 +144,7 @@ impl Builder {
                 let (scaled_glyph_width, scaled_glyph_height) =
                     glyph_bounding_box.get_scaled_glyph_dimensions_no_padding(args);
 
-                let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap();
+                let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0);
                 let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
                 let bearing_y = glyph_bounding_box.calculate_bearings_y();
 
@@ -196,9 +193,12 @@ impl Builder {
                     ColorType::Distance => shape.color_edges_by_distance(radians),
                 };
 
-                let translation = Vector2 {
-                    x: (-1.0 * glyph_bounding_box.rect.x_min as f64),
-                    y: (-1.0 * glyph_bounding_box.rect.y_min as f64),
+                let translation = {
+                    let this = &glyph_bounding_box;
+                    Vector2 {
+                        x: (-1.0 * this.rect.x_min as f64),
+                        y: (-1.0 * this.rect.y_min as f64),
+                    }
                 };
                 let projection = Projection {
                     scale: args.get_scale(),
@@ -214,11 +214,8 @@ impl Builder {
                     &msdf_config,
                 );
 
-                // TODO: Store this into a vec
                 let glyph_image: ImageBuffer<Rgb<f32>, Vec<f32>> = msdf_data.to_image();
                 glyph_images.push(glyph_image);
-                glyph_metadata.push((x_offset, y_offset));
-                // glyph_indices.push(index);
 
                 let next_width = x_offset + scaled_glyph_width_padding;
                 if next_width >= max_width as i32 {
@@ -226,6 +223,7 @@ impl Builder {
                     current_line_no += 1;
                     x_offset = 0;
                 }
+                atlas_offsets.push((x_offset, y_offset));
 
                 x_offset += scaled_glyph_width_padding;
             }
@@ -239,7 +237,7 @@ impl Builder {
             return Builder {
                 glyph_bounding_boxes,
                 glyph_data: glyph_buffer,
-                atlas_offsets: glyph_metadata,
+                atlas_offsets,
                 glyph_images,
                 thread_metadata,
                 atlas_dimensions: dim,
@@ -249,7 +247,7 @@ impl Builder {
         Builder {
             glyph_bounding_boxes: Vec::new(),
             glyph_data: Vec::new(),
-            atlas_offsets: glyph_metadata,
+            atlas_offsets,
             glyph_images,
             thread_metadata,
             atlas_dimensions: (0, 0),
@@ -311,6 +309,7 @@ impl Builder {
                 let arc_img_view = Arc::new(Mutex::new(raw_img_view));
                 raw_image_views.push(arc_img_view);
             }
+            thread_index += 1;
         }
 
         let pool = ThreadPoolBuilder::new()
@@ -755,7 +754,6 @@ pub unsafe fn get_font_metrics(
             // We need to copy the pixel given the offset
             atlas.put_pixel(new_x, new_y, *pixel);
         }
-
         x_offset += scaled_glyph_width_padding;
     }
 

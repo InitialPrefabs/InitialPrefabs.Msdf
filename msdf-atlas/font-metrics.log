@@ -1,18 +1,172 @@
-[00:00:00.001] (4ad0) DEBUG  total glyphs stored: 53
-[00:00:00.001] (4ad0) DEBUG  Pushed new height: 65
-[00:00:00.001] (4ad0) DEBUG  Pushed new height: 52
-[00:00:00.001] (4ad0) DEBUG  Chars in buffer so far: jQfbdkhlgypqOGC
-[00:00:00.001] (4ad0) DEBUG  Line Number: 0 | Line Width: 505
-[00:00:00.001] (4ad0) DEBUG  Pushed new height: 51
-[00:00:00.001] (4ad0) DEBUG  Chars in buffer so far: SiUJWMAVYXHK
-[00:00:00.001] (4ad0) DEBUG  Line Number: 1 | Line Width: 498
-[00:00:00.001] (4ad0) DEBUG  Pushed new height: 40
-[00:00:00.001] (4ad0) DEBUG  Chars in buffer so far: NTRPDZBEFLItoe
-[00:00:00.001] (4ad0) DEBUG  Line Number: 2 | Line Width: 486
-[00:00:00.002] (4ad0) DEBUG  Pushed last height: 40
-[00:00:00.002] (4ad0) DEBUG  Chars in buffer so far: casmunrwxvz 
-[00:00:00.002] (4ad0) DEBUG  Original Height: 208
-[00:00:00.002] (4ad0) DEBUG  New Height: 256
-[00:00:00.002] (4ad0) DEBUG  Max Width: 512, Max_Height: 256, Total Lines: 4
-[00:00:00.538] (4ad0) DEBUG  Skipped   due to no shape being generated for msdf.
-[00:00:00.885] (4ad0) DEBUG  Generated atlas to atlas0.png
+[00:00:00.001] (6994) DEBUG  total glyphs stored: 53
+[00:00:00.001] (6994) DEBUG  Pushed new height: 65
+[00:00:00.001] (6994) DEBUG  Pushed new height: 52
+[00:00:00.001] (6994) DEBUG  Chars in buffer so far: jQfbdkhlgypqOGC
+[00:00:00.001] (6994) DEBUG  Line Number: 0 | Line Width: 505
+[00:00:00.001] (6994) DEBUG  Pushed new height: 51
+[00:00:00.002] (6994) DEBUG  Chars in buffer so far: SiUJWMAVYXHK
+[00:00:00.002] (6994) DEBUG  Line Number: 1 | Line Width: 498
+[00:00:00.002] (6994) DEBUG  Pushed new height: 40
+[00:00:00.002] (6994) DEBUG  Chars in buffer so far: NTRPDZBEFLItoe
+[00:00:00.002] (6994) DEBUG  Line Number: 2 | Line Width: 486
+[00:00:00.002] (6994) DEBUG  Pushed last height: 40
+[00:00:00.002] (6994) DEBUG  Chars in buffer so far: casmunrwxvz 
+[00:00:00.011] (6994) INFO   [0]: For glyph: j, the offsets for the x, y are: 0, 0
+[00:00:00.035] (6994) INFO   [1]: For glyph: Q, the offsets for the x, y are: 20, 0
+[00:00:00.042] (6994) INFO   [2]: For glyph: f, the offsets for the x, y are: 63, 0
+[00:00:00.057] (6994) INFO   [3]: For glyph: b, the offsets for the x, y are: 89, 0
+[00:00:00.071] (6994) INFO   [4]: For glyph: d, the offsets for the x, y are: 124, 0
+[00:00:00.078] (6994) INFO   [5]: For glyph: k, the offsets for the x, y are: 159, 0
+[00:00:00.086] (6994) INFO   [6]: For glyph: h, the offsets for the x, y are: 194, 0
+[00:00:00.087] (6994) INFO   [7]: For glyph: l, the offsets for the x, y are: 227, 0
+[00:00:00.105] (6994) INFO   [8]: For glyph: g, the offsets for the x, y are: 240, 0
+[00:00:00.113] (6994) INFO   [9]: For glyph: y, the offsets for the x, y are: 275, 0
+[00:00:00.127] (6994) INFO   [10]: For glyph: p, the offsets for the x, y are: 310, 0
+[00:00:00.141] (6994) INFO   [11]: For glyph: q, the offsets for the x, y are: 345, 0
+[00:00:00.161] (6994) INFO   [12]: For glyph: O, the offsets for the x, y are: 380, 0
+[00:00:00.177] (6994) INFO   [13]: For glyph: G, the offsets for the x, y are: 423, 0
+[00:00:00.196] (6994) INFO   [14]: For glyph: C, the offsets for the x, y are: 464, 0
+[00:00:00.215] (6994) INFO   [15]: For glyph: S, the offsets for the x, y are: 505, 0
+[00:00:00.219] (6994) INFO   [16]: For glyph: i, the offsets for the x, y are: 39, 65
+[00:00:00.228] (6994) INFO   [17]: For glyph: U, the offsets for the x, y are: 53, 65
+[00:00:00.237] (6994) INFO   [18]: For glyph: J, the offsets for the x, y are: 92, 65
+[00:00:00.248] (6994) INFO   [19]: For glyph: W, the offsets for the x, y are: 127, 65
+[00:00:00.259] (6994) INFO   [20]: For glyph: M, the offsets for the x, y are: 186, 65
+[00:00:00.270] (6994) INFO   [21]: For glyph: A, the offsets for the x, y are: 238, 65
+[00:00:00.277] (6994) INFO   [22]: For glyph: V, the offsets for the x, y are: 285, 65
+[00:00:00.284] (6994) INFO   [23]: For glyph: Y, the offsets for the x, y are: 330, 65
+[00:00:00.292] (6994) INFO   [24]: For glyph: X, the offsets for the x, y are: 373, 65
+[00:00:00.299] (6994) INFO   [25]: For glyph: H, the offsets for the x, y are: 416, 65
+[00:00:00.307] (6994) INFO   [26]: For glyph: K, the offsets for the x, y are: 457, 65
+[00:00:00.314] (6994) INFO   [27]: For glyph: N, the offsets for the x, y are: 498, 65
+[00:00:00.320] (6994) INFO   [28]: For glyph: T, the offsets for the x, y are: 41, 117
+[00:00:00.335] (6994) INFO   [29]: For glyph: R, the offsets for the x, y are: 82, 117
+[00:00:00.348] (6994) INFO   [30]: For glyph: P, the offsets for the x, y are: 121, 117
+[00:00:00.362] (6994) INFO   [31]: For glyph: D, the offsets for the x, y are: 160, 117
+[00:00:00.368] (6994) INFO   [32]: For glyph: Z, the offsets for the x, y are: 199, 117
+[00:00:00.388] (6994) INFO   [33]: For glyph: B, the offsets for the x, y are: 238, 117
+[00:00:00.394] (6994) INFO   [34]: For glyph: E, the offsets for the x, y are: 275, 117
+[00:00:00.400] (6994) INFO   [35]: For glyph: F, the offsets for the x, y are: 310, 117
+[00:00:00.404] (6994) INFO   [36]: For glyph: L, the offsets for the x, y are: 344, 117
+[00:00:00.406] (6994) INFO   [37]: For glyph: I, the offsets for the x, y are: 378, 117
+[00:00:00.411] (6994) INFO   [38]: For glyph: t, the offsets for the x, y are: 391, 117
+[00:00:00.423] (6994) INFO   [39]: For glyph: o, the offsets for the x, y are: 415, 117
+[00:00:00.435] (6994) INFO   [40]: For glyph: e, the offsets for the x, y are: 451, 117
+[00:00:00.445] (6994) INFO   [41]: For glyph: c, the offsets for the x, y are: 486, 117
+[00:00:00.460] (6994) INFO   [42]: For glyph: a, the offsets for the x, y are: 34, 168
+[00:00:00.473] (6994) INFO   [43]: For glyph: s, the offsets for the x, y are: 68, 168
+[00:00:00.487] (6994) INFO   [44]: For glyph: m, the offsets for the x, y are: 101, 168
+[00:00:00.492] (6994) INFO   [45]: For glyph: u, the offsets for the x, y are: 154, 168
+[00:00:00.498] (6994) INFO   [46]: For glyph: n, the offsets for the x, y are: 187, 168
+[00:00:00.502] (6994) INFO   [47]: For glyph: r, the offsets for the x, y are: 220, 168
+[00:00:00.509] (6994) INFO   [48]: For glyph: w, the offsets for the x, y are: 243, 168
+[00:00:00.514] (6994) INFO   [49]: For glyph: x, the offsets for the x, y are: 293, 168
+[00:00:00.518] (6994) INFO   [50]: For glyph: v, the offsets for the x, y are: 328, 168
+[00:00:00.523] (6994) INFO   [51]: For glyph: z, the offsets for the x, y are: 363, 168
+[00:00:00.523] (6994) DEBUG  Skipped   due to no shape being generated for msdf.
+[00:00:00.523] (6994) INFO   For thread: 0, start at 0 and ending at: 52
+[00:00:00.523] (6994) INFO   [0]: Generating offset at: 0, 0
+[00:00:00.523] (6994) INFO   [1]: Generating offset at: 20, 0
+[00:00:00.523] (6994) INFO   [2]: Generating offset at: 63, 0
+[00:00:00.523] (6994) INFO   [3]: Generating offset at: 89, 0
+[00:00:00.523] (6994) INFO   [4]: Generating offset at: 124, 0
+[00:00:00.523] (6994) INFO   [5]: Generating offset at: 159, 0
+[00:00:00.523] (6994) INFO   [6]: Generating offset at: 194, 0
+[00:00:00.523] (6994) INFO   [7]: Generating offset at: 227, 0
+[00:00:00.523] (6994) INFO   [8]: Generating offset at: 240, 0
+[00:00:00.523] (6994) INFO   [9]: Generating offset at: 275, 0
+[00:00:00.524] (6994) INFO   [10]: Generating offset at: 310, 0
+[00:00:00.524] (6994) INFO   [11]: Generating offset at: 345, 0
+[00:00:00.524] (6994) INFO   [12]: Generating offset at: 380, 0
+[00:00:00.524] (6994) INFO   [13]: Generating offset at: 423, 0
+[00:00:00.524] (6994) INFO   [14]: Generating offset at: 464, 0
+[00:00:00.524] (6994) INFO   [15]: Generating offset at: 0, 65
+[00:00:00.524] (6994) INFO   [16]: Generating offset at: 39, 65
+[00:00:00.524] (6994) INFO   [17]: Generating offset at: 53, 65
+[00:00:00.524] (6994) INFO   [18]: Generating offset at: 92, 65
+[00:00:00.524] (6994) INFO   [19]: Generating offset at: 127, 65
+[00:00:00.524] (6994) INFO   [20]: Generating offset at: 186, 65
+[00:00:00.524] (6994) INFO   [21]: Generating offset at: 238, 65
+[00:00:00.524] (6994) INFO   [22]: Generating offset at: 285, 65
+[00:00:00.524] (6994) INFO   [23]: Generating offset at: 330, 65
+[00:00:00.525] (6994) INFO   [24]: Generating offset at: 373, 65
+[00:00:00.525] (6994) INFO   [25]: Generating offset at: 416, 65
+[00:00:00.525] (6994) INFO   [26]: Generating offset at: 457, 65
+[00:00:00.525] (6994) INFO   [27]: Generating offset at: 0, 117
+[00:00:00.525] (6994) INFO   [28]: Generating offset at: 41, 117
+[00:00:00.525] (6994) INFO   [29]: Generating offset at: 82, 117
+[00:00:00.525] (6994) INFO   [30]: Generating offset at: 121, 117
+[00:00:00.525] (6994) INFO   [31]: Generating offset at: 160, 117
+[00:00:00.525] (6994) INFO   [32]: Generating offset at: 199, 117
+[00:00:00.525] (6994) INFO   [33]: Generating offset at: 238, 117
+[00:00:00.525] (6994) INFO   [34]: Generating offset at: 275, 117
+[00:00:00.525] (6994) INFO   [35]: Generating offset at: 310, 117
+[00:00:00.525] (6994) INFO   [36]: Generating offset at: 344, 117
+[00:00:00.525] (6994) INFO   [37]: Generating offset at: 378, 117
+[00:00:00.526] (6994) INFO   [38]: Generating offset at: 391, 117
+[00:00:00.526] (6994) INFO   [39]: Generating offset at: 415, 117
+[00:00:00.526] (6994) INFO   [40]: Generating offset at: 451, 117
+[00:00:00.526] (6994) INFO   [41]: Generating offset at: 0, 168
+[00:00:00.526] (6994) INFO   [42]: Generating offset at: 34, 168
+[00:00:00.526] (6994) INFO   [43]: Generating offset at: 68, 168
+[00:00:00.526] (6994) INFO   [44]: Generating offset at: 101, 168
+[00:00:00.526] (6994) INFO   [45]: Generating offset at: 154, 168
+[00:00:00.526] (6994) INFO   [46]: Generating offset at: 187, 168
+[00:00:00.526] (6994) INFO   [47]: Generating offset at: 220, 168
+[00:00:00.526] (6994) INFO   [48]: Generating offset at: 243, 168
+[00:00:00.526] (6994) INFO   [49]: Generating offset at: 293, 168
+[00:00:00.526] (6994) INFO   [50]: Generating offset at: 328, 168
+[00:00:00.526] (6994) INFO   [51]: Generating offset at: 363, 168
+[00:00:00.527] (6994) INFO   Before building for thread: 0
+[00:00:00.527] (6994) INFO   [0], Building the raw image view at offset: 0, 0
+[00:00:00.527] (6994) INFO   [1], Building the raw image view at offset: 20, 0
+[00:00:00.527] (6994) INFO   [2], Building the raw image view at offset: 63, 0
+[00:00:00.527] (6994) INFO   [3], Building the raw image view at offset: 89, 0
+[00:00:00.527] (6994) INFO   [4], Building the raw image view at offset: 124, 0
+[00:00:00.527] (6994) INFO   [5], Building the raw image view at offset: 159, 0
+[00:00:00.527] (6994) INFO   [6], Building the raw image view at offset: 194, 0
+[00:00:00.527] (6994) INFO   [7], Building the raw image view at offset: 227, 0
+[00:00:00.527] (6994) INFO   [8], Building the raw image view at offset: 240, 0
+[00:00:00.527] (6994) INFO   [9], Building the raw image view at offset: 275, 0
+[00:00:00.527] (6994) INFO   [10], Building the raw image view at offset: 310, 0
+[00:00:00.527] (6994) INFO   [11], Building the raw image view at offset: 345, 0
+[00:00:00.528] (6994) INFO   [12], Building the raw image view at offset: 380, 0
+[00:00:00.528] (6994) INFO   [13], Building the raw image view at offset: 423, 0
+[00:00:00.528] (6994) INFO   [14], Building the raw image view at offset: 464, 0
+[00:00:00.528] (6994) INFO   [15], Building the raw image view at offset: 0, 65
+[00:00:00.528] (6994) INFO   [16], Building the raw image view at offset: 39, 65
+[00:00:00.528] (6994) INFO   [17], Building the raw image view at offset: 53, 65
+[00:00:00.528] (6994) INFO   [18], Building the raw image view at offset: 92, 65
+[00:00:00.528] (6994) INFO   [19], Building the raw image view at offset: 127, 65
+[00:00:00.528] (6994) INFO   [20], Building the raw image view at offset: 186, 65
+[00:00:00.528] (6994) INFO   [21], Building the raw image view at offset: 238, 65
+[00:00:00.528] (6994) INFO   [22], Building the raw image view at offset: 285, 65
+[00:00:00.528] (6994) INFO   [23], Building the raw image view at offset: 330, 65
+[00:00:00.528] (6994) INFO   [24], Building the raw image view at offset: 373, 65
+[00:00:00.528] (6994) INFO   [25], Building the raw image view at offset: 416, 65
+[00:00:00.529] (6994) INFO   [26], Building the raw image view at offset: 457, 65
+[00:00:00.529] (6994) INFO   [27], Building the raw image view at offset: 0, 117
+[00:00:00.529] (6994) INFO   [28], Building the raw image view at offset: 41, 117
+[00:00:00.529] (6994) INFO   [29], Building the raw image view at offset: 82, 117
+[00:00:00.529] (6994) INFO   [30], Building the raw image view at offset: 121, 117
+[00:00:00.529] (6994) INFO   [31], Building the raw image view at offset: 160, 117
+[00:00:00.529] (6994) INFO   [32], Building the raw image view at offset: 199, 117
+[00:00:00.529] (6994) INFO   [33], Building the raw image view at offset: 238, 117
+[00:00:00.529] (6994) INFO   [34], Building the raw image view at offset: 275, 117
+[00:00:00.529] (6994) INFO   [35], Building the raw image view at offset: 310, 117
+[00:00:00.529] (6994) INFO   [36], Building the raw image view at offset: 344, 117
+[00:00:00.529] (6994) INFO   [37], Building the raw image view at offset: 378, 117
+[00:00:00.529] (6994) INFO   [38], Building the raw image view at offset: 391, 117
+[00:00:00.529] (6994) INFO   [39], Building the raw image view at offset: 415, 117
+[00:00:00.530] (6994) INFO   [40], Building the raw image view at offset: 451, 117
+[00:00:00.530] (6994) INFO   [41], Building the raw image view at offset: 0, 168
+[00:00:00.530] (6994) INFO   [42], Building the raw image view at offset: 34, 168
+[00:00:00.530] (6994) INFO   [43], Building the raw image view at offset: 68, 168
+[00:00:00.530] (6994) INFO   [44], Building the raw image view at offset: 101, 168
+[00:00:00.530] (6994) INFO   [45], Building the raw image view at offset: 154, 168
+[00:00:00.530] (6994) INFO   [46], Building the raw image view at offset: 187, 168
+[00:00:00.530] (6994) INFO   [47], Building the raw image view at offset: 220, 168
+[00:00:00.530] (6994) INFO   [48], Building the raw image view at offset: 243, 168
+[00:00:00.530] (6994) INFO   [49], Building the raw image view at offset: 293, 168
+[00:00:00.530] (6994) INFO   [50], Building the raw image view at offset: 328, 168
+[00:00:00.530] (6994) INFO   [51], Building the raw image view at offset: 363, 168

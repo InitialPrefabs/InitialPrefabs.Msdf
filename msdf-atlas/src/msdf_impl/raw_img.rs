@@ -2,8 +2,6 @@ use std::marker::PhantomData;
 use std::mem;
 use std::slice::{self, from_raw_parts};
 
-use log::info;
-
 #[allow(dead_code)]
 type Rgbu8 = [u8; 3];
 
@@ -138,8 +136,8 @@ mod tests {
         let img = RawImage::new(&mut pixels, 10, 10);
         let pool = ThreadPoolBuilder::new().num_threads(2).build().unwrap();
 
-        let mut v1 = RawImageView::new(&img, 0, 0, 5, 10);
-        let mut v2 = RawImageView::new(&img, 5, 0, 5, 10);
+        let v1 = RawImageView::new(&img, 0, 0, 5, 10);
+        let v2 = RawImageView::new(&img, 5, 0, 5, 10);
 
         let mut images = Vec::with_capacity(2);
         images.push(Arc::new(Mutex::new(v1)));
@@ -155,7 +153,7 @@ mod tests {
                 s.spawn(move |_| {
                     let color = if i == 0 { red } else { blue };
                     let m = &mut v[i].lock().unwrap();
-                    m.for_each_mut(&|x, y, p| {
+                    m.for_each_mut(&|_, _, p| {
                         *p = color;
                     });
                 });

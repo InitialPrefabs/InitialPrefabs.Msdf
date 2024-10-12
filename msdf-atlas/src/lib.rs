@@ -349,7 +349,7 @@ mod tests {
         let font_path =  "Roboto-Medium.ttf".to_string();
         let os_font_path = OsStr::new(&font_path);
         Builder::from_font_path(os_font_path, s.to_string(), &args)
-            .prepare_workload(8)
+            .prepare_workload(1)
             .build_atlas(atlas_path);
     }
 
