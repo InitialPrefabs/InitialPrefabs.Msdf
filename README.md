@@ -93,3 +93,7 @@ The `msdf-atlas` is a rust project which generates a dll. You are welcome to use
 that the glyph data is returned as pointer so you will need to reinterpret it back to its structured data.
 
 Please view `byte_buffer.rs` tests and source code to see how to interpret a pointer at an index to `GlyphData`.
+
+## Acknowledgements
+* Viktor Chlumský for the master thesis and providing MSDFGen to play around with.
+* [Cysharp's csbindgen](https://github.com/Cysharp/csbindgen/) for an automated code generation of bindings from Rust -> C#.
