@@ -157,46 +157,45 @@ impl Builder {
                 let (width, height) = glyph_bounding_box.get_metrics();
 
                 let opt_shape = face.load_shape(glyph_index);
-                if opt_shape.is_none() {
+                if opt_shape.is_some() {
+                    let shape = opt_shape.unwrap();
+                    let radians = args.get_radians();
+
+                    let colored_shape = match args.color_type {
+                        ColorType::Simple => shape.color_edges_simple(radians),
+                        ColorType::InkTrap => shape.color_edges_ink_trap(radians),
+                        ColorType::Distance => shape.color_edges_by_distance(radians),
+                    };
+
+                    let translation = {
+                        let this = &glyph_bounding_box;
+                        Vector2 {
+                            x: (-1.0 * this.rect.x_min as f64),
+                            y: (-1.0 * this.rect.y_min as f64),
+                        }
+                    };
+                    let projection = Projection {
+                        scale: args.get_scale(),
+                        translation,
+                    };
+
+                    let msdf_config: MSDFConfig = Default::default();
+                    let msdf_data = colored_shape.generate_msdf(
+                        scaled_glyph_width as u32,
+                        scaled_glyph_height as u32,
+                        args.range as f64,
+                        &projection,
+                        &msdf_config,
+                    );
+
+                    let glyph_image: ImageBuffer<Rgb<f32>, Vec<f32>> = msdf_data.to_image();
+                    glyph_images.push(glyph_image);
+                } else {
                     debug!(
                         "Skipped {} due to no shape being generated for msdf.",
                         glyph_bounding_box.unicode
                     );
-                    continue;
                 }
-
-                let shape = opt_shape.unwrap();
-                let radians = args.get_radians();
-
-                let colored_shape = match args.color_type {
-                    ColorType::Simple => shape.color_edges_simple(radians),
-                    ColorType::InkTrap => shape.color_edges_ink_trap(radians),
-                    ColorType::Distance => shape.color_edges_by_distance(radians),
-                };
-
-                let translation = {
-                    let this = &glyph_bounding_box;
-                    Vector2 {
-                        x: (-1.0 * this.rect.x_min as f64),
-                        y: (-1.0 * this.rect.y_min as f64),
-                    }
-                };
-                let projection = Projection {
-                    scale: args.get_scale(),
-                    translation,
-                };
-
-                let msdf_config: MSDFConfig = Default::default();
-                let msdf_data = colored_shape.generate_msdf(
-                    scaled_glyph_width as u32,
-                    scaled_glyph_height as u32,
-                    args.range as f64,
-                    &projection,
-                    &msdf_config,
-                );
-
-                let glyph_image: ImageBuffer<Rgb<f32>, Vec<f32>> = msdf_data.to_image();
-                glyph_images.push(glyph_image);
 
                 let next_width = x_offset + scaled_glyph_width_padding;
                 if next_width >= max_width as i32 {
@@ -235,11 +234,7 @@ impl Builder {
                 x_offset += scaled_glyph_width_padding;
             }
 
-            let dim = if args.scale_texture_to_po2 {
-                (max_width, get_next_power_of_2(max_height as i32) as u32)
-            } else {
-                (max_width, max_height)
-            };
+            let dim = (max_width, max_height);
 
             return Builder {
                 glyph_buffer,

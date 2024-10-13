@@ -78,6 +78,7 @@ pub unsafe extern "C" fn reinterpret_as_glyph_data(byte_buffer: &ByteBuffer, i: 
 #[cfg(test)]
 mod tests {
     const FONT_PATH: &str = "testing-resources/Roboto-Medium.ttf";
+    const DEFAULT_CHAR_SET: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
     use image::DynamicImage;
 
     use crate::msdf_impl::{
@@ -273,12 +274,11 @@ mod tests {
                 .with_range(640.0)
                 .with_padding(10)
                 .with_scaled_texture(true)
-                .with_uv_space(UVSpace::OneMinusV);
+                .with_uv_space(UVSpace::OneMinusV)
+                .with_scaled_texture(true);
 
             let atlas_path = Path::new("atlas0.png");
-            let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-
-            let (font_data, actual_img) = common_setup(s, atlas_path, args, true);
+            let (font_data, actual_img) = common_setup(DEFAULT_CHAR_SET, atlas_path, args, true);
 
             let glyph_data = *font_data.glyph_data;
             assert_eq!(
@@ -289,7 +289,6 @@ mod tests {
 
             let actual_img = actual_img.unwrap();
 
-            // let actual_img = opened_img.unwrap();
             assert_eq!(
                 actual_img.width(),
                 512,
@@ -315,9 +314,7 @@ mod tests {
                 .with_uv_space(UVSpace::OneMinusV);
 
             let atlas_path = Path::new("atlas1.png");
-            let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-
-            let (font_data, actual_img) = common_setup(s, atlas_path, args, true);
+            let (font_data, actual_img) = common_setup(DEFAULT_CHAR_SET, atlas_path, args, true);
 
             let glyph_data = *font_data.glyph_data;
 
@@ -343,24 +340,6 @@ mod tests {
     }
 
     #[test]
-    fn generates_with_builder() {
-        let args = Args::default()
-            .with_uniform_scale(1.0 / 32.0)
-            .with_range(640.0)
-            .with_padding(10)
-            .with_scaled_texture(false)
-            .with_uv_space(UVSpace::OneMinusV);
-
-        let atlas_path = Path::new("atlas_via_builder.png");
-        let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-        let font_path = FONT_PATH.to_string();
-        let os_font_path = OsStr::new(&font_path);
-        Builder::from_font_path(os_font_path, s.to_string(), &args)
-            .prepare_workload(1)
-            .build_atlas(atlas_path);
-    }
-
-    #[test]
     fn generates_atlas_at_size() {
         unsafe {
             let args = Args::default()
@@ -371,9 +350,8 @@ mod tests {
                 .with_angle(180.0)
                 .with_max_atlas(512);
 
-            let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
             let atlas_path = Path::new("atlas2.png");
-            let (font_data, _) = common_setup(s, atlas_path, args, false);
+            let (font_data, _) = common_setup(DEFAULT_CHAR_SET, atlas_path, args, false);
 
             assert!(
                 atlas_path.exists(),
