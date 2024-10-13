@@ -128,6 +128,22 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 }
             });
 
+            var maxAtlasWidthSlider = root.Q<SliderInt>("width");
+            maxAtlasWidthSlider.value = (int)maxAtlasWidthProp.uintValue;
+            // TODO: Create an array of power of 2s, the slider will just be a min max between 0..len()
+            maxAtlasWidthSlider.RegisterValueChangedCallback(changeEvt => {
+                using var _ = new SerializedObjectScope(serializedObject);
+                var delta = Mathf.Clamp(changeEvt.newValue - changeEvt.previousValue, -1, 1);
+                var power = delta switch {
+                    1 => Mathf.RoundToInt(Mathf.Ceil(Mathf.Log(changeEvt.newValue, 2))),
+                    -1 => Mathf.RoundToInt(Mathf.Floor(Mathf.Log(changeEvt.newValue, 2))),
+                    _ => Mathf.RoundToInt(Mathf.Log(changeEvt.newValue, 2))
+                };
+                var value = Mathf.Clamp(1 << power, 128, 4096);
+                // maxAtlasWidthSlider.value =value;
+                maxAtlasWidthProp.uintValue = (uint)value;
+            });
+
             root.Q<FloatField>("range").BindProperty(rangeProp);
             // root.Q<EnumField>("scale").BindProperty(uniformScaleProp);
             root.Q<UnsignedIntegerField>("padding").BindProperty(paddingProp);
