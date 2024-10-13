@@ -72,11 +72,9 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Custom files
-Assets/com.initialprefabs.msdfgen/Example
-Assets/com.initialprefabs.msdfgen/Example.meta
 msdf-impl/target
 msdf-atlas/target
-*.png
+msdf-atlas/*.png
 Assets/ShaderlabVSCode
 Assets/ShaderlabVSCode.meta
 msdf-atlas/.bacon-locations
@@ -84,3 +82,4 @@ msdf-atlas/test.cs
 .idea
 msdf-atlas/MsdfAtlas.cs
 msdf-atlas/font-metrics.log
+font-metrics.log
