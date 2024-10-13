@@ -77,6 +77,8 @@ namespace InitialPrefabs.Msdf.EditorExtensions
         public UVSpace uv_space;
         public ColorType color_type;
         public float degrees;
+        [MarshalAs(UnmanagedType.U1)] public bool scale_texture_to_po2;
+        public uint thread_count;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -93,6 +95,7 @@ namespace InitialPrefabs.Msdf.EditorExtensions
     {
         public int unicode;
         public float advance;
+        [MarshalAs(UnmanagedType.U1)] public bool has_bitmap;
         public float metrics_x;
         public float metrics_y;
         public float bearings_x;

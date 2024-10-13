@@ -12,8 +12,8 @@ if ($release) {
     cargo build --release
     $dllSource = "target/release/msdf_atlas.dll"
 } else {
-    $dllSource = "target/debug/msdf_atlas.dll"
     cargo build
+    $dllSource = "target/debug/msdf_atlas.dll"
 }
 
 Copy-Item -Path $dllSource -Destination $dllTarget

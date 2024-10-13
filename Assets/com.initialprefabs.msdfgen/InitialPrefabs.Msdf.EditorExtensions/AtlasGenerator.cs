@@ -6,17 +6,15 @@ using UnityEngine.UIElements;
 
 namespace InitialPrefabs.Msdf.EditorExtensions {
 
-    public readonly ref struct SerializedObjectScope {
-        private readonly SerializedObject serializedObject;
-
-        public SerializedObjectScope(SerializedObject serializedObject) {
-            this.serializedObject = serializedObject;
-            this.serializedObject.Update();
-        }
-
-        public void Dispose() {
-            serializedObject.ApplyModifiedProperties();
-        }
+    /// <summary>
+    /// The amount to downscale our atlas by.
+    /// </summary>
+    public enum UniformScaleOptions {
+        _8 = 8,
+        _16 = 16,
+        _32 = 32,
+        _64 = 64,
+        _128 = 128,
     }
 
     public class AtlasGenerator : EditorWindow {
@@ -24,10 +22,10 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
         private VisualTreeAsset m_VisualTreeAsset = default;
 
         [MenuItem("Tools/InitialPrefabs/AtlasGenerator")]
-        public static void ShowExample() {
+        public static void ShowWindow() {
             var wnd = GetWindow<AtlasGenerator>();
-            wnd.minSize = new Vector2(400, 325);
-            wnd.maxSize = new Vector2(400, 350);
+            wnd.minSize = new Vector2(400, 400);
+            wnd.maxSize = new Vector2(400, 400);
             wnd.titleContent = new GUIContent("AtlasGenerator");
         }
 
@@ -44,6 +42,8 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
         private SerializedProperty uvSpaceProp;
         private SerializedProperty colorTypeProp;
         private SerializedProperty degreesProp;
+        private SerializedProperty threadCountProp;
+        private SerializedProperty scaleToPO2Prop;
 
         private void OnEnable() {
             var guids = AssetDatabase.FindAssets("t: GeneratorSettings");
@@ -72,6 +72,8 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
             uvSpaceProp = generatorArgsProp.FindPropertyRelative(nameof(Args.uv_space));
             colorTypeProp = generatorArgsProp.FindPropertyRelative(nameof(Args.color_type));
             degreesProp = generatorArgsProp.FindPropertyRelative(nameof(Args.degrees));
+            threadCountProp = generatorArgsProp.FindPropertyRelative(nameof(Args.thread_count));
+            scaleToPO2Prop = generatorArgsProp.FindPropertyRelative(nameof(Args.scale_texture_to_po2));
 
             rootVisualElement.Bind(serializedObject);
         }
@@ -99,7 +101,7 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
 
             var dirLabel = root.Q<Label>("dir-label");
             var export = root.Q<Button>("export");
-            root.schedule.Execute(timerState => {
+            _ = root.schedule.Execute(timerState => {
                 export.SetEnabled(fontProp.objectReferenceValue != null);
                 dirLabel.text = resourcePathProp.stringValue;
             }).Every(500);
@@ -114,13 +116,27 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 }
             });
 
+            var scaleField = root.Q<EnumField>("scale");
+            scaleField.value = (UniformScaleOptions)Mathf.RoundToInt(1.0f / uniformScaleProp.floatValue);
+
+            _ = scaleField.RegisterValueChangedCallback(changeEvt => {
+                if (changeEvt.previousValue != changeEvt.newValue) {
+                    serializedObject.Update();
+                    var uniformScale = 1.0f / (int)(UniformScaleOptions)changeEvt.newValue;
+                    uniformScaleProp.floatValue = uniformScale;
+                    _ = serializedObject.ApplyModifiedProperties();
+                }
+            });
+
             root.Q<FloatField>("range").BindProperty(rangeProp);
-            root.Q<FloatField>("scale").BindProperty(uniformScaleProp);
+            // root.Q<EnumField>("scale").BindProperty(uniformScaleProp);
             root.Q<UnsignedIntegerField>("padding").BindProperty(paddingProp);
             root.Q<UnsignedIntegerField>("width").BindProperty(maxAtlasWidthProp);
-            root.Q<EnumField>("uvspace").BindProperty(uvSpaceProp);
+            root.Q<EnumFlagsField>("uvspace").BindProperty(uvSpaceProp);
             root.Q<EnumField>("colortype").BindProperty(colorTypeProp);
             root.Q<Slider>("degrees").BindProperty(degreesProp);
+            root.Q<SliderInt>("thread-count").BindProperty(threadCountProp);
+            root.Q<Toggle>("scale-to-po2").BindProperty(scaleToPO2Prop);
 
             root.Q<Button>("export").RegisterCallback<MouseUpEvent>(mouseUpEvent => {
                 var font = fontProp.objectReferenceValue;
@@ -163,8 +179,8 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 Debug.Log(soPath);
 
                 AssetDatabase.CreateAsset(serializedFontData, soPath);
-                AssetDatabase.ImportAsset(fontPath);
                 AssetDatabase.SaveAssets();
+                AssetDatabase.ImportAsset(fontPath);
             });
         }
     }

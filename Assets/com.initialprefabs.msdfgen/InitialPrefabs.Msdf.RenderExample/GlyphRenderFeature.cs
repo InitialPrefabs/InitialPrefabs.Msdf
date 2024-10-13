@@ -24,7 +24,7 @@ namespace InitialPrefabs.Msdf.RenderExample {
         }
 
         private struct GlyphComparer : IComparer<RuntimeGlyphData> {
-            public int Compare(RuntimeGlyphData x, RuntimeGlyphData y) {
+            public readonly int Compare(RuntimeGlyphData x, RuntimeGlyphData y) {
                 return x.Unicode.CompareTo(y.Unicode);
             }
         }
@@ -87,6 +87,7 @@ namespace InitialPrefabs.Msdf.RenderExample {
                         default(GlyphComparer));
 
                     if (idx < 0) {
+                        Debug.Log($"Skipped {c} | {(int)c}");
                         continue;
                     }
 

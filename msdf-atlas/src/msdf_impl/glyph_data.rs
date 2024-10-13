@@ -1,5 +1,5 @@
 use std::fmt::{Display, Formatter, Result};
-
+use log::debug;
 use mint::Vector2;
 use ttf_parser::Face;
 use super::enums::UVSpace;
@@ -93,21 +93,24 @@ impl GlyphData {
         self
     }
 
-    pub fn with_uvs(mut self, start: Vector2<i32>, end: Vector2<i32>, dimensions: Vector2<i32>, uv_space: UVSpace) -> GlyphData {
-        let width = dimensions.x as f32;
-        let height = dimensions.y as f32;
+    pub fn with_uvs(mut self, start: Vector2<i32>, end: Vector2<i32>, atlas_dimensions: Vector2<i32>, uv_space: UVSpace) -> GlyphData {
+        let width = atlas_dimensions.x as f32;
+        let height = atlas_dimensions.y as f32;
 
-        let x_min = start.x as f32 / width;
-        let y_min = start.y as f32 / height;
+        let x_min = (start.x as f32 / width).clamp(0.0, 1.0);
+        let y_min = (start.y as f32 / height).clamp(0.0, 1.0);
 
-        let x_max = end.x as f32 / width;
-        let y_max = end.y as f32 / height;
+        let x_max = (end.x as f32 / width).clamp(0.0, 1.0);
+        let y_max = (end.y as f32 / height).clamp(0.0,1.0);
 
         self.uv_x = if uv_space & UVSpace::OneMinusU > UVSpace::Default { 1.0 - x_min } else { x_min };
         self.uv_y = if uv_space & UVSpace::OneMinusV > UVSpace::Default { 1.0 - y_max } else { y_min };
 
         self.uv_z = if uv_space & UVSpace::OneMinusU > UVSpace::Default { 1.0 - x_max } else { x_max };
         self.uv_w = if uv_space & UVSpace::OneMinusV > UVSpace::Default { 1.0 - y_min } else { y_max };
+
+        debug!("For unicode: {}, min uv: {}, {}, max uv: {}, {}, with uv space: {}", 
+            char::from_u32(self.unicode as u32).unwrap_or_default(), self.uv_x, self.uv_y, self.uv_z, self.uv_w, uv_space);
 
         self
     }

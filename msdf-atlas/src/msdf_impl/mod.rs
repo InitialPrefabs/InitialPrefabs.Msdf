@@ -83,7 +83,7 @@ fn config_log_file() {
 
 #[cfg(not(test))]
 fn config_log_file() {
-    let _ = log_to_file("font-metrics.log", LevelFilter::Error);
+    let _ = log_to_file("font-metrics.log", LevelFilter::Debug);
 }
 
 pub struct Builder {
@@ -152,40 +152,15 @@ impl Builder {
 
                 let horizontal_advance = face.glyph_hor_advance(glyph_index).unwrap_or(0);
                 let bearing_x = face.glyph_hor_side_bearing(glyph_index).unwrap();
-                let bearing_y = glyph_bounding_box.calculate_bearings_y();
+                let bearing_y = glyph_bounding_box.calculate_bearings_y(ascender);
 
                 let (width, height) = glyph_bounding_box.get_metrics();
-
-                let uv_start = Vector2 {
-                    x: x_offset,
-                    y: y_offset,
-                };
-
-                let uv_end = Vector2 {
-                    x: x_offset + scaled_glyph_width,
-                    y: y_offset + scaled_glyph_height,
-                };
-
-                let glyph_data = GlyphData::from_char(glyph_bounding_box.unicode)
-                    .with_uvs(
-                        uv_start,
-                        uv_end,
-                        Vector2 {
-                            x: max_width as i32,
-                            y: max_height as i32,
-                        },
-                        args.uv_space,
-                    )
-                    .with_advance(horizontal_advance)
-                    .with_bearings(bearing_x, bearing_y)
-                    .with_metrics(width, height);
-                glyph_buffer.push(glyph_data);
 
                 let opt_shape = face.load_shape(glyph_index);
                 if opt_shape.is_none() {
                     debug!(
                         "Skipped {} due to no shape being generated for msdf.",
-                        char::from_u32(glyph_data.unicode as u32).unwrap()
+                        glyph_bounding_box.unicode
                     );
                     continue;
                 }
@@ -229,6 +204,32 @@ impl Builder {
                     current_line_no += 1;
                     x_offset = 0;
                 }
+
+                let uv_start = Vector2 {
+                    x: x_offset,
+                    y: y_offset,
+                };
+
+                let uv_end = Vector2 {
+                    x: x_offset + scaled_glyph_width,
+                    y: y_offset + scaled_glyph_height,
+                };
+
+                let glyph_data = GlyphData::from_char(glyph_bounding_box.unicode)
+                    .with_uvs(
+                        uv_start,
+                        uv_end,
+                        Vector2 {
+                            x: max_width as i32,
+                            y: max_height as i32,
+                        },
+                        args.uv_space,
+                    )
+                    .with_advance(horizontal_advance)
+                    .with_bearings(bearing_x, bearing_y)
+                    .with_metrics(width, height);
+                glyph_buffer.push(glyph_data);
+
                 atlas_offsets.push((x_offset, y_offset));
 
                 x_offset += scaled_glyph_width_padding;
@@ -368,7 +369,9 @@ impl Builder {
 
     /// Constructs a new font data to send through an FFI.
     pub fn package_font_data(&self) -> FontData {
-        let new_glyph_data = self.glyph_buffer.to_vec();
+        // TODO: Don't really need to copy, find a way to just conver the original glyph_buffer
+        let mut new_glyph_data = self.glyph_buffer.to_vec();
+        new_glyph_data.sort_unstable_by(|lhs, rhs| lhs.unicode.partial_cmp(&rhs.unicode).unwrap());
         let glyph_data = ByteBuffer::from_vec_struct(new_glyph_data);
 
         FontData {
@@ -402,29 +405,31 @@ impl GlyphBoundingBoxData {
         }
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn area(&self) -> i32 {
         self.rect.width() as i32 * self.rect.height() as i32
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn get_scaled_glyph_dimensions_with_padding(&self, args: &Args) -> (i32, i32) {
         let width = args.scale_dimension_with_padding(self.rect.width().into());
         let height = args.scale_dimension_with_padding(self.rect.height().into());
         (width, height)
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn get_scaled_glyph_dimensions_no_padding(&self, args: &Args) -> (i32, i32) {
         let width = (self.rect.width() as f32 * args.uniform_scale).round() as i32;
         let height = (self.rect.height() as f32 * args.uniform_scale).round() as i32;
         (width, height)
     }
 
-    pub fn calculate_bearings_y(&self) -> i16 {
-        self.rect.y_max + self.rect.y_min
+    #[inline(always)]
+    pub fn calculate_bearings_y(&self, ascender: i32) -> i16 {
+        self.rect.y_max - ascender as i16
     }
 
+    #[inline(always)]
     pub fn get_metrics(&self) -> (i16, i16) {
         (self.rect.width(), self.rect.height())
     }

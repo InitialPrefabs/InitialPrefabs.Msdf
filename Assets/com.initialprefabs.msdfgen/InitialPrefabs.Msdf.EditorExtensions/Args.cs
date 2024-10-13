@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace InitialPrefabs.Msdf.EditorExtensions {
 
@@ -16,7 +16,9 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 range = 64.0f,
                 uv_space = UVSpace.OneMinusV,
                 color_type = ColorType.Simple,
-                degrees = 15
+                degrees = 15,
+                scale_texture_to_po2 = false,
+                thread_count = 8
             };
         }
     }

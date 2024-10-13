@@ -49,6 +49,25 @@ impl ByteBuffer {
         }
     }
 
+    pub fn from_vec_struct_mut_ref<T>(bytes: &mut Vec<T>) -> Self 
+        where T: Sized + PartialEq {
+        let element_size = size_of::<T>() as i32;
+
+        let length = (bytes.len() as i32) * element_size;
+        let capacity = (bytes.capacity() as i32) * element_size;
+
+        let mut v = ManuallyDrop::new(bytes);
+
+        Self {
+            element_size,
+            ptr: v.as_mut_ptr() as *mut u8,
+            length,
+            capacity,
+        }
+    }
+
+
+
     /// Returns the length of this [`ByteBuffer`] as if it was treated like an array.
     pub fn element_len(&self) -> i32 {
         self.length / self.element_size
