@@ -79,7 +79,7 @@ project by right clicking in the project and going to `Create -> InitialPrefabs 
 3. Add any `TextureImporterSettings` and `TextureImporterPlatformSettings` to the **Per Platform Settings** array.
     - a. The default one only configures Standalone in the repo.
 
-## Adavance Usages
+## Advance Usages
 1. If you don't want the importer to do any post processing, add the define: `DISABLE_MSDF_IMPORT` to your project's scripting define.
 2. If you want **binary serialization** for the `SerializedFontData`, add the define `MSDF_BINARY` to your project's scripting define.
 
@@ -87,3 +87,9 @@ project by right clicking in the project and going to `Create -> InitialPrefabs 
 
 An example shader and glyph rendering is provided in this repo, but is by no means a good way of handling text rendering with layouts. It's simply a demo to provide 
 basic details on how text rendering can work. You can view this in `com.initialprefabs.msdfgen/Example/Scenes/SampleScene.unity`.
+
+## Using this as a lib
+The `msdf-atlas` is a rust project which generates a dll. You are welcome to use that dll and call `get_glyph_data_utf16` to generate an atlas. Please keep in mind 
+that the glyph data is returned as pointer so you will need to reinterpret it back to its structured data.
+
+Please view `byte_buffer.rs` tests and source code to see how to interpret a pointer at an index to `GlyphData`.
