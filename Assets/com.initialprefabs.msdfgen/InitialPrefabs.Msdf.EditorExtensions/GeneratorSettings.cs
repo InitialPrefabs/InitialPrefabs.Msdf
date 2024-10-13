@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace InitialPrefabs.Msdf.EditorExtensions {
 
@@ -23,5 +23,16 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
         /// A series of characters to generate the atlas for.
         /// </summary>
         public string DefaultCharacters;
+
+        private void OnValidate()
+        {
+            var atlasWidth = GeneratorArgs.max_atlas_width;
+            if ((atlasWidth & (atlasWidth - 1)) != 0) {
+                // Get the next power of 2
+                int power = Mathf.RoundToInt(Mathf.Ceil(Mathf.Log(atlasWidth, 2)));
+                Debug.Log($"Next power of 2: {1 << power}");
+                // GeneratorArgs.max_atlas_width = (uint)1 << power;
+            }
+        }
     }
 }
