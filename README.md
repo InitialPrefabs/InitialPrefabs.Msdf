@@ -70,4 +70,20 @@ A default `FontAtlasImportConfig` is provided which
 This is queried by: `FontAtlasTextureImporter`, which attempts to get the first **primary** `FontAtlasImportConfig`. You can create your own for your
 project by right clicking in the project and going to `Create -> InitialPrefabs -> MSDF -> FontAtlasImportConfig`.
 
-To make your custom `FontAtlasImportConfig` the **primary** config, toggle the **Is Primary** field on.
+![font-atlas-import-config-ui](https://github.com/InitialPrefabs/InitialPrefabs.Msdf/blob/main/font-atlas-import-configs.png)
+
+1. To make your custom `FontAtlasImportConfig` the **primary** config, toggle the **Is Primary** field on.
+2. Add any file pattern to the **File Pattern** field to post process any incoming textures.
+    - a. By default the Atlas Generator names all generated files with **_MSDSAtlas.png** suffix.
+    - b. This field is a regex field.
+3. Add any `TextureImporterSettings` and `TextureImporterPlatformSettings` to the **Per Platform Settings** array.
+    - a. The default one only configures Standalone in the repo.
+
+## Adavance Usages
+1. If you don't want the importer to do any post processing, add the define: `DISABLE_MSDF_IMPORT` to your project's scripting define.
+2. If you want **binary serialization** for the `SerializedFontData`, add the define `MSDF_BINARY` to your project's scripting define.
+
+### Example
+
+An example shader and glyph rendering is provided in this repo, but is by no means a good way of handling text rendering with layouts. It's simply a demo to provide 
+basic details on how text rendering can work. You can view this in `com.initialprefabs.msdfgen/Example/Scenes/SampleScene.unity`.
