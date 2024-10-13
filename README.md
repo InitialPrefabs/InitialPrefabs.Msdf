@@ -34,6 +34,9 @@ comparing how SDF handles sharp corners and with how MSDF handles sharp corners.
 To get a better quality for font rendering with SDF, you would need to scale the texture up and provide more info. This is how TextMeshPro 
 provides higher quality fonts. For more information, please read Viktor Chlumský's [master thesis](https://github.com/Chlumsky/msdfgen/files/3050967/thesis.pdf).
 
+## Install
+* OpenUPM integration is coming a bit later for now, add this through your package manager via git URL.
+
 ## Workflow
 ![workflow](https://github.com/InitialPrefabs/InitialPrefabs.Msdf/blob/main/editor-workflow.png)
 
