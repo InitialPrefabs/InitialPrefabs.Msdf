@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.initialprefabs.importoverrides": "1.1.0",
     "com.unity.collections": "2.1.4",
     "com.unity.feature.development": "1.0.1",
     "com.unity.render-pipelines.universal": "14.0.11",
@@ -12,10 +13,10 @@
   },
   "scopedRegistries": [
     {
-      "name": "Unity NuGet",
-      "url": "https://unitynuget-registry.azurewebsites.net",
+      "name": "Import Overrides",
+      "url": "https://package.openupm.com",
       "scopes": [
-        "org.nuget"
+        "com.initialprefabs.importoverrides"
       ]
     }
   ]

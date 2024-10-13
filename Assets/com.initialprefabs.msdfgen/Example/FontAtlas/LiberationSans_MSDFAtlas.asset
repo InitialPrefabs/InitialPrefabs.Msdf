@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d6e1a013ccec344b9fd17b334c57708, type: 3}
-  m_Name: LiberationSans_Atlas
+  m_Name: LiberationSans_MSDFAtlas
   m_EditorClassIdentifier: 
   FaceData:
     AscentLine: 1854

@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e112fdf73a5213f4d83f791c1ee83905, type: 3}
+  m_Name: DefaultFontAtlasImportConfig
+  m_EditorClassIdentifier: 
+  IsPrimary: 0
+  FilePattern: (_MSDFAtlas.png)$
+  perPlatformSettings:
+  - Name: Standalone
+    Settings:
+      m_AlphaSource: 0
+      m_MipMapMode: 0
+      m_EnableMipMap: 0
+      m_FadeOut: 0
+      m_BorderMipMap: 0
+      m_MipMapsPreserveCoverage: 0
+      m_AlphaTestReferenceValue: 0
+      m_MipMapFadeDistanceStart: 0
+      m_MipMapFadeDistanceEnd: 0
+      m_ConvertToNormalMap: 0
+      m_HeightScale: 0
+      m_NormalMapFilter: 0
+      m_FlipGreenChannel: 0
+      m_Swizzle: 134349056
+      m_IsReadable: 0
+      m_StreamingMipmaps: 0
+      m_StreamingMipmapsPriority: 0
+      m_VTOnly: 0
+      m_IgnoreMipmapLimit: 0
+      m_NPOTScale: 0
+      m_sRGBTexture: 1
+      m_SpriteMode: 0
+      m_SpriteExtrude: 0
+      m_SpriteMeshType: 0
+      m_Alignment: 0
+      m_SpritePivot: {x: 0, y: 0}
+      m_SpritePixelsToUnits: 0
+      m_SpriteBorder: {x: 0, y: 0, z: 0, w: 0}
+      m_SpriteGenerateFallbackPhysicsShape: 0
+      m_GenerateCubemap: 0
+      m_CubemapConvolution: 0
+      m_SeamlessCubemap: 0
+      m_AlphaIsTransparency: 0
+      m_SpriteTessellationDetail: 0
+      m_TextureType: 0
+      m_TextureShape: 1
+      m_SingleChannelComponent: 0
+      m_FlipbookRows: 0
+      m_FlipbookColumns: 0
+      m_IgnorePngGamma: 0
+      m_CookieMode: 0
+      m_FilterMode: 0
+      m_Aniso: 0
+      m_MipBias: 0
+      m_WrapU: 0
+      m_WrapV: 0
+      m_WrapW: 0
+      m_NormalMap: 0
+      m_TextureFormat: 0
+      m_MaxTextureSize: 0
+      m_Lightmap: 0
+      m_CompressionQuality: 0
+      m_LinearTexture: 0
+      m_GrayScaleToAlpha: 0
+      m_RGBM: 0
+      m_CubemapConvolutionSteps: 0
+      m_CubemapConvolutionExponent: 0
+      m_MaxTextureSizeSet: 0
+      m_CompressionQualitySet: 0
+      m_TextureFormatSet: 0
+      m_ApplyGammaDecoding: 0
+    PlatformSettings:
+      m_Name: Standalone
+      m_Overridden: 1
+      m_IgnorePlatformSupport: 0
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 3
+      m_TextureCompression: 0
+      m_CompressionQuality: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_AndroidETC2FallbackOverride: 0

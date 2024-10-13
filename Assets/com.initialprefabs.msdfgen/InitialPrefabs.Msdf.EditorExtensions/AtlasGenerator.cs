@@ -222,14 +222,14 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                     serializedFontData.Glyphs[i] = glyphData.ToRuntime();
                 }
                 NativeMethods.drop_byte_buffer(data.glyph_data);
-                var soPath = savePath[savePath.IndexOf("Assets")..] + $"{font.name}_Atlas.asset";
+                var soPath = savePath[savePath.IndexOf("Assets")..] + $"{font.name}_MSDFAtlas.asset";
 
                 AssetDatabase.CreateAsset(serializedFontData, soPath);
                 AssetDatabase.SaveAssets();
 
                 AssetDatabase.ImportAsset(soPath, ImportAssetOptions.ForceUpdate);
 
-                var relativeAtlasPath = savePath[savePath.IndexOf("Assets")..] + $"{font.name}_Atlas.png";
+                var relativeAtlasPath = savePath[savePath.IndexOf("Assets")..] + $"{font.name}_MSDFAtlas.png";
                 AssetDatabase.ImportAsset(relativeAtlasPath, ImportAssetOptions.ForceUpdate);
             });
         }
