@@ -9,6 +9,7 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
     /// <summary>
     /// The amount to downscale our atlas by.
     /// </summary>
+    [System.Obsolete]
     public enum UniformScaleOptions {
         _8 = 8,
         _16 = 16,
