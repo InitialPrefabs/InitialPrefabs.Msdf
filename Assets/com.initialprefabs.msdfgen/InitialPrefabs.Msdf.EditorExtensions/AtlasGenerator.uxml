@@ -3,18 +3,28 @@
     <ui:Button text="Select Export Directory" parse-escape-sequences="true" display-tooltip-when-elided="true" name="dir" />
     <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="dir-label" binding-path="ResourcePath" class="Label" style="height: auto; width: auto; padding-top: 10px; padding-bottom: 10px; flex-wrap: wrap;" />
     <ui:VisualElement name="params" style="flex-grow: 1;">
-        <ui:Label tabindex="-1" text="Generator Params" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 20px; -unity-text-align: upper-center;" />
+        <ui:Label tabindex="-1" text="Font Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 20px; -unity-text-align: upper-center; -unity-font-style: bold-and-italic;" />
         <uie:ObjectField label="Font" name="font" type="UnityEngine.Font, UnityEngine.TextRenderingModule" allow-scene-objects="false" binding-path="Font" />
         <ui:TextField picking-mode="Ignore" label="Default Characters" value=" ☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼!&quot;#$%&amp;&apos;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■✖✕ " name="chars" tooltip="The default characters to generate with the atlas." binding-path="DefaultCharacters" style="justify-content: flex-start; white-space: normal;" />
-        <ui:FloatField label="Range" value="4" tooltip=" A larger range might give you smoother transitions and more detailed information about the shape&apos;s edges, while a smaller range may result in a more focused distance field but could lose some detail in the outer regions." name="range" />
-        <ui:EnumField label="Downscale" type="InitialPrefabs.Msdf.EditorExtensions.UniformScaleOptions, InitialPrefabs.Msdf.EditorExtensions" value="_16" name="scale" tooltip="How much should the glyphs be downscaled by? The bigger the number, the smaller the glyph is." />
+        <ui:Button text="Reset Default Characters" parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Do you want to reset the charactesr back to generator&apos;s defaults?  ☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼!&quot;#$%&amp;&apos;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■✖✕ " name="reset" />
+        <ui:Label tabindex="-1" text="Atlas Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 20px; -unity-text-align: upper-center; -unity-font-style: bold-and-italic; margin-top: 5px;" />
+        <ui:Toggle label="Scale Texture" name="scale-to-po2" tooltip="Should the texture be scaled to the nearest power of 2?" />
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row; margin-bottom: 5px;">
+            <ui:SliderInt label="Downscale" high-value="5" name="scale" tooltip="How much should the glyphs be downscaled by? The bigger the number, the smaller the glyph is." style="width: 90%;" />
+            <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="scale-label" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row; margin-bottom: 5px;">
+            <ui:SliderInt label="Max Atlas Width" high-value="6" name="width" low-value="0" show-input-field="false" tooltip="The max width of the generated atlas, if a glyph exceeds the width, it is moved to the next row." style="width: 90%;" />
+            <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="width-label" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="Per Glyph Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="font-size: 20px; -unity-text-align: upper-center; -unity-font-style: bold-and-italic; margin-top: 5px;" />
         <ui:UnsignedIntegerField label="Padding" value="10" tooltip="The amount of padding between each glyph" name="padding" />
-        <ui:SliderInt label="Max Atlas Width" high-value="4096" name="width" low-value="128" show-input-field="true" tooltip="The max width of the generated atlas, if a glyph exceeds the width, it is moved to the next row." />
+        <ui:FloatField label="Range" value="4" tooltip=" A larger range might give you smoother transitions and more detailed information about the shape&apos;s edges, while a smaller range may result in a more focused distance field but could lose some detail in the outer regions." name="range" />
         <uie:EnumFlagsField label="UV Space" type="InitialPrefabs.Msdf.EditorExtensions.UVSpace, InitialPrefabs.Msdf.EditorExtensions" name="uvspace" tooltip="When generating the atlas, we may need to flip the UVs depending on the Graphics API. In Unity, OneMinusV will be correct." />
         <ui:EnumField label="Color Type" type="InitialPrefabs.Msdf.EditorExtensions.ColorType, InitialPrefabs.Msdf.EditorExtensions" tooltip="The algorithm for coloring the edges when generating an SDF per channel. Simple is the fastest, ink trapping is slower but more accurate, while distance is the most accurate but slowest." name="colortype" />
         <ui:Slider label="Degrees" high-value="360" name="degrees" show-input-field="true" tooltip="At what angle do we consider a corner an actual corner?" />
-        <ui:SliderInt label="# of Threads" high-value="8" name="thread-count" tooltip="How many threads should be used to generate the atlas?" low-value="1" show-input-field="true" inverted="false" direction="Horizontal" />
-        <ui:Toggle label="Scale Texture" name="scale-to-po2" tooltip="Should the texture be scaled to the nearest power of 2?" />
+        <ui:Label tabindex="-1" text="Workload Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 20px; -unity-text-align: upper-center; -unity-font-style: bold-and-italic; margin-top: 5px;" />
+        <ui:SliderInt label="# of Threads" high-value="8" name="thread-count" tooltip="How many threads should be used to generate the atlas? When selecting the # of threads, consider how many glyphs you need to generate. A large thread count with low # of glyphs is not ideal as spawning threads is not a free operation." low-value="1" show-input-field="true" inverted="false" direction="Horizontal" />
     </ui:VisualElement>
     <ui:Button text="Export Atlas" parse-escape-sequences="true" display-tooltip-when-elided="true" name="export" style="margin-top: 10px; margin-bottom: 10px; height: 44px; padding-top: 3px;" />
 </ui:UXML>

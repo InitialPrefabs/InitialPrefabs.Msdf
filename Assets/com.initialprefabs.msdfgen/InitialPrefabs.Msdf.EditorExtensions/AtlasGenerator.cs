@@ -1,4 +1,6 @@
 ﻿using InitialPrefabs.Msdf.Runtime;
+using System;
+using System.IO;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -19,20 +21,32 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
     }
 
     public class AtlasGenerator : EditorWindow {
-        [SerializeField]
-        private VisualTreeAsset m_VisualTreeAsset = default;
+
+        /// <summary>
+        /// Stores a bunch of sizes to downscale a glyph by before writing it to the atlas.
+        /// </summary>
+        private static readonly int[] DownScaleSamples = { 8, 16, 32, 64, 128 };
+
+        /// <summary>
+        /// Stores a bunch of atlas sizes.
+        /// </summary>
+        private static readonly int[] AtlasSizes = { 128, 256, 512, 1024, 2048, 4096 };
 
         [MenuItem("Tools/InitialPrefabs/AtlasGenerator")]
         public static void ShowWindow() {
             var wnd = GetWindow<AtlasGenerator>();
-            wnd.minSize = new Vector2(400, 400);
-            wnd.maxSize = new Vector2(400, 400);
+            // wnd.minSize = new Vector2(400, 485);
+            // wnd.maxSize = new Vector2(400, 485);
             wnd.titleContent = new GUIContent("AtlasGenerator");
         }
+
+        [SerializeField]
+        private VisualTreeAsset m_VisualTreeAsset = default;
 
         private GeneratorSettings generatorSettings;
         private SerializedObject serializedObject;
 
+        // The following stores a bunch of properties associated with the Args struct.
         private SerializedProperty resourcePathProp;
         private SerializedProperty defaultCharsProp;
         private SerializedProperty fontProp;
@@ -98,12 +112,12 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 }
             });
 
-            root.Q<TextField>("chars").BindProperty(defaultCharsProp);
-
+            // Ensure that the export button is enabled/disable if the resourcePath is 'valid'.
             var dirLabel = root.Q<Label>("dir-label");
-            var export = root.Q<Button>("export");
+            var exportBtn = root.Q<Button>("export");
             _ = root.schedule.Execute(timerState => {
-                export.SetEnabled(fontProp.objectReferenceValue != null);
+                var dirExists = Directory.Exists(resourcePathProp.stringValue) && !string.IsNullOrEmpty(resourcePathProp.stringValue);
+                exportBtn.SetEnabled(fontProp.objectReferenceValue != null && dirExists);
                 dirLabel.text = resourcePathProp.stringValue;
             }).Every(500);
 
@@ -117,45 +131,61 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 }
             });
 
-            var scaleField = root.Q<EnumField>("scale");
-            scaleField.value = (UniformScaleOptions)Mathf.RoundToInt(1.0f / uniformScaleProp.floatValue);
+            var scaleField = root.Q<SliderInt>("scale");
+            var scaleLabel = root.Q<Label>("scale-label");
+
+            // Set the downscale low and high values
+            scaleField.value = Array.IndexOf(DownScaleSamples, (int)(1.0f / uniformScaleProp.floatValue));
+            scaleField.lowValue = 0;
+            scaleField.highValue = DownScaleSamples.Length - 1;
+
+            // Initialize the label for the downscaler
+            scaleLabel.text = DownScaleSamples[scaleField.value].ToString();
 
             _ = scaleField.RegisterValueChangedCallback(changeEvt => {
                 if (changeEvt.previousValue != changeEvt.newValue) {
-                    serializedObject.Update();
-                    var uniformScale = 1.0f / (int)(UniformScaleOptions)changeEvt.newValue;
-                    uniformScaleProp.floatValue = uniformScale;
-                    _ = serializedObject.ApplyModifiedProperties();
+                    using var _ = new SerializedObjectScope(serializedObject);
+                    var downscale = DownScaleSamples[changeEvt.newValue];
+                    uniformScaleProp.floatValue = 1.0f / downscale;
+                    scaleLabel.text = downscale.ToString();
                 }
             });
 
             var maxAtlasWidthSlider = root.Q<SliderInt>("width");
-            maxAtlasWidthSlider.value = (int)maxAtlasWidthProp.uintValue;
-            // TODO: Create an array of power of 2s, the slider will just be a min max between 0..len()
+            var atlasWidthLabel = root.Q<Label>("width-label");
+
+            // Set the max atlas low and high value
+            maxAtlasWidthSlider.value = Array.IndexOf(AtlasSizes,(int)maxAtlasWidthProp.uintValue);
+            maxAtlasWidthSlider.lowValue = 0;
+            maxAtlasWidthSlider.highValue = AtlasSizes.Length - 1;
+
+            // Initialize the label for the atlas width
+            atlasWidthLabel.text = maxAtlasWidthProp.uintValue.ToString();
+
             maxAtlasWidthSlider.RegisterValueChangedCallback(changeEvt => {
-                using var _ = new SerializedObjectScope(serializedObject);
-                var delta = Mathf.Clamp(changeEvt.newValue - changeEvt.previousValue, -1, 1);
-                var power = delta switch {
-                    1 => Mathf.RoundToInt(Mathf.Ceil(Mathf.Log(changeEvt.newValue, 2))),
-                    -1 => Mathf.RoundToInt(Mathf.Floor(Mathf.Log(changeEvt.newValue, 2))),
-                    _ => Mathf.RoundToInt(Mathf.Log(changeEvt.newValue, 2))
-                };
-                var value = Mathf.Clamp(1 << power, 128, 4096);
-                // maxAtlasWidthSlider.value =value;
-                maxAtlasWidthProp.uintValue = (uint)value;
+                if (changeEvt.previousValue != changeEvt.newValue) {
+                    using var _ = new SerializedObjectScope(serializedObject);
+                    maxAtlasWidthProp.uintValue = (uint)AtlasSizes[changeEvt.newValue];
+                    atlasWidthLabel.text = maxAtlasWidthProp.uintValue.ToString();
+                }
             });
 
+            var charField = root.Q<TextField>("chars");
+            root.Q<Button>("reset").RegisterCallback<MouseUpEvent>(_ => {
+                charField.value = "☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■✖✕ ";
+            });
+
+            // Just bind the property directly to the fields from UI Toolkit, we don't need custom logic.
+            charField.BindProperty(defaultCharsProp);
             root.Q<FloatField>("range").BindProperty(rangeProp);
-            // root.Q<EnumField>("scale").BindProperty(uniformScaleProp);
             root.Q<UnsignedIntegerField>("padding").BindProperty(paddingProp);
-            root.Q<UnsignedIntegerField>("width").BindProperty(maxAtlasWidthProp);
             root.Q<EnumFlagsField>("uvspace").BindProperty(uvSpaceProp);
             root.Q<EnumField>("colortype").BindProperty(colorTypeProp);
             root.Q<Slider>("degrees").BindProperty(degreesProp);
             root.Q<SliderInt>("thread-count").BindProperty(threadCountProp);
             root.Q<Toggle>("scale-to-po2").BindProperty(scaleToPO2Prop);
 
-            root.Q<Button>("export").RegisterCallback<MouseUpEvent>(mouseUpEvent => {
+            exportBtn.RegisterCallback<MouseUpEvent>(mouseUpEvent => {
                 var font = fontProp.objectReferenceValue;
                 if (font == null) {
                     Debug.LogError("Cannot create a texture atlas without a valid Font!");
@@ -173,7 +203,7 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 var generatorChars = defaultCharsProp.stringValue;
 
                 using var absoluteFontPath = new Utf16(Application.dataPath + fontPath["Assets".Length..]);
-                using var absoluteAtlasPath = new Utf16($"{savePath}{font.name}.png");
+                using var absoluteAtlasPath = new Utf16($"{savePath}{font.name}_Atlas.png");
                 using var chars = new Utf16(generatorChars);
 
                 var data = NativeMethods.get_glyph_data_utf16(
@@ -192,12 +222,15 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                     serializedFontData.Glyphs[i] = glyphData.ToRuntime();
                 }
                 NativeMethods.drop_byte_buffer(data.glyph_data);
-                var soPath = savePath[savePath.IndexOf("Assets")..] + $"{font.name}.asset";
-                Debug.Log(soPath);
+                var soPath = savePath[savePath.IndexOf("Assets")..] + $"{font.name}_Atlas.asset";
 
                 AssetDatabase.CreateAsset(serializedFontData, soPath);
                 AssetDatabase.SaveAssets();
-                AssetDatabase.ImportAsset(fontPath);
+
+                AssetDatabase.ImportAsset(soPath, ImportAssetOptions.ForceUpdate);
+
+                var relativeAtlasPath = savePath[savePath.IndexOf("Assets")..] + $"{font.name}_Atlas.png";
+                AssetDatabase.ImportAsset(relativeAtlasPath, ImportAssetOptions.ForceUpdate);
             });
         }
     }
