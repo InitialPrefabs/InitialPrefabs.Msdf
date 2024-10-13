@@ -83,3 +83,5 @@ msdf-atlas/test.cs
 msdf-atlas/MsdfAtlas.cs
 msdf-atlas/font-metrics.log
 font-metrics.log
+Assets/PrimaryAtlasGeneratorSettings.asset
+Assets/PrimaryAtlasGeneratorSettings.asset.meta
