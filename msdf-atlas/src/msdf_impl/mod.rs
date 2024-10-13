@@ -83,7 +83,7 @@ fn config_log_file() {
 
 #[cfg(not(test))]
 fn config_log_file() {
-    let _ = log_to_file("font-metrics.log", LevelFilter::Debug);
+    let _ = log_to_file("font-metrics.log", LevelFilter::Error);
 }
 
 pub struct Builder {
