@@ -77,6 +77,7 @@ pub unsafe extern "C" fn reinterpret_as_glyph_data(byte_buffer: &ByteBuffer, i: 
 
 #[cfg(test)]
 mod tests {
+    const FONT_PATH: &str = "testing-resources/Roboto-Medium.ttf";
     use image::DynamicImage;
 
     use crate::msdf_impl::{
@@ -94,7 +95,7 @@ mod tests {
             .with_scaled_texture(true)
             .with_uv_space(UVSpace::OneMinusV);
 
-        let p = OsStr::new("UbuntuMonoNerdFontPropo-Regular.ttf");
+        let p = OsStr::new(FONT_PATH);
         let builder = Builder::from_font_path(p, "ABC".to_string(), &args);
         assert_eq!(builder.atlas_offsets.len(), 3);
         assert_eq!(builder.glyph_buffer.capacity(), 3);
@@ -127,7 +128,7 @@ mod tests {
             .with_scaled_texture(true)
             .with_uv_space(UVSpace::OneMinusV);
 
-        let p = OsStr::new("UbuntuMonoNerdFontPropo-Regular.ttf");
+        let p = OsStr::new(FONT_PATH);
         let mut builder = Builder::from_font_path(p, "ABCDEFGHIJ".to_string(), &args);
 
         // Check if we only push 1 thread
@@ -228,7 +229,7 @@ mod tests {
     ) -> (FontData, Option<DynamicImage>) {
         let utf16: Vec<u16> = chars_to_generate.encode_utf16().collect();
         let s = String::from_utf16(&utf16).unwrap();
-        let font_path = OsStr::new("Roboto-Medium.ttf");
+        let font_path = OsStr::new(FONT_PATH);
 
         let font_data = Builder::from_font_path(font_path, s.to_string(), &args)
             .prepare_workload(args.thread_count as usize)
@@ -352,7 +353,7 @@ mod tests {
 
         let atlas_path = Path::new("atlas_via_builder.png");
         let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-        let font_path = "Roboto-Medium.ttf".to_string();
+        let font_path = FONT_PATH.to_string();
         let os_font_path = OsStr::new(&font_path);
         Builder::from_font_path(os_font_path, s.to_string(), &args)
             .prepare_workload(1)
