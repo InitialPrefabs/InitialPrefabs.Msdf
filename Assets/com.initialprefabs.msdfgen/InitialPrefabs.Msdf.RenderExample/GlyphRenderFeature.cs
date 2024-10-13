@@ -10,6 +10,9 @@ namespace InitialPrefabs.Msdf.RenderExample {
 
     public class GlyphRenderFeature : ScriptableRendererFeature {
 
+        /// <summary>
+        /// Basic font settings.
+        /// </summary>
         [Serializable]
         public class GlyphSettings {
             public ushort FontSize = 16;
@@ -23,23 +26,35 @@ namespace InitialPrefabs.Msdf.RenderExample {
             public bool IsValid => Material != null & FontData != null && FontTexture != null;
         }
 
+        /// <summary>
+        /// Compares a Glyph's unicode with another Glyph.
+        /// </summary>
         private struct GlyphComparer : IComparer<RuntimeGlyphData> {
             public readonly int Compare(RuntimeGlyphData x, RuntimeGlyphData y) {
                 return x.Unicode.CompareTo(y.Unicode);
             }
         }
 
+        /// <summary>
+        /// A basic glyph render pass.
+        /// <remarks>
+        /// This is by no means an optimal way to render text with Unity's API and is simply an example.
+        /// This also does not handle text layout in any way whatsoever.
+        /// </remarks>
+        /// </summary>
         private class GlyphRenderPass : ScriptableRenderPass {
 
             public GlyphSettings Settings;
 
+            private MaterialPropertyBlock propertyBlock;
+
             private const int VertexCapacity = 26 * 4;
             private const int IndexCapacity = 26 * 6;
+            private static readonly int _BaseMap = Shader.PropertyToID(nameof(_BaseMap));
 
             private Mesh mesh;
             private readonly List<Vector3> vertexPositions = new List<Vector3>(VertexCapacity);
             private readonly List<Vector2> vertexUvs0 = new List<Vector2>(VertexCapacity);
-            private readonly List<Vector2> vertexUvs1 = new List<Vector2>(VertexCapacity);
             private readonly List<Color> vertexColors = new List<Color>(VertexCapacity);
             private readonly List<ushort> indices = new List<ushort>(IndexCapacity);
 
@@ -49,8 +64,12 @@ namespace InitialPrefabs.Msdf.RenderExample {
                 };
             }
 
+            public void Init() {
+                propertyBlock = new MaterialPropertyBlock();
+            }
+
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData) {
-                if (!Settings.IsValid) {
+                if (!Settings.IsValid || propertyBlock == null) {
                     return;
                 }
 
@@ -59,6 +78,7 @@ namespace InitialPrefabs.Msdf.RenderExample {
                         name = "Glyph Mesh"
                     };
                 }
+                propertyBlock.SetTexture(_BaseMap, Settings.FontTexture);
 
                 ref var cameraData = ref renderingData.cameraData;
                 var width = cameraData.camera.pixelWidth;
@@ -93,12 +113,6 @@ namespace InitialPrefabs.Msdf.RenderExample {
 
                     var s = glyphs[idx].Scale(fontScale);
                     var metrics = s.Metrics;
-                    // calculate the px range, assume the texture size is the metrics
-                    // Ideally this should be put to a compute buffer, receive the vertex ID and flatten it to it's associated
-                    // unitRange. Every 4 vertices = 1 element
-                    // TODO: Write the Range into the RuntimeFontFace
-                    var unitRange = 100 / metrics;
-
                     var localHeight = s.Metrics.y - s.Bearings.y;
                     var extrem = new float4(
                         startPos.x + s.Bearings.x,
@@ -111,7 +125,6 @@ namespace InitialPrefabs.Msdf.RenderExample {
                     PushVertex(new float3(extrem.xw, 0), s.Uvs.xw, Settings.Color);
                     PushVertex(new float3(extrem.zw, 0), s.Uvs.zw, Settings.Color);
                     PushVertex(new float3(extrem.zy, 0), s.Uvs.zy, Settings.Color);
-                    PushUnitRange(unitRange);
 
                     PushTriangle(idxOffset, idxOffset + 1, idxOffset + 2);
                     PushTriangle(idxOffset, idxOffset + 2, idxOffset + 3);
@@ -120,7 +133,7 @@ namespace InitialPrefabs.Msdf.RenderExample {
                 }
                 SetMesh();
 
-                cmd.DrawMesh(mesh, Matrix4x4.identity, Settings.Material, 0, 0);
+                cmd.DrawMesh(mesh, Matrix4x4.identity, Settings.Material, 0, 0, propertyBlock);
                 context.ExecuteCommandBuffer(cmd);
                 CommandBufferPool.Release(cmd);
             }
@@ -128,7 +141,6 @@ namespace InitialPrefabs.Msdf.RenderExample {
             private void ResetInternalBuffers() {
                 vertexPositions.Clear();
                 vertexUvs0.Clear();
-                vertexUvs1.Clear();
                 vertexColors.Clear();
                 indices.Clear();
                 mesh.Clear();
@@ -140,13 +152,6 @@ namespace InitialPrefabs.Msdf.RenderExample {
                 vertexColors.Add(color);
             }
 
-            private void PushUnitRange(float2 unitRange) {
-                vertexUvs1.Add(unitRange);
-                vertexUvs1.Add(unitRange);
-                vertexUvs1.Add(unitRange);
-                vertexUvs1.Add(unitRange);
-            }
-
             private void PushTriangle(int a, int b, int c) {
                 indices.Add((ushort)a);
                 indices.Add((ushort)b);
@@ -156,7 +161,6 @@ namespace InitialPrefabs.Msdf.RenderExample {
             private void SetMesh() {
                 mesh.SetVertices(vertexPositions);
                 mesh.SetUVs(0, vertexUvs0);
-                mesh.SetUVs(1, vertexUvs1);
                 mesh.SetColors(vertexColors, 0, vertexColors.Count);
                 mesh.SetIndices(indices, MeshTopology.Triangles, 0);
                 mesh.RecalculateBounds();
@@ -164,6 +168,7 @@ namespace InitialPrefabs.Msdf.RenderExample {
         }
 
         private GlyphRenderPass glyphRenderPass;
+
         [SerializeField]
         private GlyphSettings settings = new GlyphSettings();
 
@@ -178,8 +183,8 @@ namespace InitialPrefabs.Msdf.RenderExample {
         // Here you can inject one or multiple render passes in the renderer.
         // This method is called when setting up the renderer once per-camera.
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData) {
+            glyphRenderPass.Init();
             renderer.EnqueuePass(glyphRenderPass);
         }
     }
-
 }

@@ -111,7 +111,7 @@ Material:
     - _OcclusionStrength: 1
     - _PXRange: 255
     - _Parallax: 0.005
-    - _PxRange: 4
+    - _PxRange: 100
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RENDERTYPE: 0

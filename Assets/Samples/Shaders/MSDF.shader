@@ -3,9 +3,7 @@ Shader "Unlit/MSDF"
     Properties
     {
         _BaseMap("Main Texture", 2D) = "white" {}
-        _Strength("Strength", Range(0.0, 1.0)) = 0
-        _PxRange("PX Range", Float) = 4
-        _BoxSampleSize("Box Sample Size", Range(0, 5)) = 1
+        _UnitRange("Unit Range", Float) = 4
         _Cutoff("AlphaCutout", Range(0.0, 1.0)) = 0.5
     }
 
@@ -45,7 +43,6 @@ Shader "Unlit/MSDF"
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
-            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
             // -------------------------------------
             // Includes
