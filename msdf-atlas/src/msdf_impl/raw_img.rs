@@ -168,7 +168,7 @@ mod tests {
     use super::{RawImage, RawImageView};
 
     #[test]
-    fn raw_image_view_writes_to_same_img_multithread_no_mutex() {
+    fn raw_image_view_writes_to_same_img_multithread() {
         let mut pixels: Vec<[u8; 3]> = vec![[255, 255, 255]; 100];
         let img = RawImage::new(&mut pixels, 10, 10);
         let pool = ThreadPoolBuilder::new().num_threads(2).build().unwrap();
@@ -212,50 +212,6 @@ mod tests {
                 ImageBuffer::from_raw(10, 10, bytes)
                     .expect("Failed to create the image");
             atlas.save("test.png").expect("Failed to save img");
-        });
-    }
-
-    #[test]
-    fn raw_image_view_writes_to_same_img_multithread_mutex() {
-        let mut pixels: Vec<[u8; 3]> = vec![[255, 255, 255]; 100];
-        let img = RawImage::new(&mut pixels, 10, 10);
-        let pool = ThreadPoolBuilder::new().num_threads(2).build().unwrap();
-
-        let v1 = Arc::new(Mutex::new(RawImageView::new(&img, 0, 0, 5, 10)));
-        let v2 = Arc::new(Mutex::new(RawImageView::new(&img, 5, 0, 5, 10)));
-        let group = Arc::new([Arc::clone(&v1), Arc::clone(&v2)]);
-
-        let red = [255, 0, 0];
-        let blue = [0, 0, 255];
-        pool.scope(|s| {
-            s.spawn(|_| {
-                let mut v1 = group[0].lock().unwrap();
-                let _ = &v1.for_each_mut(&|_, _, p| {
-                    *p = red;
-                });
-            });
-
-            s.spawn(|_| {
-                let mut v2 = group[1].lock().unwrap();
-                let _ = &v2.for_each_mut(&|_, _, p| {
-                    *p = blue;
-                });
-            });
-        });
-
-        let mut v1 = RawImageView::new(&img, 0, 0, 5, 10);
-        let mut v2 = RawImageView::new(&img, 5, 0, 5, 10);
-
-        v1.for_each(&|_, _, p| {
-            for (i, c) in p.iter().enumerate() {
-                assert!(red[i] - c == 0);
-            }
-        });
-
-        v2.for_each(&|_, _, p| {
-            for (i, c) in p.iter().enumerate() {
-                assert!(blue[i] - c == 0);
-            }
         });
     }
 }
