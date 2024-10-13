@@ -1,9 +1,3 @@
-[submodule "Dependencies/freetype-native"]
-	path = Dependencies/freetype-native
-	url = git@github.com:freetype/freetype.git
-[submodule "Dependencies/SharpFont"]
-	path = Dependencies/SharpFont
-	url = git@github.com:psuong/SharpFont.git
 [submodule "msdf-rs"]
 	path = msdf-rs
 	url = git@github.com:InitialPrefabs/msdf-rs.git
