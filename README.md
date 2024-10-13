@@ -42,9 +42,9 @@ To access the above menu, go to `Tools -> InitialPrefabs -> Atlas Generator` in 
 1. Select a directory using the **Select Export Directory**.
 2. Select a font asset
 3. Add in the default characters you want to include in the atlas
-    a. _Your font must support the characters you want to include. If the characters don't exist in the font, then glyph information cannot be extracted!_
+    - a. _Your font must support the characters you want to include. If the characters don't exist in the font, then glyph information cannot be extracted!_
 4. (Optional) If you want to scale the texture to the nearest power of 2, click on **Scale Texture**. 
-    a. _**Please note** that scaling the texture may leave undesired empty space._
+    - a. _**Please note** that scaling the texture may leave undesired empty space._
 5. Select your **DownScale** option, the bigger the #, the smaller the glyphs will be in the atlas.
 6. Select your **Max Atlas Width**, this supports 128, 256, 512, 1024, 2048, 4096 as a max atlas width.
 7. (Optional). Add padding between your glyphs, via the **Padding** field.
@@ -52,5 +52,22 @@ To access the above menu, go to `Tools -> InitialPrefabs -> Atlas Generator` in 
 loses detail the further you are away from the edge.
 9. Select the **UV Space**. `One Minus V` is the default for Unity, so that the glyphs aline the rendering engine's sampler.
 10. Select your **Color Type**. Currently supported are: Simple, Ink Trap, and Distance.
-11. Select the **# of Threads** to execute the work on. 
-    a. _Be mindful of selecting the total # of threads relative to the # of glyphs/chars you want to goenerate. Each thread is responsible for `total_num_of_glyphs / thread_count`._
+11. Select your **Degrees**. This helps the algorithm determine what's considered a corner in the character when generating the glyphs.
+12. Select the **# of Threads** to execute the work on. 
+    - a. _Be mindful of selecting the total # of threads relative to the # of glyphs/chars you want to goenerate. Each thread is responsible for `total_num_of_glyphs / thread_count`._
+
+## Importing
+
+InitialPrefabs.MSDF makes use of [InitialPrefabs.ImportOverrides](https://github.com/InitialPrefabs/ImportOverrides). This allows for easy configuration 
+of the TextureImporterSettings.
+
+A default `FontAtlasImportConfig` is provided which 
+* Removes the alpha channel
+* Removes mipmaps
+* Removes filtering
+* Removes compression
+
+This is queried by: `FontAtlasTextureImporter`, which attempts to get the first **primary** `FontAtlasImportConfig`. You can create your own for your
+project by right clicking in the project and going to `Create -> InitialPrefabs -> MSDF -> FontAtlasImportConfig`.
+
+To make your custom `FontAtlasImportConfig` the **primary** config, toggle the **Is Primary** field on.
