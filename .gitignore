@@ -70,8 +70,8 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-Dependencies/freetype-demos/bin
-.idea
+
+# Custom files
 Assets/com.initialprefabs.msdfgen/Example
 Assets/com.initialprefabs.msdfgen/Example.meta
 msdf-impl/target
@@ -81,3 +81,4 @@ Assets/ShaderlabVSCode
 Assets/ShaderlabVSCode.meta
 msdf-atlas/.bacon-locations
 msdf-atlas/test.cs
+.idea
