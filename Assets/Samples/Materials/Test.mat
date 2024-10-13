@@ -96,7 +96,7 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
-    - _Cutoff: 0.059
+    - _Cutoff: 0.1
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistanceFactor: 27.42
@@ -124,6 +124,7 @@ Material:
     - _SrcBlendAlpha: 1
     - _Strength: 0.5
     - _Surface: 0
+    - _UnitRange: 4
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
