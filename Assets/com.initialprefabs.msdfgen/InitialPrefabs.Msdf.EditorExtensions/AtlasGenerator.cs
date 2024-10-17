@@ -203,7 +203,7 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
                 var generatorChars = defaultCharsProp.stringValue;
 
                 using var absoluteFontPath = new Utf16(Application.dataPath + fontPath["Assets".Length..]);
-                using var absoluteAtlasPath = new Utf16($"{savePath}{font.name}_Atlas.png");
+                using var absoluteAtlasPath = new Utf16($"{savePath}{font.name}_MSDFAtlas.png");
                 using var chars = new Utf16(generatorChars);
 
                 var data = NativeMethods.get_glyph_data_utf16(
