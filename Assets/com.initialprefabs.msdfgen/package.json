@@ -1,6 +1,6 @@
 {
     "name": "com.initialprefabs.msdfgen",
-    "version": "0.2.0",
+    "version": "1.0.0",
     "displayName": "MSDF Atlas Gen",
     "description": "Using MSDF to generate font atlases",
     "unity": "2022.3",
