@@ -1,24 +1,13 @@
 ﻿using InitialPrefabs.Msdf.Runtime;
 using System;
 using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace InitialPrefabs.Msdf.EditorExtensions {
-
-    /// <summary>
-    /// The amount to downscale our atlas by.
-    /// </summary>
-    [System.Obsolete]
-    public enum UniformScaleOptions {
-        _8 = 8,
-        _16 = 16,
-        _32 = 32,
-        _64 = 64,
-        _128 = 128,
-    }
 
     public class AtlasGenerator : EditorWindow {
 
@@ -115,10 +104,12 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
             // Ensure that the export button is enabled/disable if the resourcePath is 'valid'.
             var dirLabel = root.Q<Label>("dir-label");
             var exportBtn = root.Q<Button>("export");
+            var pullAllBtn = root.Q<Button>("pull-all");
             _ = root.schedule.Execute(timerState => {
                 var dirExists = Directory.Exists(resourcePathProp.stringValue) && !string.IsNullOrEmpty(resourcePathProp.stringValue);
                 exportBtn.SetEnabled(fontProp.objectReferenceValue != null && dirExists);
                 dirLabel.text = resourcePathProp.stringValue;
+                pullAllBtn.SetEnabled(fontProp.objectReferenceValue is Font font && !font.dynamic);
             }).Every(500);
 
             var fontField = root.Q<ObjectField>("font");
@@ -155,14 +146,14 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
             var atlasWidthLabel = root.Q<Label>("width-label");
 
             // Set the max atlas low and high value
-            maxAtlasWidthSlider.value = Array.IndexOf(AtlasSizes,(int)maxAtlasWidthProp.uintValue);
+            maxAtlasWidthSlider.value = Array.IndexOf(AtlasSizes, (int)maxAtlasWidthProp.uintValue);
             maxAtlasWidthSlider.lowValue = 0;
             maxAtlasWidthSlider.highValue = AtlasSizes.Length - 1;
 
             // Initialize the label for the atlas width
             atlasWidthLabel.text = maxAtlasWidthProp.uintValue.ToString();
 
-            maxAtlasWidthSlider.RegisterValueChangedCallback(changeEvt => {
+            _ = maxAtlasWidthSlider.RegisterValueChangedCallback(changeEvt => {
                 if (changeEvt.previousValue != changeEvt.newValue) {
                     using var _ = new SerializedObjectScope(serializedObject);
                     maxAtlasWidthProp.uintValue = (uint)AtlasSizes[changeEvt.newValue];
@@ -173,6 +164,18 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
             var charField = root.Q<TextField>("chars");
             root.Q<Button>("reset").RegisterCallback<MouseUpEvent>(_ => {
                 charField.value = "☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■✖✕ ";
+            });
+
+            pullAllBtn.RegisterCallback<MouseUpEvent>(_ => {
+                if (fontProp.objectReferenceValue is Font font && !font.dynamic) {
+                    var characterInfo = font.characterInfo;
+                    var sb = new StringBuilder(characterInfo.Length);
+                    foreach (var charInfo in characterInfo) {
+                        var c = (char)charInfo.index;
+                        sb.Append(c);
+                    }
+                    charField.value = sb.ToString();
+                }
             });
 
             // Just bind the property directly to the fields from UI Toolkit, we don't need custom logic.

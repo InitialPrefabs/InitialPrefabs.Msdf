@@ -16,9 +16,9 @@ MonoBehaviour:
   settings:
     FontSize: 50
     TextToRender: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
-    FontData: {fileID: 11400000, guid: eccd0244c21f7f442903c35849ed001d, type: 2}
+    FontData: {fileID: 11400000, guid: 7eb357c69c98c1244b514f4e18c220d2, type: 2}
     Material: {fileID: 2100000, guid: cbb9df6ebeade864a9ee665803d60ed9, type: 2}
-    FontTexture: {fileID: 2800000, guid: 2cf860dd78a5b4f42b32633dfd30d271, type: 3}
+    FontTexture: {fileID: 2800000, guid: 91be1b80181fafc4cac0a1f0a2b7989d, type: 3}
     StartPos:
       x: 0
       y: 1080
