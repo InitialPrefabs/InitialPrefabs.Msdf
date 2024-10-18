@@ -1,11 +1,12 @@
 {
   "dependencies": {
     "com.initialprefabs.importoverrides": "1.1.0",
-    "com.unity.collections": "2.1.4",
-    "com.unity.feature.development": "1.0.1",
-    "com.unity.render-pipelines.universal": "14.0.11",
-    "com.unity.textmeshpro": "3.0.6",
-    "com.unity.ugui": "1.0.0",
+    "com.unity.collections": "2.5.1",
+    "com.unity.feature.development": "1.0.2",
+    "com.unity.multiplayer.center": "1.0.0",
+    "com.unity.render-pipelines.universal": "17.0.3",
+    "com.unity.ugui": "2.0.0",
+    "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.imageconversion": "1.0.0",
     "com.unity.modules.imgui": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
