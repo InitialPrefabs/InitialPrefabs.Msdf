@@ -234,6 +234,8 @@ namespace InitialPrefabs.Msdf.EditorExtensions {
 
                 var relativeAtlasPath = savePath[savePath.IndexOf("Assets")..] + $"{font.name}_MSDFAtlas.png";
                 AssetDatabase.ImportAsset(relativeAtlasPath, ImportAssetOptions.ForceUpdate);
+                // Release memory allocated on the heap that we no longer need.
+                NativeMethods.drop_byte_buffer(data.glyph_data);
             });
         }
     }
