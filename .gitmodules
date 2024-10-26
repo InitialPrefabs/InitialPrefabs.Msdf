@@ -1,3 +1,6 @@
 [submodule "msdf-rs"]
 	path = msdf-rs
 	url = git@github.com:InitialPrefabs/msdf-rs.git
+[submodule "Assets/com.initialprefabs.msdfgen"]
+	path = Assets/com.initialprefabs.msdfgen
+	url = git@github.com:InitialPrefabs/com.initialprefabs.msdfgen.git
