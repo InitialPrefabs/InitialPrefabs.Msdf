@@ -211,7 +211,7 @@ impl Builder {
 
                 let uv_end = Vector2 {
                     x: x_offset + scaled_glyph_width,
-                    y: y_offset + scaled_glyph_height,
+                    y: y_offset + scaled_glyph_height - args.padding as i32,
                 };
 
                 let glyph_data = GlyphData::from_char(glyph_bounding_box.unicode)
