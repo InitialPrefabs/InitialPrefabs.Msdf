@@ -206,7 +206,7 @@ impl Builder {
 
                 let uv_start = Vector2 {
                     x: x_offset,
-                    y: y_offset,
+                    y: y_offset + (args.padding / 2) as i32,
                 };
 
                 let uv_end = Vector2 {
