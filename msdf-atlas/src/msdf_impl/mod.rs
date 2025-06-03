@@ -145,7 +145,7 @@ impl Builder {
             for glyph_bounding_box in &glyph_bounding_boxes {
                 let glyph_index = glyph_bounding_box.glyph_index;
 
-                let (scaled_glyph_width_padding, scaled_glyph_height_padding) =
+                let (scaled_glyph_width_padding, _) =
                     glyph_bounding_box.get_scaled_glyph_dimensions_with_padding(args);
                 let (scaled_glyph_width, scaled_glyph_height) =
                     glyph_bounding_box.get_scaled_glyph_dimensions_no_padding(args);
@@ -206,12 +206,12 @@ impl Builder {
 
                 let uv_start = Vector2 {
                     x: x_offset,
-                    y: y_offset + (args.padding / 2) as i32,
+                    y: y_offset,
                 };
 
                 let uv_end = Vector2 {
                     x: x_offset + scaled_glyph_width,
-                    y: y_offset + scaled_glyph_height_padding,
+                    y: y_offset + scaled_glyph_height,
                 };
 
                 let glyph_data = GlyphData::from_char(glyph_bounding_box.unicode)
