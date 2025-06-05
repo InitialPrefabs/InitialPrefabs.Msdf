@@ -3,9 +3,9 @@ use std::mem;
 use std::slice::{self, from_raw_parts};
 
 #[allow(dead_code)]
-type Rgbu8 = [u8; 3];
+type Rgbu8 = [u8; 4];
 
-const RGB_CHANNELS: u32 = 3;
+const RGB_CHANNELS: u32 = 4;
 
 #[allow(dead_code)]
 pub struct RawImage<'a> {
@@ -169,7 +169,7 @@ mod tests {
 
     #[test]
     fn raw_image_view_writes_to_same_img_multithread() {
-        let mut pixels: Vec<[u8; 3]> = vec![[255, 255, 255]; 100];
+        let mut pixels: Vec<[u8; 4]> = vec![[255, 255, 255, 255]; 100];
         let img = RawImage::new(&mut pixels, 10, 10);
         let pool = ThreadPoolBuilder::new().num_threads(2).build().unwrap();
 
@@ -182,8 +182,8 @@ mod tests {
 
         let arc_images = Arc::new(&images);
 
-        let red = [255, 0, 0];
-        let blue = [0, 0, 255];
+        let red = [255, 0, 0, 255];
+        let blue = [0, 0, 255, 255];
         pool.scope(|s| {
             for i in 0..2 {
                 let v = arc_images.clone();

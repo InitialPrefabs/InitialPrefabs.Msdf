@@ -1,6 +1,6 @@
 use enums::ColorType;
 use font_data::FontData;
-use image::{ImageBuffer, Rgb};
+use image::{ImageBuffer, Rgb, Rgba};
 use log::{debug, LevelFilter};
 use mint::Vector2;
 use msdf::{GlyphLoader, MSDFConfig, Projection, SDFTrait};
@@ -89,7 +89,7 @@ fn config_log_file() {
 pub struct Builder {
     pub glyph_buffer: Vec<GlyphData>,
     pub atlas_offsets: Vec<(i32, i32)>,
-    pub glyph_images: Vec<ImageBuffer<Rgb<f32>, Vec<f32>>>,
+    pub glyph_images: Vec<ImageBuffer<Rgba<f32>, Vec<f32>>>,
     pub thread_metadata: Vec<ThreadMetadata>,
     pub atlas_dimensions: (u32, u32),
 
@@ -109,7 +109,7 @@ impl Builder {
         let glyph_capacity = chars_to_generate.len();
 
         let mut atlas_offsets: Vec<(i32, i32)> = Vec::with_capacity(glyph_capacity);
-        let mut glyph_images: Vec<ImageBuffer<Rgb<f32>, Vec<f32>>> =
+        let mut glyph_images: Vec<ImageBuffer<Rgba<f32>, Vec<f32>>> =
             Vec::with_capacity(glyph_capacity);
 
         if lossy_string.ends_with(".otf") || lossy_string.ends_with(".ttf") {
@@ -180,7 +180,7 @@ impl Builder {
                     };
 
                     let msdf_config: MSDFConfig = Default::default();
-                    let msdf_data = colored_shape.generate_msdf(
+                    let msdf_data = colored_shape.generate_mtsdf(
                         scaled_glyph_width as u32,
                         scaled_glyph_height as u32,
                         args.range as f64,
@@ -188,7 +188,7 @@ impl Builder {
                         &msdf_config,
                     );
 
-                    let glyph_image: ImageBuffer<Rgb<f32>, Vec<f32>> = msdf_data.to_image();
+                    let glyph_image: ImageBuffer<Rgba<f32>, Vec<f32>> = msdf_data.to_image();
                     glyph_images.push(glyph_image);
                 } else {
                     debug!(
@@ -292,7 +292,7 @@ impl Builder {
         let thread_count = self.thread_metadata.len();
         let (max_width, max_height) = self.atlas_dimensions;
 
-        let mut pixels: Vec<[u8; 3]> = vec![[0, 0, 0]; (max_width * max_height) as usize];
+        let mut pixels: Vec<[u8; 4]> = vec![[0, 0, 0, 0]; (max_width * max_height) as usize];
         let raw_img = RawImage::new(&mut pixels, max_width, max_height);
 
         let mut raw_image_views: Vec<Arc<Mutex<RawImageView>>> =
@@ -301,7 +301,7 @@ impl Builder {
         for metadata in &self.thread_metadata {
             let (start, end) = metadata.get_slice_offsets();
 
-            let glyph_images: &[ImageBuffer<Rgb<f32>, Vec<f32>>] = &self.glyph_images[start..end];
+            let glyph_images: &[ImageBuffer<Rgba<f32>, Vec<f32>>] = &self.glyph_images[start..end];
             let atlas_offsets = &self.atlas_offsets[start..end];
 
             for (local_idx, (offset_x, offset_y)) in atlas_offsets.iter().enumerate() {
@@ -325,7 +325,7 @@ impl Builder {
             .unwrap();
 
         let shared_target_views: Arc<Vec<Arc<Mutex<RawImageView<'_>>>>> = Arc::new(raw_image_views);
-        let shared_src_images: Arc<&Vec<ImageBuffer<Rgb<f32>, Vec<f32>>>> =
+        let shared_src_images: Arc<&Vec<ImageBuffer<Rgba<f32>, Vec<f32>>>> =
             Arc::new(&self.glyph_images);
 
         pool.scope(|s| {
@@ -345,6 +345,7 @@ impl Builder {
                                 (pixel[0].clamp(0.0, 1.0) * 255.0) as u8,
                                 (pixel[1].clamp(0.0, 1.0) * 255.0) as u8,
                                 (pixel[2].clamp(0.0, 1.0) * 255.0) as u8,
+                                (pixel[3].clamp(0.0, 1.0) * 255.0) as u8
                             ];
                         });
                     }
@@ -353,7 +354,7 @@ impl Builder {
         });
 
         raw_img.process_as_byte_array(&|bytes| {
-            let atlas: ImageBuffer<Rgb<u8>, &[u8]> =
+            let atlas: ImageBuffer<Rgba<u8>, &[u8]> =
                 ImageBuffer::from_raw(max_width, max_height, bytes)
                     .expect("Failed to create the image");
             atlas.save(path).expect("Failed to save img");
