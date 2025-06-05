@@ -1,6 +1,6 @@
 use enums::ColorType;
 use font_data::FontData;
-use image::{ImageBuffer, Rgb, Rgba};
+use image::{ImageBuffer, Rgba};
 use log::{debug, LevelFilter};
 use mint::Vector2;
 use msdf::{GlyphLoader, MSDFConfig, Projection, SDFTrait};
